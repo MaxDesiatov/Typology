@@ -1,12 +1,9 @@
 //
-//  Typology.swift
+//  AST.swift
 //  Typology
 //
-//  Created by Max Desiatov on 16/04/2019.
-//  Copyright © 2019 Typology. All rights reserved.
+//  Created by Max Desiatov on 19/04/2019.
 //
-
-import SwiftSyntax
 
 struct WhereClause {
 }
@@ -15,27 +12,24 @@ struct InheritanceClause {
   var types: [NominalType]
 }
 
-struct FunctionType {
+protocol ExprType {}
+
+struct FunctionType: ExprType {
+  var genericParameters: [GenericParameter]
+  var parameters: [ExprType]
 }
 
-struct TupleType {
+struct TupleType: ExprType {
 }
 
-struct NominalType {
+struct NominalType: ExprType {
   var name: String
   var parameters: [GenericParameter]
-}
-
-struct TypeSignature {
 }
 
 struct GenericParameter {
   var name: String
   var inheritance: InheritanceClause
-}
-
-struct GenericParameterClause {
-
 }
 
 struct TypealiasDecl {
@@ -88,32 +82,11 @@ struct File {
   var protocols: [ProtocolDecl]
 }
 
-final class Visitor: SyntaxVisitor {
-  override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.path.map { $0.name.text }
-    return .skipChildren
-  }
+struct Module {
+  var files: [File]
+}
 
-  override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.genericParameterClause
-    return .skipChildren
-  }
-
-  override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .skipChildren
-  }
-
-  override func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.identifier.text
-    return .skipChildren
-  }
-
-  override func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
-    return .skipChildren
-  }
-
-  override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-    node
-    return .skipChildren
-  }
+struct Target {
+  var dependencies: [Module]
+  var main: Module
 }
