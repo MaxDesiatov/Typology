@@ -86,3 +86,19 @@ extension TypeEnv: Substitutable {
     return Array(values).freeTypeVariables
   }
 }
+
+extension Constraint: Substitutable {
+  func apply(_ sub: Substitution) -> Constraint {
+    switch self {
+    case let .equal(t1, t2):
+      return .equal(t1.apply(sub), t2.apply(sub))
+    }
+  }
+
+  var freeTypeVariables: Set<TypeVariable> {
+    switch self {
+    case let .equal(t1, t2):
+      return t1.freeTypeVariables.union(t2.freeTypeVariables)
+    }
+  }
+}

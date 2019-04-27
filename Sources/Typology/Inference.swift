@@ -22,8 +22,10 @@ enum TypeError: Error {
   case unificationFailure(Type, Type)
 }
 
-struct ConstraintProducer {
-  var variableCount = 0
+struct Inference {
+  private var variableCount = 0
+  var environment: TypeEnv
+  var constraints: [Constraint]
 
   mutating func fresh() -> Type {
     defer { variableCount += 1 }
@@ -44,8 +46,10 @@ struct ConstraintProducer {
     let variables = type.freeTypeVariables.subtracting(env.freeTypeVariables)
     return Scheme(variables: Array(variables), type: type)
   }
-}
 
-struct ConstraintSolver {
-
+//  func infer(_ expr: Expr) -> Type {
+//    switch expr {
+//      case .literal(<#T##Literal#>)
+//    }
+//  }
 }

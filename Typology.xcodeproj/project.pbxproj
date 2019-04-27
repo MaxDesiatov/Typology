@@ -23,6 +23,7 @@
 /* Begin PBXBuildFile section */
 		D1C63D3E2274ACF300412161 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C63D3D2274ACF300412161 /* Type.swift */; };
 		D1C63D402274AD3200412161 /* Substitution.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C63D3F2274AD3200412161 /* Substitution.swift */; };
+		D1C63D4D2274CF9E00412161 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C63D4C2274CF9E00412161 /* Solver.swift */; };
 		OBJ_101 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Inference.swift */; };
 		OBJ_102 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Visitor.swift */; };
 		OBJ_104 /* SwiftSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftSyntax::SwiftSyntax::Product" /* SwiftSyntax.framework */; };
@@ -94,6 +95,7 @@
 /* Begin PBXFileReference section */
 		D1C63D3D2274ACF300412161 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		D1C63D3F2274AD3200412161 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
+		D1C63D4C2274CF9E00412161 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Visitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visitor.swift; sourceTree = "<group>"; };
 		OBJ_15 /* TypologyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyTests.swift; sourceTree = "<group>"; };
@@ -258,7 +260,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -271,7 +273,6 @@
 				OBJ_54 /* LICENSE.md */,
 				OBJ_55 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -290,6 +291,7 @@
 				OBJ_12 /* Visitor.swift */,
 				D1C63D3D2274ACF300412161 /* Type.swift */,
 				D1C63D3F2274AD3200412161 /* Substitution.swift */,
+				D1C63D4C2274CF9E00412161 /* Solver.swift */,
 			);
 			name = Typology;
 			path = Sources/Typology;
@@ -394,7 +396,7 @@
 				English,
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_48 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -473,6 +475,7 @@
 			files = (
 				OBJ_99 /* AST.swift in Sources */,
 				OBJ_101 /* Inference.swift in Sources */,
+				D1C63D4D2274CF9E00412161 /* Solver.swift in Sources */,
 				OBJ_102 /* Visitor.swift in Sources */,
 				D1C63D3E2274ACF300412161 /* Type.swift in Sources */,
 				D1C63D402274AD3200412161 /* Substitution.swift in Sources */,
