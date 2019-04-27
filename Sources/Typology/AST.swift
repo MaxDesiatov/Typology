@@ -5,6 +5,29 @@
 //  Created by Max Desiatov on 19/04/2019.
 //
 
+enum Literal {
+  case integer(Int)
+  case floating(Double)
+  case bool(Bool)
+  case string(String)
+}
+
+indirect enum Expr {
+  case variable(String)
+  case application(Expr, Expr)
+  case lambda(String, Expr)
+  case constant(String, Expr, Expr)
+  case literal(Literal)
+  case ternary(Expr, Expr, Expr)
+  case fixPoint(Expr)
+  case binaryOperator(String, Expr, Expr)
+}
+
+struct File {
+  let declarations: [(String, Expr)]
+  let expressions: [Expr]
+}
+
 struct WhereClause {
 }
 
@@ -74,19 +97,19 @@ struct ImportDecl {
   var path: [String]
 }
 
-struct File {
-  var imports: [ImportDecl]
-  var functions: [FunctionDecl]
-  var statements: [Statement]
-  var concreteTypes: [ConcreteTypeDecl]
-  var protocols: [ProtocolDecl]
-}
-
-struct Module {
-  var files: [File]
-}
-
-struct Target {
-  var dependencies: [Module]
-  var main: Module
-}
+//struct File {
+//  var imports: [ImportDecl]
+//  var functions: [FunctionDecl]
+//  var statements: [Statement]
+//  var concreteTypes: [ConcreteTypeDecl]
+//  var protocols: [ProtocolDecl]
+//}
+//
+//struct Module {
+//  var files: [File]
+//}
+//
+//struct Target {
+//  var dependencies: [Module]
+//  var main: Module
+//}

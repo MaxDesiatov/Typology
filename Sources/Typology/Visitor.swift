@@ -20,7 +20,7 @@ final class Visitor: SyntaxVisitor {
   }
 
   override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.genericParameterClause.first?.
+    node.genericParameterClause
     return .skipChildren
   }
 

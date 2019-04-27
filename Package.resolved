@@ -2,24 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Axiomatic",
-        "repositoryURL": "https://github.com/MaxDesiatov/Axiomatic.git",
-        "state": {
-          "branch": "master",
-          "revision": "0d664b4747bdae3401baac23a316bb8471cc8b89",
-          "version": null
-        }
-      },
-      {
-        "package": "Gluey",
-        "repositoryURL": "https://github.com/MaxDesiatov/Gluey.git",
-        "state": {
-          "branch": "master",
-          "revision": "cc65d74319966ef3eb75e2c4d90e41c80010307c",
-          "version": null
-        }
-      },
-      {
         "package": "SwiftSyntax",
         "repositoryURL": "https://github.com/apple/swift-syntax.git",
         "state": {
