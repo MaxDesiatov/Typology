@@ -14,17 +14,17 @@ struct Scheme {
   let type: Type
 }
 
-typealias Variable = String
-typealias TypeEnv = [Variable: Scheme]
+typealias TypeEnv = [Identifier: Scheme]
 
 enum TypeError: Error {
   case infiniteType(TypeVariable, Type)
   case unificationFailure(Type, Type)
+  case unbound(Identifier)
 }
 
 struct Inference {
   private var variableCount = 0
-  var environment: TypeEnv
+  private var environment: TypeEnv
   var constraints: [Constraint]
 
   mutating func fresh() -> Type {
@@ -33,9 +33,15 @@ struct Inference {
     return .variable("T\(variableCount)")
   }
 
+  mutating func lookup(_ id: Identifier) throws -> Type {
+    guard let scheme = environment[id] else { throw TypeError.unbound(id) }
+
+    return instantiate(scheme)
+  }
+
   /// Converting a σ type into a τ type by creating fresh names for each type
   /// variable that does not appear in the current typing environment.
-  mutating func instantiate(_ scheme: Scheme) -> Type {
+  private mutating func instantiate(_ scheme: Scheme) -> Type {
     let substitution = scheme.variables.map { ($0, fresh()) }
     return scheme.type.apply(Dictionary(uniqueKeysWithValues: substitution))
   }

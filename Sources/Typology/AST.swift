@@ -5,6 +5,9 @@
 //  Created by Max Desiatov on 19/04/2019.
 //
 
+typealias Identifier = String
+typealias Operator = String
+
 enum Literal {
   case integer(Int)
   case floating(Double)
@@ -13,18 +16,18 @@ enum Literal {
 }
 
 indirect enum Expr {
-  case variable(String)
+  case variable(Identifier)
   case application(Expr, Expr)
-  case lambda(String, Expr)
-  case constant(String, Expr, Expr)
+  case lambda(Identifier, Expr)
+  case constant(Identifier, Expr, Expr)
   case literal(Literal)
   case ternary(Expr, Expr, Expr)
   case fixPoint(Expr)
-  case binaryOperator(String, Expr, Expr)
+  case binaryOperator(Operator, Expr, Expr)
 }
 
 struct File {
-  let declarations: [(String, Expr)]
+  let declarations: [(Identifier, Expr)]
   let expressions: [Expr]
 }
 
