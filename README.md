@@ -26,3 +26,10 @@ that certain logical statements are
 
 Typology generates a sequence of predicates and rules for declarations and
 expressions in your Swift source code.
+
+## See also
+
+* [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst)
+* [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html)
+* [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand)
+* [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/)
