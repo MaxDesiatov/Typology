@@ -34,3 +34,4 @@ expressions in your Swift source code.
 * [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand)
 * [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/)
 * [Exponential time complexity in the Swift type checker](https://www.cocoawithlove.com/blog/2016/07/12/type-checker-issues.html)
+* [A Swift Playground containing Martin Grabmüller's "Algorithm W Step-by-Step"](https://gist.github.com/CodaFi/ca35a0c22fbd96eca505b5df45f2509e)
