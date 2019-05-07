@@ -19,7 +19,7 @@ Same as [the type checker in Apple's Swift
 compiler](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst),
 Typology relies on the fact that you can express [type
 systems](https://en.m.wikipedia.org/wiki/Hindley–Milner_type_system) with a set of constraints
-on types that are resolved through [unification](https://en.wikipedia.org/wiki/Unification).
+on types that are resolved through [unification](https://en.wikipedia.org/wiki/Unification_(computer_science)).
 
 ## See also
 
