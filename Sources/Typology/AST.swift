@@ -13,6 +13,19 @@ enum Literal {
   case floating(Double)
   case bool(Bool)
   case string(String)
+
+  var defaultType: Type {
+    switch self {
+    case .integer:
+      return .constructor("Int")
+    case .floating:
+      return .constructor("Double")
+    case .bool:
+      return .constructor("Bool")
+    case .string:
+      return .constructor("String")
+    }
+  }
 }
 
 indirect enum Expr {
@@ -22,7 +35,6 @@ indirect enum Expr {
   case constant(Identifier, Expr, Expr)
   case literal(Literal)
   case ternary(Expr, Expr, Expr)
-  case fixPoint(Expr)
   case binaryOperator(Operator, Expr, Expr)
 }
 

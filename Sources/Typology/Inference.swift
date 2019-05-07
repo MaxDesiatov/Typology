@@ -23,14 +23,29 @@ enum TypeError: Error {
 }
 
 struct Inference {
-  private var variableCount = 0
+  private var typeVariableCount = 0
   private var environment: TypeEnv
   var constraints: [Constraint]
 
-  mutating func fresh() -> Type {
-    defer { variableCount += 1 }
+  mutating func inferInExtendedEnvironment(
+    _ id: Identifier,
+    _ scheme: Scheme,
+    _ inferred: Expr
+  ) throws -> Type {
+    // introduce inference with local scope
+    var local = self
+    local.environment[id] = scheme
+    let result = try local.infer(inferred)
 
-    return .variable("T\(variableCount)")
+    // update the type variable count after local inference has completed
+    typeVariableCount = local.typeVariableCount
+    return result
+  }
+
+  mutating func fresh() -> Type {
+    defer { typeVariableCount += 1 }
+
+    return .variable("T\(typeVariableCount)")
   }
 
   mutating func lookup(_ id: Identifier) throws -> Type {
@@ -53,9 +68,19 @@ struct Inference {
     return Scheme(variables: Array(variables), type: type)
   }
 
-//  func infer(_ expr: Expr) -> Type {
-//    switch expr {
-//      case .literal(<#T##Literal#>)
-//    }
-//  }
+  mutating func infer(_ expr: Expr) throws -> Type {
+    switch expr {
+    case let .literal(literal):
+      return literal.defaultType
+    case let .variable(id):
+      return try lookup(id)
+    case let .lambda(id, expr):
+      let typeVariable = fresh()
+      let localScheme = Scheme(variables: [], type: typeVariable)
+      return .arrow(
+        typeVariable,
+        try inferInExtendedEnvironment(id, localScheme, expr)
+      )
+    }
+  }
 }
