@@ -1,5 +1,7 @@
 # Typology
 
+[![Build Status](https://dev.azure.com/max0484/max/_apis/build/status/MaxDesiatov.Typology?branchName=master)](https://dev.azure.com/max0484/max/_build/latest?definitionId=1&branchName=master)
+
 Typology is a work in progress attempt to implement type checking of Swift in Swift itself.
 Currently it uses [SwiftSyntax](https://github.com/apple/swift-syntax) as a parser, but is ready
 to switch to other pure Swift parsers in the future when any are available.
