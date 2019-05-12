@@ -10,10 +10,9 @@ pool:
   vmImage: 'macos-latest'
 
 steps:
-- task: AzureCLI@1
+- task: ShellScript@2
   inputs:
-    scriptLocation: 'inlineScript'
-    inlineScript: 'swift package generate-xcodeproj'
+    scriptPath: './update.sh'
 - task: Xcode@5
   inputs:
     actions: 'test'
