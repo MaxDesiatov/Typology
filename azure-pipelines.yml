@@ -12,12 +12,7 @@ pool:
 steps:
 - task: ShellScript@2
   inputs:
-    scriptPath: './update.sh'
-- task: Xcode@5
-  inputs:
-    actions: 'test'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, default, specifyPath
+    scriptPath: './ci.sh'
+  env:
+    CODECOV_TOKEN: $(codecovToken)
+
