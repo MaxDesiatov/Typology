@@ -6,7 +6,7 @@
 //
 
 struct Solver {
-  var substitution: Substitution
+  var substitution = Substitution()
   var constraints: [Constraint]
 
   static var empty: Solver {

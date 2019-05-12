@@ -17,25 +17,15 @@ enum Literal {
   var defaultType: Type {
     switch self {
     case .integer:
-      return .constructor("Int")
+      return .intType
     case .floating:
-      return .constructor("Double")
+      return .doubleType
     case .bool:
-      return .constructor("Bool")
+      return .boolType
     case .string:
-      return .constructor("String")
+      return .stringType
     }
   }
-}
-
-indirect enum Expr {
-  case variable(Identifier)
-  case application(Expr, Expr)
-  case lambda(Identifier, Expr)
-  case constant(Identifier, Expr, Expr)
-  case literal(Literal)
-  case ternary(Expr, Expr, Expr)
-  case binaryOperator(Operator, Expr, Expr)
 }
 
 struct File {

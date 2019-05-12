@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D1B239E622885CF000746A12 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B239E522885CF000746A12 /* Expr.swift */; };
 		OBJ_101 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AST.swift */; };
 		OBJ_102 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Inference.swift */; };
 		OBJ_103 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Solver.swift */; };
@@ -93,6 +94,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1B239E522885CF000746A12 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
@@ -250,7 +252,7 @@
 			path = ".build/checkouts/swift-syntax.git-8734449718529945203/Sources/lit-test-helper";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -264,7 +266,6 @@
 				OBJ_57 /* README.md */,
 			);
 			indentWidth = 2;
-			name = "";
 			sourceTree = "<group>";
 			tabWidth = 2;
 		};
@@ -295,6 +296,7 @@
 				OBJ_12 /* Substitution.swift */,
 				OBJ_13 /* Type.swift */,
 				OBJ_14 /* Visitor.swift */,
+				D1B239E522885CF000746A12 /* Expr.swift */,
 			);
 			name = Typology;
 			path = Sources/Typology;
@@ -399,7 +401,7 @@
 				English,
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_50 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -422,6 +424,7 @@
 				OBJ_101 /* AST.swift in Sources */,
 				OBJ_102 /* Inference.swift in Sources */,
 				OBJ_103 /* Solver.swift in Sources */,
+				D1B239E622885CF000746A12 /* Expr.swift in Sources */,
 				OBJ_104 /* Substitution.swift in Sources */,
 				OBJ_105 /* Type.swift in Sources */,
 				OBJ_106 /* Visitor.swift in Sources */,

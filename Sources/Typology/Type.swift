@@ -9,6 +9,11 @@ indirect enum Type: Equatable {
   case variable(TypeVariable)
   case constructor(String)
   case arrow(Type, Type)
+
+  static let boolType   = Type.constructor("Bool")
+  static let stringType = Type.constructor("String")
+  static let doubleType = Type.constructor("Double")
+  static let intType    = Type.constructor("Int")
   
   func bind(to variable: TypeVariable) throws -> Substitution {
     if self == .variable(variable) {

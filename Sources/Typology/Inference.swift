@@ -25,7 +25,11 @@ enum TypeError: Error {
 struct Inference {
   private var typeVariableCount = 0
   private var environment: TypeEnv
-  var constraints: [Constraint]
+  var constraints = [Constraint]()
+
+  init(environment: TypeEnv) {
+    self.environment = environment
+  }
 
   mutating func inferInExtendedEnvironment(
     _ id: Identifier,
@@ -72,7 +76,7 @@ struct Inference {
     switch expr {
     case let .literal(literal):
       return literal.defaultType
-    case let .variable(id):
+    case let .identifier(id):
       return try lookup(id)
     case let .lambda(id, expr):
       let typeVariable = fresh()
@@ -81,6 +85,22 @@ struct Inference {
         typeVariable,
         try inferInExtendedEnvironment(id, localScheme, expr)
       )
+    case let .application(callable, arguments):
+      let callableType = try infer(callable)
+      let argumentsType = try infer(arguments)
+      let typeVariable = fresh()
+      constraints.append(.equal(
+        callableType,
+        .arrow(argumentsType, typeVariable)
+      ))
+      return typeVariable
+    case let .ternary(cond, expr1, expr2):
+      let result = try infer(expr1)
+      try constraints.append(contentsOf: [
+        .equal(infer(cond), .boolType),
+        .equal(result, infer(expr2))
+      ])
+      return result
     }
   }
 }

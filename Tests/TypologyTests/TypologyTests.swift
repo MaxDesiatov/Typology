@@ -8,16 +8,32 @@
 
 import Foundation
 import XCTest
-import Typology
+@testable import Typology
 
 class TypologyTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        //// XCTAssertEqual(Typology().text, "Hello, World!")
-    }
-    
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+  func testTernary() throws {
+    let string = Expr.ternary(
+      .literal(.bool(true)),
+      .literal(.string("then")),
+      .literal(.string("else"))
+    )
+    let int = Expr.ternary(
+      .literal(.bool(false)),
+      .literal(.integer(0)),
+      .literal(.integer(42))
+    )
+    let whatever = Expr.ternary(
+      .literal(.bool(true)),
+      .literal(.string("then")),
+      .literal(.integer(42))
+    )
+
+    XCTAssertEqual(try string.infer(), .stringType)
+    XCTAssertEqual(try int.infer(), .intType)
+    XCTAssertThrowsError(try whatever.infer())
+  }
+
+  static var allTests = [
+    ("testTernary", testTernary),
+  ]
 }
