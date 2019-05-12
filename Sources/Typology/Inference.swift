@@ -12,6 +12,16 @@ enum Constraint {
 struct Scheme {
   let variables: [TypeVariable]
   let type: Type
+
+  init(variables: [TypeVariable], type: Type) {
+    self.variables = variables
+    self.type = type
+  }
+
+  init(_ type: Type) {
+    self.variables = []
+    self.type = type
+  }
 }
 
 typealias TypeEnv = [Identifier: Scheme]

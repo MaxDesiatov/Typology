@@ -12,8 +12,8 @@ indirect enum Expr {
   case literal(Literal)
   case ternary(Expr, Expr, Expr)
 
-  func infer() throws -> Type {
-    var inference = Inference(environment: [:])
+  func infer(in environment: TypeEnv = [:]) throws -> Type {
+    var inference = Inference(environment: environment)
     let type = try inference.infer(self)
 
     let solver = Solver(substitution: [:], constraints: inference.constraints)

@@ -22,7 +22,7 @@ class TypologyTests: XCTestCase {
       .literal(.integer(0)),
       .literal(.integer(42))
     )
-    let whatever = Expr.ternary(
+    let error = Expr.ternary(
       .literal(.bool(true)),
       .literal(.string("then")),
       .literal(.integer(42))
@@ -30,7 +30,30 @@ class TypologyTests: XCTestCase {
 
     XCTAssertEqual(try string.infer(), .stringType)
     XCTAssertEqual(try int.infer(), .intType)
-    XCTAssertThrowsError(try whatever.infer())
+    XCTAssertThrowsError(try error.infer())
+  }
+
+  func testApplication() throws {
+    let increment = Expr.application(
+      .identifier("increment"),
+      .literal(.integer(0))
+    )
+    let stringify = Expr.application(
+      .identifier("stringify"),
+      .literal(.integer(0))
+    )
+    let error = Expr.application(
+      .identifier("increment"),
+      .literal(.bool(false))
+    )
+    let environment: TypeEnv = [
+      "increment": .init(.arrow(.intType, .intType)),
+      "stringify": .init(.arrow(.intType, .stringType))
+    ]
+
+    XCTAssertEqual(try increment.infer(in: environment), .intType)
+    XCTAssertEqual(try stringify.infer(in: environment), .stringType)
+    XCTAssertThrowsError(try error.infer())
   }
 
   static var allTests = [
