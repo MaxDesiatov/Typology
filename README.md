@@ -28,6 +28,7 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 
 * [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst)
 * [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html)
+* [Typing Haskell in Haskell](http://web.cecs.pdx.edu/~mpj/thih/TypingHaskellInHaskell.html)
 * [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand)
 * [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/)
 * [Exponential time complexity in the Swift type checker](https://www.cocoawithlove.com/blog/2016/07/12/type-checker-issues.html)
