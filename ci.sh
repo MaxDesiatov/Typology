@@ -1,5 +1,8 @@
 #/bin/sh
 
+set -e 
+set -o pipefail
+
 swift test --enable-code-coverage
 xcrun llvm-cov show \
   .build/debug/TypologyPackageTests.xctest/Contents/MacOS/TypologyPackageTests \
