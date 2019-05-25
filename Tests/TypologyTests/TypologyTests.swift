@@ -6,7 +6,6 @@
 //  Copyright © 2019 Typology. All rights reserved.
 //
 
-import Foundation
 import XCTest
 @testable import Typology
 

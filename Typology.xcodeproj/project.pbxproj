@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC2E22998F0D00491928 /* Benchmarks.swift */; };
 		D1B239E622885CF000746A12 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B239E522885CF000746A12 /* Expr.swift */; };
 		OBJ_101 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AST.swift */; };
 		OBJ_102 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Inference.swift */; };
@@ -94,6 +95,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D12CCC2E22998F0D00491928 /* Benchmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmarks.swift; sourceTree = "<group>"; };
 		D1B239E522885CF000746A12 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_17 /* TypologyTests.swift */,
+				D12CCC2E22998F0D00491928 /* Benchmarks.swift */,
 			);
 			name = TypologyTests;
 			path = Tests/TypologyTests;
@@ -444,6 +447,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_126 /* TypologyTests.swift in Sources */,
+				D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

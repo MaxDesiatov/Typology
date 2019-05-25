@@ -47,14 +47,12 @@ struct Inference {
     _ inferred: Expr
   ) throws -> Type {
     // introduce inference with local scope
-    var local = self
-    local.environment[id] = scheme
-    let result = try local.infer(inferred)
+    var old = environment
 
-    // update the type variable count after local inference has completed
-    typeVariableCount = local.typeVariableCount
-    constraints.append(contentsOf: local.constraints)
-    return result
+    defer { environment = old }
+
+    environment[id] = scheme
+    return try infer(inferred)
   }
 
   mutating func fresh() -> Type {
