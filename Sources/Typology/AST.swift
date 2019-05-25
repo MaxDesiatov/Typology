@@ -17,14 +17,32 @@ enum Literal {
   var defaultType: Type {
     switch self {
     case .integer:
-      return .intType
+      return .int
     case .floating:
-      return .doubleType
+      return .double
     case .bool:
-      return .boolType
+      return .bool
     case .string:
-      return .stringType
+      return .string
     }
+  }
+}
+
+extension Literal: ExpressibleByStringLiteral {
+  init(stringLiteral value: String) {
+    self = .string(value)
+  }
+}
+
+extension Literal: ExpressibleByIntegerLiteral {
+  init(integerLiteral value: IntegerLiteralType) {
+    self = .integer(value)
+  }
+}
+
+extension Literal: ExpressibleByBooleanLiteral {
+  init(booleanLiteral value: BooleanLiteralType) {
+    self = .bool(value)
   }
 }
 

@@ -13,46 +13,66 @@ import XCTest
 class TypologyTests: XCTestCase {
   func testTernary() throws {
     let string = Expr.ternary(
-      .literal(.bool(true)),
-      .literal(.string("then")),
-      .literal(.string("else"))
+      .literal(true),
+      .literal("then"),
+      .literal("else")
     )
     let int = Expr.ternary(
       .literal(.bool(false)),
-      .literal(.integer(0)),
-      .literal(.integer(42))
+      .literal(0),
+      .literal(42)
     )
     let error = Expr.ternary(
-      .literal(.bool(true)),
-      .literal(.string("then")),
-      .literal(.integer(42))
+      .literal(true),
+      .literal("then"),
+      .literal(42)
     )
 
-    XCTAssertEqual(try string.infer(), .stringType)
-    XCTAssertEqual(try int.infer(), .intType)
+    XCTAssertEqual(try string.infer(), .string)
+    XCTAssertEqual(try int.infer(), .int)
     XCTAssertThrowsError(try error.infer())
   }
 
   func testApplication() throws {
-    let increment = Expr.application(
-      .identifier("increment"),
-      .literal(.integer(0))
-    )
-    let stringify = Expr.application(
-      .identifier("stringify"),
-      .literal(.integer(0))
-    )
-    let error = Expr.application(
-      .identifier("increment"),
-      .literal(.bool(false))
-    )
+    let increment = Expr.application("increment", .literal(0))
+
+    let stringify = Expr.application("stringify", .literal(0))
+    let error = Expr.application("increment", .literal(false))
+
     let environment: TypeEnv = [
-      "increment": .init(.arrow(.intType, .intType)),
-      "stringify": .init(.arrow(.intType, .stringType))
+      "increment": .init(.arrow(.int, .int)),
+      "stringify": .init(.arrow(.int, .string))
     ]
 
-    XCTAssertEqual(try increment.infer(in: environment), .intType)
-    XCTAssertEqual(try stringify.infer(in: environment), .stringType)
+    XCTAssertEqual(try increment.infer(in: environment), .int)
+    XCTAssertEqual(try stringify.infer(in: environment), .string)
+    XCTAssertThrowsError(try error.infer())
+  }
+
+  func testLambda() throws {
+    let lambda = Expr.lambda(
+      "x",
+      .application(
+        "decode",
+        .application(
+          "stringify",
+          .application("increment", "x"))))
+
+    let error = Expr.lambda(
+      "x",
+      .application(
+        "stringify",
+        .application(
+          "decode",
+          .application("increment", "x"))))
+
+    let environment: TypeEnv = [
+      "increment": .init(.arrow(.int, .int)),
+      "stringify": .init(.arrow(.int, .string)),
+      "decode": .init(.arrow(.string, .int)),
+    ]
+
+    XCTAssertEqual(try lambda.infer(in: environment), .arrow(.int, .int))
     XCTAssertThrowsError(try error.infer())
   }
 

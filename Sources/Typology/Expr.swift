@@ -20,3 +20,9 @@ indirect enum Expr {
     return try type.apply(solver.solve())
   }
 }
+
+extension Expr: ExpressibleByStringLiteral {
+  init(stringLiteral value: String) {
+    self = .identifier(value)
+  }
+}

@@ -53,6 +53,7 @@ struct Inference {
 
     // update the type variable count after local inference has completed
     typeVariableCount = local.typeVariableCount
+    constraints.append(contentsOf: local.constraints)
     return result
   }
 
@@ -107,7 +108,7 @@ struct Inference {
     case let .ternary(cond, expr1, expr2):
       let result = try infer(expr1)
       try constraints.append(contentsOf: [
-        .equal(infer(cond), .boolType),
+        .equal(infer(cond), .bool),
         .equal(result, infer(expr2))
       ])
       return result
