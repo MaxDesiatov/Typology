@@ -38,7 +38,7 @@ class TypologyTests: XCTestCase {
     let stringify = Expr.application("stringify", .literal(0))
     let error = Expr.application("increment", .literal(false))
 
-    let environment: TypeEnv = [
+    let environment: Environment = [
       "increment": .init(.arrow(.int, .int)),
       "stringify": .init(.arrow(.int, .string))
     ]
@@ -65,7 +65,7 @@ class TypologyTests: XCTestCase {
           "decode",
           .application("increment", "x"))))
 
-    let environment: TypeEnv = [
+    let environment: Environment = [
       "increment": .init(.arrow(.int, .int)),
       "stringify": .init(.arrow(.int, .string)),
       "decode": .init(.arrow(.string, .int)),
@@ -73,6 +73,17 @@ class TypologyTests: XCTestCase {
 
     XCTAssertEqual(try lambda.infer(in: environment), .arrow(.int, .int))
     XCTAssertThrowsError(try error.infer())
+  }
+
+  func testMember() throws {
+    let member = Expr.application(.member(.literal("Hello, "), "appending"),
+                                  .literal(" World"))
+
+    let declarations: TypeDeclarations = ["String":
+      ["appending": .init(.arrow(.string, .string))]
+    ]
+
+    XCTAssertEqual(try member.infer(with: declarations), .string)
   }
 
   static var allTests = [

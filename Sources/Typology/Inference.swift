@@ -7,10 +7,13 @@
 
 enum Constraint {
   case equal(Type, Type)
+  case member(Type, Identifier, Type)
 }
 
 struct Scheme {
+  /// Variables bound in this scheme
   let variables: [TypeVariable]
+
   let type: Type
 
   init(variables: [TypeVariable], type: Type) {
@@ -24,29 +27,33 @@ struct Scheme {
   }
 }
 
-typealias TypeEnv = [Identifier: Scheme]
+typealias Environment = [Identifier: Scheme]
+typealias TypeDeclarations = [TypeIdentifier: Environment]
 
 enum TypeError: Error {
   case infiniteType(TypeVariable, Type)
   case unificationFailure(Type, Type)
+  case arrowMember(Identifier)
+  case unknownMember(TypeIdentifier, Identifier)
   case unbound(Identifier)
 }
 
 struct Inference {
   private var typeVariableCount = 0
-  private var environment: TypeEnv
+  private var environment: Environment
   var constraints = [Constraint]()
 
-  init(environment: TypeEnv) {
+  init(environment: Environment) {
     self.environment = environment
   }
 
-  mutating func inferInExtendedEnvironment(
+  private mutating func inferInExtendedEnvironment(
     _ id: Identifier,
     _ scheme: Scheme,
     _ inferred: Expr
   ) throws -> Type {
-    // introduce inference with local scope
+    // preserve old environment to be restored after inference in extended
+    // environment has finished
     var old = environment
 
     defer { environment = old }
@@ -55,13 +62,13 @@ struct Inference {
     return try infer(inferred)
   }
 
-  mutating func fresh() -> Type {
+  private mutating func fresh() -> Type {
     defer { typeVariableCount += 1 }
 
     return .variable("T\(typeVariableCount)")
   }
 
-  mutating func lookup(_ id: Identifier) throws -> Type {
+  private mutating func lookup(_ id: Identifier) throws -> Type {
     guard let scheme = environment[id] else { throw TypeError.unbound(id) }
 
     return instantiate(scheme)
@@ -76,7 +83,7 @@ struct Inference {
 
   /// Converting a τ type into a σ type by closing over all free type variables
   /// in a type scheme.
-  func generalize(type: Type, in env: TypeEnv) -> Scheme {
+  private func generalize(type: Type, in env: Environment) -> Scheme {
     let variables = type.freeTypeVariables.subtracting(env.freeTypeVariables)
     return Scheme(variables: Array(variables), type: type)
   }
@@ -85,8 +92,10 @@ struct Inference {
     switch expr {
     case let .literal(literal):
       return literal.defaultType
+
     case let .identifier(id):
       return try lookup(id)
+
     case let .lambda(id, expr):
       let typeVariable = fresh()
       let localScheme = Scheme(variables: [], type: typeVariable)
@@ -94,6 +103,7 @@ struct Inference {
         typeVariable,
         try inferInExtendedEnvironment(id, localScheme, expr)
       )
+
     case let .application(callable, arguments):
       let callableType = try infer(callable)
       let argumentsType = try infer(arguments)
@@ -103,6 +113,7 @@ struct Inference {
         .arrow(argumentsType, typeVariable)
       ))
       return typeVariable
+
     case let .ternary(cond, expr1, expr2):
       let result = try infer(expr1)
       try constraints.append(contentsOf: [
@@ -110,6 +121,11 @@ struct Inference {
         .equal(result, infer(expr2))
       ])
       return result
+
+    case let .member(expr, id):
+      let typeVariable = fresh()
+      try constraints.append(.member(infer(expr), id, typeVariable))
+      return typeVariable
     }
   }
 }

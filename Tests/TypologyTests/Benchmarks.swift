@@ -14,7 +14,7 @@ class Benchmarks: XCTestCase {
 
     closure {
       do {
-        let environment: TypeEnv = [
+        let environment: Environment = [
           "increment": .init(.arrow(.int, .int)),
           "stringify": .init(.arrow(.int, .string)),
           "decode": .init(.arrow(.string, .int)),

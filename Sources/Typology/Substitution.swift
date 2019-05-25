@@ -34,9 +34,9 @@ extension Type: Substitutable {
       return sub[v] ?? .variable(v)
     case let .arrow(t1, t2):
       return .arrow(t1.apply(sub), t2.apply(sub))
-    case let .constructor(c):
+    case let .constructor(c, args):
       // no substitutions for a plain type constructor
-      return .constructor(c)
+      return .constructor(c, args)
     }
   }
 
@@ -77,8 +77,8 @@ extension Array: Substitutable where Element: Substitutable {
   }
 }
 
-extension TypeEnv: Substitutable {
-  func apply(_ sub: Substitution) -> TypeEnv {
+extension Environment: Substitutable {
+  func apply(_ sub: Substitution) -> Environment {
     return mapValues { $0.apply(sub) }
   }
 
@@ -92,6 +92,8 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return .equal(t1.apply(sub), t2.apply(sub))
+    case let .member(t, id, mt):
+      return .member(t.apply(sub), id, mt)
     }
   }
 
@@ -99,6 +101,8 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
+    case let .member(t, _, mt):
+      return t.freeTypeVariables.union(mt.freeTypeVariables)
     }
   }
 }
