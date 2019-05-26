@@ -8,23 +8,21 @@
 struct Solver {
   var substitution = Substitution()
   var constraints: [Constraint]
-  let declarations: TypeDeclarations
 
-  private func empty() -> Solver {
-    return .init(substitution: [:], constraints: [], declarations: declarations)
+  private static var empty: Solver {
+    return .init(substitution: [:], constraints: [])
   }
 
   private func bind(type: Type, to variable: TypeVariable) throws -> Solver {
     if type == .variable(variable) {
-      return empty()
+      return .empty
     } else if type.occurs(variable) {
       throw TypeError.infiniteType(variable, type)
     }
 
     return Solver(
       substitution: [variable: type],
-      constraints: [],
-      declarations: declarations
+      constraints: []
     )
   }
 
@@ -35,15 +33,19 @@ struct Solver {
       let s2 = try unify(o1.apply(s1.substitution), o2.apply(s1.substitution))
       return Solver(
         substitution: s2.substitution.compose(s1.substitution),
-        constraints: s1.constraints + s2.constraints,
-        declarations: declarations
+        constraints: s1.constraints + s2.constraints
       )
     case let (.variable(v), t):
       return try bind(type: t, to: v)
     case let (t, .variable(v)):
       return try bind(type: t, to: v)
     case let (.constructor(a), .constructor(b)) where a == b:
-      return empty()
+      return .empty
+    case let (.tuple(t1), .tuple(t2)) where t1.count == t2.count:
+      let solvers = try zip(t1, t2).map { try unify($0, $1) }
+      return solvers.reduce(.empty) { Solver(
+        substitution: $0.substitution.compose($1.substitution),
+        constraints: $0.constraints + $1.constraints) }
     case let (a, b):
       throw TypeError.unificationFailure(a, b)
     }
@@ -60,23 +62,8 @@ struct Solver {
 
       return try Solver(
         substitution: s.substitution.compose(substitution),
-        constraints: s.constraints + rest.apply(s.substitution),
-        declarations: declarations
+        constraints: s.constraints + rest.apply(s.substitution)
       ).solve()
-    case let .member(t, id, memberType):
-      switch t {
-      case .arrow:
-        throw TypeError.arrowMember(id)
-      case let .constructor(tid, _):
-        guard let type = declarations[tid]?[id] else {
-          throw TypeError.unknownMember(tid, id)
-        }
-
-        return substitution
-      case .variable:
-        fatalError("TBD")
-      }
-      return .init()
     }
   }
 }

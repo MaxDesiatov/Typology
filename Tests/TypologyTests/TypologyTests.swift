@@ -76,14 +76,19 @@ class TypologyTests: XCTestCase {
   }
 
   func testMember() throws {
-    let member = Expr.application(.member(.literal("Hello, "), "appending"),
-                                  .literal(" World"))
+    let appending = Expr.application(.member(.literal("Hello, "), "appending"),
+                                     .literal(" World"))
+    let count = Expr.application(.member(.literal("Test"), "count"), .tuple([]))
 
     let declarations: TypeDeclarations = ["String":
-      ["appending": .init(.arrow(.string, .string))]
+      [
+        "appending": .init(.arrow(.string, .string)),
+        "count": .init(.arrow(.tuple([]), .int))
+      ]
     ]
 
-    XCTAssertEqual(try member.infer(with: declarations), .string)
+    XCTAssertEqual(try appending.infer(with: declarations), .string)
+    XCTAssertEqual(try count.infer(with: declarations), .int)
   }
 
   static var allTests = [

@@ -37,6 +37,8 @@ extension Type: Substitutable {
     case let .constructor(c, args):
       // no substitutions for a plain type constructor
       return .constructor(c, args)
+    case let .tuple(types):
+      return .tuple(types.map { $0.apply(sub) })
     }
   }
 
@@ -48,6 +50,8 @@ extension Type: Substitutable {
       return [v]
     case let .arrow(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
+    case let .tuple(types):
+      return types.map { $0.freeTypeVariables }.reduce([]) { $0.union($1) }
     }
   }
 }
@@ -92,8 +96,6 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return .equal(t1.apply(sub), t2.apply(sub))
-    case let .member(t, id, mt):
-      return .member(t.apply(sub), id, mt)
     }
   }
 
@@ -101,8 +103,6 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
-    case let .member(t, _, mt):
-      return t.freeTypeVariables.union(mt.freeTypeVariables)
     }
   }
 }

@@ -12,18 +12,18 @@ indirect enum Expr {
   case literal(Literal)
   case ternary(Expr, Expr, Expr)
   case member(Expr, Identifier)
+  case tuple([Expr])
 
   func infer(
     in environment: Environment = [:],
     with declarations: TypeDeclarations = [:]
   ) throws -> Type {
-    var inference = Inference(environment: environment)
+    var inference = Inference(environment, declarations)
     let type = try inference.infer(self)
 
     let solver = Solver(
       substitution: [:],
-      constraints: inference.constraints,
-      declarations: declarations
+      constraints: inference.constraints
     )
     return try type.apply(solver.solve())
   }

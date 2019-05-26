@@ -7,7 +7,6 @@
 
 enum Constraint {
   case equal(Type, Type)
-  case member(Type, Identifier, Type)
 }
 
 struct Scheme {
@@ -41,12 +40,17 @@ enum TypeError: Error {
 struct Inference {
   private var typeVariableCount = 0
   private var environment: Environment
+  private let declarations: TypeDeclarations
   var constraints = [Constraint]()
 
-  init(environment: Environment) {
+  init(_ environment: Environment, _ declarations: TypeDeclarations) {
     self.environment = environment
+    self.declarations = declarations
   }
 
+  /// Temporarily injects `scheme` for `id` in the current environment to
+  /// infer the type of `inferred` expression. Is used to infer
+  /// type of an expression evaluated in a lambda.
   private mutating func inferInExtendedEnvironment(
     _ id: Identifier,
     _ scheme: Scheme,
@@ -68,10 +72,19 @@ struct Inference {
     return .variable("T\(typeVariableCount)")
   }
 
-  private mutating func lookup(_ id: Identifier) throws -> Type {
-    guard let scheme = environment[id] else { throw TypeError.unbound(id) }
+  private mutating func lookup(
+    _ id: Identifier,
+    in typeID: TypeIdentifier? = nil
+  ) throws -> Type {
+    if let typeID = typeID {
+      guard let scheme = declarations[typeID]?[id] else { throw TypeError.unknownMember(typeID, id) }
 
-    return instantiate(scheme)
+      return instantiate(scheme)
+    } else {
+      guard let scheme = environment[id] else { throw TypeError.unbound(id) }
+
+      return instantiate(scheme)
+    }
   }
 
   /// Converting a σ type into a τ type by creating fresh names for each type
@@ -124,8 +137,20 @@ struct Inference {
 
     case let .member(expr, id):
       let typeVariable = fresh()
-      try constraints.append(.member(infer(expr), id, typeVariable))
+      switch try infer(expr) {
+      case .arrow:
+        throw TypeError.arrowMember(id)
+      case let .constructor(typeID, _):
+        try constraints.append(.equal(typeVariable, lookup(id, in: typeID)))
+      case .variable(_):
+        fatalError("TBD member has type variable")
+      case .tuple(_):
+        fatalError("tuple")
+      }
       return typeVariable
+
+    case let .tuple(expressions):
+      return try .tuple(expressions.map { try infer($0) })
     }
   }
 }
