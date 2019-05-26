@@ -77,7 +77,9 @@ struct Inference {
     in typeID: TypeIdentifier? = nil
   ) throws -> Type {
     if let typeID = typeID {
-      guard let scheme = declarations[typeID]?[id] else { throw TypeError.unknownMember(typeID, id) }
+      guard let scheme = declarations[typeID]?[id] else {
+        throw TypeError.unknownMember(typeID, id)
+      }
 
       return instantiate(scheme)
     } else {
