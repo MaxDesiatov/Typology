@@ -89,7 +89,8 @@ indirect enum Type: Equatable {
 
    An example of a higher-kinded type used a in a function declaration would be
 
-   ```func f<T>(_ arg: T<Int>) -> T<Int>
+   ```
+   func f<T>(_ arg: T<Int>) -> T<Int>
    ```
 
    In Typology this would be represented as
