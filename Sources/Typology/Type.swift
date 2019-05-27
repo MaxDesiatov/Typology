@@ -48,7 +48,7 @@ indirect enum Type: Equatable {
    types that help to verify correctness of expressions at compile time, types
    have kinds that allow us to verify type constructor applications. Note that
    this is different from metatypes in Swift. Metatypes are still types and
-   and metatype values can be stored as constant/variables and operated on in
+   and metatype values can be stored as constants/variables and operated on in
    runtime. Kinds are completely separate from this and are a purely
    compile-time concept that help use to reason about generic types.
 
