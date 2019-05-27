@@ -30,8 +30,8 @@ extension Substitutable {
 extension Type: Substitutable {
   func apply(_ sub: Substitution) -> Type {
     switch self {
-    case let .variable(v):
-      return sub[v] ?? .variable(v)
+    case let .variable(v, args):
+      return sub[v] ?? .variable(v, args)
     case let .arrow(t1, t2):
       return .arrow(t1.apply(sub), t2.apply(sub))
     case let .constructor(c, args):
@@ -46,12 +46,12 @@ extension Type: Substitutable {
     switch self {
     case .constructor:
       return []
-    case let .variable(v):
-      return [v]
+    case let .variable(v, args):
+      return Set([v]).union(args.freeTypeVariables)
     case let .arrow(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
     case let .tuple(types):
-      return types.map { $0.freeTypeVariables }.reduce([]) { $0.union($1) }
+      return types.freeTypeVariables
     }
   }
 }

@@ -69,7 +69,7 @@ struct Inference {
   private mutating func fresh() -> Type {
     defer { typeVariableCount += 1 }
 
-    return .variable("T\(typeVariableCount)")
+    return .variable("T\(typeVariableCount)", [])
   }
 
   private mutating func lookup(

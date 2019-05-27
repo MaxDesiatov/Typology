@@ -14,7 +14,7 @@ struct Solver {
   }
 
   private func bind(type: Type, to variable: TypeVariable) throws -> Solver {
-    if type == .variable(variable) {
+    if type == .variable(variable, []) {
       return .empty
     } else if type.occurs(variable) {
       throw TypeError.infiniteType(variable, type)
@@ -35,9 +35,10 @@ struct Solver {
         substitution: s2.substitution.compose(s1.substitution),
         constraints: s1.constraints + s2.constraints
       )
-    case let (.variable(v), t):
+    // FIXME: unify type constructor arguments?
+    case let (.variable(v, _), t):
       return try bind(type: t, to: v)
-    case let (t, .variable(v)):
+    case let (t, .variable(v, _)):
       return try bind(type: t, to: v)
     case let (.constructor(a), .constructor(b)) where a == b:
       return .empty
