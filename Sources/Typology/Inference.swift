@@ -13,14 +13,6 @@ typealias Environment = [Identifier: Scheme]
 typealias Types = [TypeIdentifier: Environment]
 typealias Protocols = [ProtocolIdentifier: Protocol]
 
-enum TypeError: Error {
-  case infiniteType(TypeVariable, Type)
-  case unificationFailure(Type, Type)
-  case arrowMember(Identifier)
-  case unknownMember(TypeIdentifier, Identifier)
-  case unbound(Identifier)
-}
-
 struct Inference {
   private var typeVariableCount = 0
   private var environment: Environment
@@ -124,18 +116,29 @@ struct Inference {
       return result
 
     case let .member(expr, id):
-      let typeVariable = fresh()
       switch try infer(expr) {
       case .arrow:
         throw TypeError.arrowMember(id)
       case let .constructor(typeID, _):
+        let typeVariable = fresh()
         try constraints.append(.equal(typeVariable, lookup(id, in: typeID)))
+        return typeVariable
       case .variable(_):
         fatalError("TBD member has type variable")
-      case .tuple(_):
-        fatalError("tuple")
+      case let .tuple(types):
+        guard let idx = Int(id) else {
+          throw TypeError.unknownTupleMember(id)
+        }
+
+        guard (0..<types.count).contains(idx) else {
+          throw TypeError.tupleIndexOutOfRange(
+            total: types.count,
+            addressed: idx
+          )
+        }
+
+        return types[idx]
       }
-      return typeVariable
 
     case let .tuple(expressions):
       return try .tuple(expressions.map { try infer($0) })

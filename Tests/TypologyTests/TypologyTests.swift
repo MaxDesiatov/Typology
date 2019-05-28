@@ -91,6 +91,13 @@ class TypologyTests: XCTestCase {
     XCTAssertEqual(try count.infer(types: t), .int)
   }
 
+  func testTupleMember() throws {
+    let tuple = Expr.tuple([.literal(42), .literal("forty two")])
+
+    XCTAssertEqual(try Expr.member(tuple, "0").infer(), .int)
+    XCTAssertEqual(try Expr.member(tuple, "1").infer(), .string)
+  }
+
   static var allTests = [
     ("testTernary", testTernary),
   ]

@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D1055B21229D3B760018F4BF /* TypeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1055B20229D3B760018F4BF /* TypeError.swift */; };
 		D114741A229C3C9100CDBEB0 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1147419229C3C9100CDBEB0 /* Protocol.swift */; };
 		D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC2E22998F0D00491928 /* Benchmarks.swift */; };
 		D12CCC322299933600491928 /* Literal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC312299933600491928 /* Literal.swift */; };
@@ -98,6 +99,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1055B20229D3B760018F4BF /* TypeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeError.swift; sourceTree = "<group>"; };
 		D1147419229C3C9100CDBEB0 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		D12CCC2E22998F0D00491928 /* Benchmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmarks.swift; sourceTree = "<group>"; };
 		D12CCC312299933600491928 /* Literal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Literal.swift; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 				OBJ_11 /* Solver.swift */,
 				OBJ_12 /* Substitution.swift */,
 				OBJ_13 /* Type.swift */,
+				D1055B20229D3B760018F4BF /* TypeError.swift */,
 				D12CCC332299934500491928 /* AST */,
 			);
 			name = Typology;
@@ -440,6 +443,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_101 /* AST.swift in Sources */,
+				D1055B21229D3B760018F4BF /* TypeError.swift in Sources */,
 				OBJ_102 /* Inference.swift in Sources */,
 				OBJ_103 /* Solver.swift in Sources */,
 				D1B239E622885CF000746A12 /* Expr.swift in Sources */,
