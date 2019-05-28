@@ -21,9 +21,11 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D114741A229C3C9100CDBEB0 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1147419229C3C9100CDBEB0 /* Protocol.swift */; };
 		D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC2E22998F0D00491928 /* Benchmarks.swift */; };
 		D12CCC322299933600491928 /* Literal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC312299933600491928 /* Literal.swift */; };
 		D1B239E622885CF000746A12 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B239E522885CF000746A12 /* Expr.swift */; };
+		D1ECA97B229C7A8D00BB8765 /* Scheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ECA97A229C7A8D00BB8765 /* Scheme.swift */; };
 		OBJ_101 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AST.swift */; };
 		OBJ_102 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Inference.swift */; };
 		OBJ_103 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Solver.swift */; };
@@ -96,9 +98,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D1147419229C3C9100CDBEB0 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		D12CCC2E22998F0D00491928 /* Benchmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmarks.swift; sourceTree = "<group>"; };
 		D12CCC312299933600491928 /* Literal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Literal.swift; sourceTree = "<group>"; };
 		D1B239E522885CF000746A12 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
+		D1ECA97A229C7A8D00BB8765 /* Scheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheme.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
@@ -132,7 +136,6 @@
 		OBJ_46 /* TokenKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenKind.swift; sourceTree = "<group>"; };
 		OBJ_47 /* Trivia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trivia.swift; sourceTree = "<group>"; };
 		OBJ_49 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = "/Users/maxd/Documents/Typology/.build/checkouts/swift-syntax.git-8734449718529945203/Package.swift"; sourceTree = "<group>"; };
-		OBJ_54 /* Configs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Configs; sourceTree = SOURCE_ROOT; };
 		OBJ_55 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		OBJ_56 /* Typology.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = Typology.podspec; sourceTree = "<group>"; };
 		OBJ_57 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -276,7 +279,6 @@
 				OBJ_15 /* Tests */,
 				OBJ_18 /* Dependencies */,
 				OBJ_50 /* Products */,
-				OBJ_54 /* Configs */,
 				OBJ_55 /* LICENSE.md */,
 				OBJ_56 /* Typology.podspec */,
 				OBJ_57 /* README.md */,
@@ -307,6 +309,8 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_10 /* Inference.swift */,
+				D1147419229C3C9100CDBEB0 /* Protocol.swift */,
+				D1ECA97A229C7A8D00BB8765 /* Scheme.swift */,
 				OBJ_11 /* Solver.swift */,
 				OBJ_12 /* Substitution.swift */,
 				OBJ_13 /* Type.swift */,
@@ -439,10 +443,12 @@
 				OBJ_102 /* Inference.swift in Sources */,
 				OBJ_103 /* Solver.swift in Sources */,
 				D1B239E622885CF000746A12 /* Expr.swift in Sources */,
+				D1ECA97B229C7A8D00BB8765 /* Scheme.swift in Sources */,
 				OBJ_104 /* Substitution.swift in Sources */,
 				D12CCC322299933600491928 /* Literal.swift in Sources */,
 				OBJ_105 /* Type.swift in Sources */,
 				OBJ_106 /* Visitor.swift in Sources */,
+				D114741A229C3C9100CDBEB0 /* Protocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,7 @@ extension Substitution {
 }
 
 protocol Substitutable {
-  func apply(_: Substitution) -> Self
+  func apply(_ sub: Substitution) -> Self
   var freeTypeVariables: Set<TypeVariable> { get }
 }
 
@@ -63,7 +63,7 @@ extension Scheme: Substitutable {
       result[$1] = nil
       return result
     })
-    return Scheme(variables: variables, type: type)
+    return Scheme(variables: variables, constrained: type)
   }
 
   var freeTypeVariables: Set<TypeVariable> {
@@ -104,5 +104,28 @@ extension Constraint: Substitutable {
     case let .equal(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
     }
+  }
+}
+
+extension Predicate: Substitutable {
+  func apply(_ substitution: Substitution) -> Predicate {
+    return Predicate(subject: subject.apply(substitution), inherited: inherited)
+  }
+
+  var freeTypeVariables: Set<TypeVariable> {
+    return subject.freeTypeVariables
+  }
+}
+
+extension GenericConstraint: Substitutable where T: Substitutable {
+  func apply(_ sub: Substitution) -> GenericConstraint<T> {
+    return GenericConstraint(
+      predicates: predicates.apply(sub),
+      constrained: constrained.apply(sub)
+    )
+  }
+
+  var freeTypeVariables: Set<TypeVariable> {
+    return constrained.freeTypeVariables.union(predicates.freeTypeVariables)
   }
 }

@@ -38,13 +38,13 @@ class TypologyTests: XCTestCase {
     let stringify = Expr.application("stringify", .literal(0))
     let error = Expr.application("increment", .literal(false))
 
-    let environment: Environment = [
+    let e: Environment = [
       "increment": .init(.arrow(.int, .int)),
       "stringify": .init(.arrow(.int, .string))
     ]
 
-    XCTAssertEqual(try increment.infer(in: environment), .int)
-    XCTAssertEqual(try stringify.infer(in: environment), .string)
+    XCTAssertEqual(try increment.infer(environment: e), .int)
+    XCTAssertEqual(try stringify.infer(environment: e), .string)
     XCTAssertThrowsError(try error.infer())
   }
 
@@ -65,13 +65,13 @@ class TypologyTests: XCTestCase {
           "decode",
           .application("increment", "x"))))
 
-    let environment: Environment = [
+    let e: Environment = [
       "increment": .init(.arrow(.int, .int)),
       "stringify": .init(.arrow(.int, .string)),
       "decode": .init(.arrow(.string, .int)),
     ]
 
-    XCTAssertEqual(try lambda.infer(in: environment), .arrow(.int, .int))
+    XCTAssertEqual(try lambda.infer(environment: e), .arrow(.int, .int))
     XCTAssertThrowsError(try error.infer())
   }
 
@@ -80,15 +80,15 @@ class TypologyTests: XCTestCase {
                                      .literal(" World"))
     let count = Expr.application(.member(.literal("Test"), "count"), .tuple([]))
 
-    let declarations: TypeDeclarations = ["String":
+    let t: Types = ["String":
       [
         "appending": .init(.arrow(.string, .string)),
         "count": .init(.arrow(.tuple([]), .int))
       ]
     ]
 
-    XCTAssertEqual(try appending.infer(with: declarations), .string)
-    XCTAssertEqual(try count.infer(with: declarations), .int)
+    XCTAssertEqual(try appending.infer(types: t), .string)
+    XCTAssertEqual(try count.infer(types: t), .int)
   }
 
   static var allTests = [

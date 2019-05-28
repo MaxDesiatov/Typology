@@ -14,11 +14,6 @@ class Benchmarks: XCTestCase {
 
     closure {
       do {
-        let environment: Environment = [
-          "increment": .init(.arrow(.int, .int)),
-          "stringify": .init(.arrow(.int, .string)),
-          "decode": .init(.arrow(.string, .int)),
-        ]
         let lambda = Expr.lambda(
           "x",
           .application(
@@ -30,7 +25,11 @@ class Benchmarks: XCTestCase {
                 "x",
                 .literal(42))))))
 
-        _ = try lambda.infer(in: environment)
+        _ = try lambda.infer(environment: [
+          "increment": .init(.arrow(.int, .int)),
+          "stringify": .init(.arrow(.int, .string)),
+          "decode": .init(.arrow(.string, .int)),
+        ])
       } catch {
         caughtError = error
       }

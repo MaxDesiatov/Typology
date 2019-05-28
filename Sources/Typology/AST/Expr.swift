@@ -15,10 +15,11 @@ indirect enum Expr {
   case tuple([Expr])
 
   func infer(
-    in environment: Environment = [:],
-    with declarations: TypeDeclarations = [:]
+    environment: Environment = [:],
+    types: Types = [:],
+    protocols: Protocols = [:]
   ) throws -> Type {
-    var inference = Inference(environment, declarations)
+    var inference = Inference(environment, types: types, protocols: protocols)
     let type = try inference.infer(self)
 
     let solver = Solver(

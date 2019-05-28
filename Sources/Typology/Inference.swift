@@ -9,25 +9,9 @@ enum Constraint {
   case equal(Type, Type)
 }
 
-struct Scheme {
-  /// Variables bound in this scheme
-  let variables: [TypeVariable]
-
-  let type: Type
-
-  init(variables: [TypeVariable], type: Type) {
-    self.variables = variables
-    self.type = type
-  }
-
-  init(_ type: Type) {
-    self.variables = []
-    self.type = type
-  }
-}
-
 typealias Environment = [Identifier: Scheme]
-typealias TypeDeclarations = [TypeIdentifier: Environment]
+typealias Types = [TypeIdentifier: Environment]
+typealias Protocols = [ProtocolIdentifier: Protocol]
 
 enum TypeError: Error {
   case infiniteType(TypeVariable, Type)
@@ -40,12 +24,14 @@ enum TypeError: Error {
 struct Inference {
   private var typeVariableCount = 0
   private var environment: Environment
-  private let declarations: TypeDeclarations
+  private let types: Types
+  private let protocols: Protocols
   var constraints = [Constraint]()
 
-  init(_ environment: Environment, _ declarations: TypeDeclarations) {
+  init(_ environment: Environment, types: Types, protocols: Protocols) {
     self.environment = environment
-    self.declarations = declarations
+    self.types = types
+    self.protocols = protocols
   }
 
   /// Temporarily injects `scheme` for `id` in the current environment to
@@ -77,7 +63,7 @@ struct Inference {
     in typeID: TypeIdentifier? = nil
   ) throws -> Type {
     if let typeID = typeID {
-      guard let scheme = declarations[typeID]?[id] else {
+      guard let scheme = types[typeID]?[id] else {
         throw TypeError.unknownMember(typeID, id)
       }
 
@@ -93,7 +79,7 @@ struct Inference {
   /// variable that does not appear in the current typing environment.
   private mutating func instantiate(_ scheme: Scheme) -> Type {
     let substitution = scheme.variables.map { ($0, fresh()) }
-    return scheme.type.apply(Dictionary(uniqueKeysWithValues: substitution))
+    return scheme.type.constrained.apply(Dictionary(uniqueKeysWithValues: substitution))
   }
 
   /// Converting a τ type into a σ type by closing over all free type variables
