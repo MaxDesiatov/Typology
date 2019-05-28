@@ -27,6 +27,7 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 ## See also
 
 * [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst)
+* [A Type System From Scratch](https://www.youtube.com/watch?v=IbjoA5xVUq0)
 * [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html)
 * [Typing Haskell in Haskell](http://web.cecs.pdx.edu/~mpj/thih/TypingHaskellInHaskell.html)
 * [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand)
