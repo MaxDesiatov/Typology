@@ -26,11 +26,11 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 
 ## See also
 
-* [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst)
-* [A Type System From Scratch](https://www.youtube.com/watch?v=IbjoA5xVUq0)
-* [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html)
-* [Typing Haskell in Haskell](http://web.cecs.pdx.edu/~mpj/thih/TypingHaskellInHaskell.html)
-* [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand)
-* [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/)
-* [Exponential time complexity in the Swift type checker](https://www.cocoawithlove.com/blog/2016/07/12/type-checker-issues.html)
-* [A Swift Playground containing Martin Grabmüller's "Algorithm W Step-by-Step"](https://gist.github.com/CodaFi/ca35a0c22fbd96eca505b5df45f2509e)
+* [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst) by multiple contributors
+* [A Type System From Scratch](https://www.youtube.com/watch?v=IbjoA5xVUq0) by @CodaFi
+* [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html) by @sdiehl
+* [Typing Haskell in Haskell](http://web.cecs.pdx.edu/~mpj/thih/TypingHaskellInHaskell.html) by Mark P. Jones
+* [“What part of Hindley-Milner do you not understand?”](https://stackoverflow.com/questions/12532552/what-part-of-hindley-milner-do-you-not-understand) question and answers on StackOverflow
+* [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/) by @psygnisfive
+* [Exponential time complexity in the Swift type checker](https://www.cocoawithlove.com/blog/2016/07/12/type-checker-issues.html) by @mattgallagher
+* [A Swift Playground containing Martin Grabmüller's "Algorithm W Step-by-Step"](https://gist.github.com/CodaFi/ca35a0c22fbd96eca505b5df45f2509e) by @CodaFi
