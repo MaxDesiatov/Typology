@@ -10,22 +10,18 @@ import SwiftSyntax
 
 final class Visitor: SyntaxVisitor {
   override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.path.map { $0.name.text }
     return .skipChildren
   }
 
   override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.genericParameterClause
     return .skipChildren
   }
 
   override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.genericParameterClause
     return .skipChildren
   }
 
   override func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
-    node.identifier.text
     return .skipChildren
   }
 
@@ -34,7 +30,6 @@ final class Visitor: SyntaxVisitor {
   }
 
   override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-    node
     return .skipChildren
   }
 }

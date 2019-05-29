@@ -82,19 +82,11 @@ struct ImportDecl {
   var path: [String]
 }
 
-//struct File {
-//  var imports: [ImportDecl]
-//  var functions: [FunctionDecl]
-//  var statements: [Statement]
-//  var concreteTypes: [ConcreteTypeDecl]
-//  var protocols: [ProtocolDecl]
-//}
-//
-//struct Module {
-//  var files: [File]
-//}
-//
-//struct Target {
-//  var dependencies: [Module]
-//  var main: Module
-//}
+struct Module {
+  var files: [File]
+}
+
+struct Target {
+  var dependencies: [Module]
+  var main: Module
+}
