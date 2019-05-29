@@ -5,7 +5,6 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
-typealias TypeVariable = String
 typealias Substitution = [TypeVariable: Type]
 
 extension Substitution {
@@ -27,16 +26,29 @@ extension Substitutable {
   }
 }
 
+extension TypeVariable: Substitutable {
+  var freeTypeVariables: Set<TypeVariable> {
+    return [self]
+  }
+
+  func apply(_ sub: Substitution) -> TypeVariable {
+    if case let .variable(v)? = sub[self] {
+      return v
+    } else {
+      return self
+    }
+  }
+}
+
 extension Type: Substitutable {
   func apply(_ sub: Substitution) -> Type {
     switch self {
-    case let .variable(v, args):
-      return sub[v] ?? .variable(v, args)
+    case let .variable(v):
+      return sub[v] ?? .variable(v)
     case let .arrow(t1, t2):
       return .arrow(t1.apply(sub), t2.apply(sub))
-    case let .constructor(c, args):
-      // no substitutions for a plain type constructor
-      return .constructor(c, args)
+    case .constructor:
+      return self
     case let .tuple(types):
       return .tuple(types.map { $0.apply(sub) })
     }
@@ -46,8 +58,8 @@ extension Type: Substitutable {
     switch self {
     case .constructor:
       return []
-    case let .variable(v, args):
-      return Set([v]).union(args.freeTypeVariables)
+    case let .variable(v):
+      return [v]
     case let .arrow(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
     case let .tuple(types):
@@ -63,7 +75,7 @@ extension Scheme: Substitutable {
       result[$1] = nil
       return result
     })
-    return Scheme(variables: variables, constrained: type)
+    return Scheme(type, variables: variables)
   }
 
   var freeTypeVariables: Set<TypeVariable> {
@@ -104,28 +116,5 @@ extension Constraint: Substitutable {
     case let .equal(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
     }
-  }
-}
-
-extension Predicate: Substitutable {
-  func apply(_ substitution: Substitution) -> Predicate {
-    return Predicate(subject: subject.apply(substitution), inherited: inherited)
-  }
-
-  var freeTypeVariables: Set<TypeVariable> {
-    return subject.freeTypeVariables
-  }
-}
-
-extension GenericConstraint: Substitutable where T: Substitutable {
-  func apply(_ sub: Substitution) -> GenericConstraint<T> {
-    return GenericConstraint(
-      predicates: predicates.apply(sub),
-      constrained: constrained.apply(sub)
-    )
-  }
-
-  var freeTypeVariables: Set<TypeVariable> {
-    return constrained.freeTypeVariables.union(predicates.freeTypeVariables)
   }
 }

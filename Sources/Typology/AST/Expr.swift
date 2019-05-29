@@ -16,10 +16,12 @@ indirect enum Expr {
 
   func infer(
     environment: Environment = [:],
-    types: Types = [:],
-    protocols: Protocols = [:]
+    members: TypeMembers = [:]
   ) throws -> Type {
-    var inference = Inference(environment, types: types, protocols: protocols)
+    var inference = Inference(
+      environment,
+      members: members
+    )
     let type = try inference.infer(self)
 
     let solver = Solver(

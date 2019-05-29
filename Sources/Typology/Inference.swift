@@ -10,20 +10,17 @@ enum Constraint {
 }
 
 typealias Environment = [Identifier: Scheme]
-typealias Types = [TypeIdentifier: Environment]
-typealias Protocols = [ProtocolIdentifier: Protocol]
+typealias TypeMembers = [TypeIdentifier: Environment]
 
 struct Inference {
   private var typeVariableCount = 0
   private var environment: Environment
-  private let types: Types
-  private let protocols: Protocols
+  private let members: TypeMembers
   var constraints = [Constraint]()
 
-  init(_ environment: Environment, types: Types, protocols: Protocols) {
+  init(_ environment: Environment, members: TypeMembers) {
     self.environment = environment
-    self.types = types
-    self.protocols = protocols
+    self.members = members
   }
 
   /// Temporarily injects `scheme` for `id` in the current environment to
@@ -47,38 +44,31 @@ struct Inference {
   private mutating func fresh() -> Type {
     defer { typeVariableCount += 1 }
 
-    return .variable("T\(typeVariableCount)", [])
+    return .variable("T\(typeVariableCount)")
+  }
+
+  private mutating func lookup(_ id: Identifier) throws -> Type {
+    guard let scheme = environment[id] else { throw TypeError.unbound(id) }
+
+    return instantiate(scheme)
   }
 
   private mutating func lookup(
     _ id: Identifier,
-    in typeID: TypeIdentifier? = nil
+    in typeID: TypeIdentifier
   ) throws -> Type {
-    if let typeID = typeID {
-      guard let scheme = types[typeID]?[id] else {
-        throw TypeError.unknownMember(typeID, id)
-      }
-
-      return instantiate(scheme)
-    } else {
-      guard let scheme = environment[id] else { throw TypeError.unbound(id) }
-
-      return instantiate(scheme)
+    guard let scheme = members[typeID]?[id] else {
+      throw TypeError.unknownMember(typeID, id)
     }
+
+    return instantiate(scheme)
   }
 
   /// Converting a σ type into a τ type by creating fresh names for each type
   /// variable that does not appear in the current typing environment.
   private mutating func instantiate(_ scheme: Scheme) -> Type {
     let substitution = scheme.variables.map { ($0, fresh()) }
-    return scheme.type.constrained.apply(Dictionary(uniqueKeysWithValues: substitution))
-  }
-
-  /// Converting a τ type into a σ type by closing over all free type variables
-  /// in a type scheme.
-  private func generalize(type: Type, in env: Environment) -> Scheme {
-    let variables = type.freeTypeVariables.subtracting(env.freeTypeVariables)
-    return Scheme(variables: Array(variables), type: type)
+    return scheme.type.apply(Dictionary(uniqueKeysWithValues: substitution))
   }
 
   mutating func infer(_ expr: Expr) throws -> Type {
@@ -91,7 +81,7 @@ struct Inference {
 
     case let .lambda(id, expr):
       let typeVariable = fresh()
-      let localScheme = Scheme(variables: [], type: typeVariable)
+      let localScheme = Scheme(typeVariable)
       return .arrow(
         typeVariable,
         try inferInExtendedEnvironment(id, localScheme, expr)
@@ -123,8 +113,8 @@ struct Inference {
         let typeVariable = fresh()
         try constraints.append(.equal(typeVariable, lookup(id, in: typeID)))
         return typeVariable
-      case .variable(_):
-        fatalError("TBD member has type variable")
+      case .variable:
+        fatalError("unhandled type variable")
       case let .tuple(types):
         guard let idx = Int(id) else {
           throw TypeError.unknownTupleMember(id)

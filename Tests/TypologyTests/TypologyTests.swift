@@ -80,15 +80,15 @@ class TypologyTests: XCTestCase {
                                      .literal(" World"))
     let count = Expr.application(.member(.literal("Test"), "count"), .tuple([]))
 
-    let t: Types = ["String":
+    let m: TypeMembers = ["String":
       [
         "appending": .init(.arrow(.string, .string)),
         "count": .init(.arrow(.tuple([]), .int))
       ]
     ]
 
-    XCTAssertEqual(try appending.infer(types: t), .string)
-    XCTAssertEqual(try count.infer(types: t), .int)
+    XCTAssertEqual(try appending.infer(members: m), .string)
+    XCTAssertEqual(try count.infer(members: m), .int)
   }
 
   func testTupleMember() throws {

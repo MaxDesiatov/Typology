@@ -5,6 +5,23 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
+
+struct TypeVariable: Hashable {
+  let value: String
+}
+
+extension TypeVariable: ExpressibleByStringLiteral {
+  init(stringLiteral value: String) {
+    self.value = value
+  }
+}
+
+extension TypeVariable: ExpressibleByStringInterpolation {
+  init(stringInterpolation: DefaultStringInterpolation) {
+    value = stringInterpolation.description
+  }
+}
+
 struct TypeIdentifier: Hashable {
   let value: String
 }
@@ -71,52 +88,10 @@ enum Type: Equatable {
    */
   case constructor(TypeIdentifier, [Type])
 
-  /** A type variable used in generic type declarations. The most primitive
-   type variables is the one without type arguments: `.variable("T", [])` (you
-   can use any other free variable name instead of `"T"`).
-
-   A type of a generic function
-
-   ```
-   func f<T>(_ arg: T) -> T
-   ```
-
-   can be represented as
-
-   ```
-   Type.arrow(.variable("T", []), .variable("T", []))
-   ```
-
-   Note the second array argument of `case variable(TypeVariable, [Type])`.
-   In the example above, for a simple generic function the second argument
-   is always an empty array, but we'd like to allow type variables to be proper
-   type constructors, at least internally within Typology. While as of 2019
-   Swift doesn't allow higher-kinded types, we're convinced that it would be a
-   very welcome addition to Swift in the future and would like to have a
-   built-in support for it in Typology from the start.
-
-   An example of a higher-kinded type used a in a function declaration would be
-
-   ```
-   func f<T>(_ arg: T<Int>) -> T<Int>
-   ```
-
-   In Typology this would be represented as
-
-   ```
-   Type.arrow(.variable("T", [.int]), .variable("T", [.int]))
-   ```
-
-   With generic constraints a practical application of this would be a function
-
-   ```
-   func f<T>(_ arg: T<Int>) -> T<Int> where T<Int>: Sequence
-   ```
-
-   which would allow one to write a generic function operating on any arbitrary
-   sequence of integers.
+  /** A type variable used as a temporary placeholder type during type
+   inference.
    */
-  case variable(TypeVariable, [Type])
+  case variable(TypeVariable)
 
   /** Binary type operator `->` representing function types.
    */

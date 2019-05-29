@@ -6,24 +6,17 @@
 //
 
 struct Scheme {
-  /// Variables bound in this scheme
+  let type: Type
+
+  /// Variables bound in the scheme
   let variables: [TypeVariable]
 
-  let type: GenericConstraint<Type>
-
-  init(variables: [TypeVariable], constrained: GenericConstraint<Type>) {
+  init(
+    _ type: Type,
+    variables: [TypeVariable] = []
+  ) {
+    self.type = type
     self.variables = variables
-    self.type = constrained
-  }
-
-  init(variables: [TypeVariable], type: Type) {
-    self.variables = variables
-    self.type = GenericConstraint(predicates: [], constrained: type)
-  }
-
-  init(_ type: Type) {
-    self.variables = []
-    self.type = GenericConstraint(predicates: [], constrained: type)
   }
 }
 
