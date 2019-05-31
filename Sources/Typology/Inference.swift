@@ -26,9 +26,8 @@ struct Inference {
   /// Temporarily injects `scheme` for `id` in the current environment to
   /// infer the type of `inferred` expression. Is used to infer
   /// type of an expression evaluated in a lambda.
-  private mutating func inferInExtendedEnvironment(
-    _ id: Identifier,
-    _ scheme: Scheme,
+  private mutating func infer(
+    inExtendedEnvironment extendedEnvironment: [(Identifier, Scheme)],
     _ inferred: Expr
   ) throws -> Type {
     // preserve old environment to be restored after inference in extended
@@ -37,7 +36,9 @@ struct Inference {
 
     defer { environment = old }
 
-    environment[id] = scheme
+    for (id, scheme) in extendedEnvironment {
+      environment[id] = scheme
+    }
     return try infer(inferred)
   }
 
@@ -84,7 +85,7 @@ struct Inference {
       let localScheme = Scheme(typeVariable)
       return .arrow(
         typeVariable,
-        try inferInExtendedEnvironment(id, localScheme, expr)
+        try infer(inExtendedEnvironment: [(id, localScheme)], expr)
       )
 
     case let .application(callable, arguments):
