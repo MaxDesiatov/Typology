@@ -5,7 +5,7 @@
 //  Created by Max Desiatov on 12/05/2019.
 //
 
-indirect enum Expr {
+indirect enum Expr: Statement {
   case identifier(Identifier)
   case application(Expr, Expr)
   case lambda(Identifier, Expr)

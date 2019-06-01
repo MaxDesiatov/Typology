@@ -9,8 +9,7 @@ typealias Identifier = String
 typealias Operator = String
 
 struct File {
-  let declarations: [(Identifier, Expr)]
-  let expressions: [Expr]
+  let statements: [Statement]
 }
 
 struct WhereClause {

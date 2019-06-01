@@ -32,7 +32,7 @@
 		OBJ_103 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Solver.swift */; };
 		OBJ_104 /* Substitution.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Substitution.swift */; };
 		OBJ_105 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Type.swift */; };
-		OBJ_106 /* Visitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Visitor.swift */; };
+		OBJ_106 /* SwiftSyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* SwiftSyntax.swift */; };
 		OBJ_108 /* SwiftSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftSyntax::SwiftSyntax::Product" /* SwiftSyntax.framework */; };
 		OBJ_115 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_126 /* TypologyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* TypologyTests.swift */; };
@@ -109,7 +109,7 @@
 		OBJ_11 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
-		OBJ_14 /* Visitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visitor.swift; sourceTree = "<group>"; };
+		OBJ_14 /* SwiftSyntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSyntax.swift; sourceTree = "<group>"; };
 		OBJ_17 /* TypologyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyTests.swift; sourceTree = "<group>"; };
 		OBJ_21 /* AbsolutePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsolutePosition.swift; sourceTree = "<group>"; };
 		OBJ_22 /* ByteTreeDeserialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteTreeDeserialization.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 				OBJ_9 /* AST.swift */,
 				D1B239E522885CF000746A12 /* Expr.swift */,
 				D12CCC312299933600491928 /* Literal.swift */,
-				OBJ_14 /* Visitor.swift */,
+				OBJ_14 /* SwiftSyntax.swift */,
 			);
 			path = AST;
 			sourceTree = "<group>";
@@ -451,7 +451,7 @@
 				OBJ_104 /* Substitution.swift in Sources */,
 				D12CCC322299933600491928 /* Literal.swift in Sources */,
 				OBJ_105 /* Type.swift in Sources */,
-				OBJ_106 /* Visitor.swift in Sources */,
+				OBJ_106 /* SwiftSyntax.swift in Sources */,
 				D114741A229C3C9100CDBEB0 /* Protocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
