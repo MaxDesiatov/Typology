@@ -25,6 +25,7 @@
 		D114741A229C3C9100CDBEB0 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1147419229C3C9100CDBEB0 /* Protocol.swift */; };
 		D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC2E22998F0D00491928 /* Benchmarks.swift */; };
 		D12CCC322299933600491928 /* Literal.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12CCC312299933600491928 /* Literal.swift */; };
+		D1A6A65F22A30B6A00F78D9A /* ASTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A6A65E22A30B6A00F78D9A /* ASTTests.swift */; };
 		D1B239E622885CF000746A12 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B239E522885CF000746A12 /* Expr.swift */; };
 		D1ECA97B229C7A8D00BB8765 /* Scheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ECA97A229C7A8D00BB8765 /* Scheme.swift */; };
 		OBJ_101 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AST.swift */; };
@@ -35,7 +36,7 @@
 		OBJ_106 /* SwiftSyntax.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* SwiftSyntax.swift */; };
 		OBJ_108 /* SwiftSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftSyntax::SwiftSyntax::Product" /* SwiftSyntax.framework */; };
 		OBJ_115 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
-		OBJ_126 /* TypologyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* TypologyTests.swift */; };
+		OBJ_126 /* InferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* InferenceTests.swift */; };
 		OBJ_128 /* Typology.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Typology::Typology::Product" /* Typology.framework */; };
 		OBJ_129 /* SwiftSyntax.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftSyntax::SwiftSyntax::Product" /* SwiftSyntax.framework */; };
 		OBJ_63 /* AbsolutePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_21 /* AbsolutePosition.swift */; };
@@ -103,6 +104,7 @@
 		D1147419229C3C9100CDBEB0 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		D12CCC2E22998F0D00491928 /* Benchmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmarks.swift; sourceTree = "<group>"; };
 		D12CCC312299933600491928 /* Literal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Literal.swift; sourceTree = "<group>"; };
+		D1A6A65E22A30B6A00F78D9A /* ASTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTTests.swift; sourceTree = "<group>"; };
 		D1B239E522885CF000746A12 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
 		D1ECA97A229C7A8D00BB8765 /* Scheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheme.swift; sourceTree = "<group>"; };
 		OBJ_10 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
@@ -110,7 +112,7 @@
 		OBJ_12 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 		OBJ_14 /* SwiftSyntax.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSyntax.swift; sourceTree = "<group>"; };
-		OBJ_17 /* TypologyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypologyTests.swift; sourceTree = "<group>"; };
+		OBJ_17 /* InferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceTests.swift; sourceTree = "<group>"; };
 		OBJ_21 /* AbsolutePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsolutePosition.swift; sourceTree = "<group>"; };
 		OBJ_22 /* ByteTreeDeserialization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ByteTreeDeserialization.swift; sourceTree = "<group>"; };
 		OBJ_23 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
@@ -198,8 +200,9 @@
 		OBJ_16 /* TypologyTests */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_17 /* TypologyTests.swift */,
+				OBJ_17 /* InferenceTests.swift */,
 				D12CCC2E22998F0D00491928 /* Benchmarks.swift */,
+				D1A6A65E22A30B6A00F78D9A /* ASTTests.swift */,
 			);
 			name = TypologyTests;
 			path = Tests/TypologyTests;
@@ -468,7 +471,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_126 /* TypologyTests.swift in Sources */,
+				D1A6A65F22A30B6A00F78D9A /* ASTTests.swift in Sources */,
+				OBJ_126 /* InferenceTests.swift in Sources */,
 				D12CCC3022998FC700491928 /* Benchmarks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

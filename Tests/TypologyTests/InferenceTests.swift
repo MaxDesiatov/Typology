@@ -1,5 +1,5 @@
 //
-//  TypologyTests.swift
+//  InferenceTests.swift
 //  Typology
 //
 //  Created by Max Desiatov on 16/04/2019.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import Typology
 
-class TypologyTests: XCTestCase {
+final class InferenceTests: XCTestCase {
   func testTernary() throws {
     let string = Expr.ternary(
       .literal(true),
