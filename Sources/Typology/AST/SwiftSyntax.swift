@@ -62,7 +62,6 @@ extension Expr {
     case let literal as StringLiteralExprSyntax:
       self = .literal(.string(literal.stringLiteral.text))
 
-
     default:
       throw ASTError.unknownSyntax
     }

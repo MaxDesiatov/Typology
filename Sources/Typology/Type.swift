@@ -5,7 +5,6 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
-
 struct TypeVariable: Hashable {
   let value: String
 }
@@ -112,8 +111,8 @@ enum Type: Equatable {
    */
   case tuple([Type])
 
-  static let bool   = Type.constructor("Bool", [])
+  static let bool = Type.constructor("Bool", [])
   static let string = Type.constructor("String", [])
   static let double = Type.constructor("Double", [])
-  static let int    = Type.constructor("Int", [])
+  static let int = Type.constructor("Int", [])
 }

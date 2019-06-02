@@ -14,4 +14,3 @@ enum TypeError: Error {
   case unknownTupleMember(Identifier)
   case unbound(Identifier)
 }
-

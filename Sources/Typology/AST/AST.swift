@@ -12,8 +12,7 @@ struct File {
   let statements: [Statement]
 }
 
-struct WhereClause {
-}
+struct WhereClause {}
 
 struct InheritanceClause {
   var types: [NominalType]
@@ -26,8 +25,7 @@ struct FunctionType: ExprType {
   var parameters: [ExprType]
 }
 
-struct TupleType: ExprType {
-}
+struct TupleType: ExprType {}
 
 struct NominalType: ExprType {
   var name: String
@@ -57,8 +55,7 @@ struct ProtocolDecl {
   var structs: [ConcreteTypeDecl]
 }
 
-struct CaseDecl {
-}
+struct CaseDecl {}
 
 struct EnumDecl {
   var cases: [CaseDecl]

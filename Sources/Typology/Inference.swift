@@ -102,7 +102,7 @@ struct Inference {
       let result = try infer(expr1)
       try constraints.append(contentsOf: [
         .equal(infer(cond), .bool),
-        .equal(result, infer(expr2))
+        .equal(result, infer(expr2)),
       ])
       return result
 

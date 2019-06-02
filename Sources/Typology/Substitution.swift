@@ -84,7 +84,7 @@ extension Scheme: Substitutable {
 }
 
 extension Array: Substitutable where Element: Substitutable {
-  func apply(_ sub: Substitution) -> Array<Element> {
+  func apply(_ sub: Substitution) -> [Element] {
     return map { $0.apply(sub) }
   }
 

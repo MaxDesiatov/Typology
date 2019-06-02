@@ -5,8 +5,8 @@
 //  Created by Max Desiatov on 25/05/2019.
 //
 
-import XCTest
 @testable import Typology
+import XCTest
 
 class Benchmarks: XCTestCase {
   func delayErrors(_ closure: (() -> ()) -> ()) throws {
@@ -23,7 +23,11 @@ class Benchmarks: XCTestCase {
               .application("increment", .ternary(
                 .literal(.bool(false)),
                 "x",
-                .literal(42))))))
+                .literal(42)
+              ))
+            )
+          )
+        )
 
         _ = try lambda.infer(environment: [
           "increment": .init(.arrow(.int, .int)),
@@ -41,10 +45,10 @@ class Benchmarks: XCTestCase {
   }
 
   func testInference() throws {
-      try delayErrors { closure in
-        self.measure {
-          closure()
-        }
+    try delayErrors { closure in
+      self.measure {
+        closure()
       }
+    }
   }
 }

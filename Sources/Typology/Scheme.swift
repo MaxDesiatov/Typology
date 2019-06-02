@@ -19,4 +19,3 @@ struct Scheme {
     self.variables = variables
   }
 }
-

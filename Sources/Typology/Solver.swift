@@ -14,14 +14,20 @@ struct Solver {
     self.constraints = constraints
   }
 
-  private func bind(type: Type, to variable: TypeVariable) throws -> Solver {
-    if type == .variable(variable) {
-      return Solver()
-    } else if type.occurs(variable) {
-      throw TypeError.infiniteType(variable, type)
-    }
+  func solve() throws -> Substitution {
+    guard let constraint = constraints.first else { return substitution }
 
-    return Solver(substitution: [variable: type])
+    let rest = Array(constraints.dropFirst())
+
+    switch constraint {
+    case let .equal(t1, t2):
+      let s = try unify(t1, t2)
+
+      return try Solver(
+        substitution: s.substitution.compose(substitution),
+        constraints: s.constraints + rest.apply(s.substitution)
+      ).solve()
+    }
   }
 
   private func unify(_ t1: Type, _ t2: Type) throws -> Solver {
@@ -51,19 +57,13 @@ struct Solver {
     }
   }
 
-  func solve() throws -> Substitution {
-    guard let constraint = constraints.first else { return substitution }
-
-    let rest = Array(constraints.dropFirst())
-
-    switch constraint {
-    case let .equal(t1, t2):
-      let s = try unify(t1, t2)
-
-      return try Solver(
-        substitution: s.substitution.compose(substitution),
-        constraints: s.constraints + rest.apply(s.substitution)
-      ).solve()
+  private func bind(type: Type, to variable: TypeVariable) throws -> Solver {
+    if type == .variable(variable) {
+      return Solver()
+    } else if type.occurs(variable) {
+      throw TypeError.infiniteType(variable, type)
     }
+
+    return Solver(substitution: [variable: type])
   }
 }

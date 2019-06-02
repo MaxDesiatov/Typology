@@ -6,8 +6,8 @@
 //  Copyright © 2019 Typology. All rights reserved.
 //
 
-import XCTest
 @testable import Typology
+import XCTest
 
 final class InferenceTests: XCTestCase {
   func testTernary() throws {
@@ -40,7 +40,7 @@ final class InferenceTests: XCTestCase {
 
     let e: Environment = [
       "increment": .init(.arrow(.int, .int)),
-      "stringify": .init(.arrow(.int, .string))
+      "stringify": .init(.arrow(.int, .string)),
     ]
 
     XCTAssertEqual(try increment.infer(environment: e), .int)
@@ -55,7 +55,10 @@ final class InferenceTests: XCTestCase {
         "decode",
         .application(
           "stringify",
-          .application("increment", "x"))))
+          .application("increment", "x")
+        )
+      )
+    )
 
     let error = Expr.lambda(
       "x",
@@ -63,7 +66,10 @@ final class InferenceTests: XCTestCase {
         "stringify",
         .application(
           "decode",
-          .application("increment", "x"))))
+          .application("increment", "x")
+        )
+      )
+    )
 
     let e: Environment = [
       "increment": .init(.arrow(.int, .int)),
@@ -83,9 +89,8 @@ final class InferenceTests: XCTestCase {
     let m: TypeMembers = ["String":
       [
         "appending": .init(.arrow(.string, .string)),
-        "count": .init(.arrow(.tuple([]), .int))
-      ]
-    ]
+        "count": .init(.arrow(.tuple([]), .int)),
+      ]]
 
     XCTAssertEqual(try appending.infer(members: m), .string)
     XCTAssertEqual(try count.infer(members: m), .int)
