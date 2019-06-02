@@ -108,6 +108,8 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return .equal(t1.apply(sub), t2.apply(sub))
+    case let .member(type, member, mt):
+      return .member(type.apply(sub), member: member, memberType: mt.apply(sub))
     }
   }
 
@@ -115,6 +117,8 @@ extension Constraint: Substitutable {
     switch self {
     case let .equal(t1, t2):
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
+    case let .member(type, _, memberType):
+      return type.freeTypeVariables.union(memberType.freeTypeVariables)
     }
   }
 }

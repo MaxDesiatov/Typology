@@ -34,7 +34,6 @@ final class InferenceTests: XCTestCase {
 
   func testApplication() throws {
     let increment = Expr.application("increment", .literal(0))
-
     let stringify = Expr.application("stringify", .literal(0))
     let error = Expr.application("increment", .literal(false))
 
@@ -81,19 +80,71 @@ final class InferenceTests: XCTestCase {
     XCTAssertThrowsError(try error.infer())
   }
 
+  func testLambdaApplication() throws {
+    let lambda = Expr.application(
+      .lambda("x", .ternary("x", .literal(1), .literal(0))), .literal(true)
+    )
+
+    let error = Expr.application(
+      .lambda("x", .ternary("x", .literal(1), .literal(0))), .literal("blah")
+    )
+
+    XCTAssertEqual(try lambda.infer(), .int)
+    XCTAssertThrowsError(try error.infer())
+  }
+
   func testMember() throws {
     let appending = Expr.application(.member(.literal("Hello, "), "appending"),
                                      .literal(" World"))
     let count = Expr.application(.member(.literal("Test"), "count"), .tuple([]))
 
-    let m: TypeMembers = ["String":
-      [
+    let m: Members = [
+      "String": [
         "appending": .init(.arrow(.string, .string)),
         "count": .init(.arrow(.tuple([]), .int)),
-      ]]
+      ],
+    ]
 
     XCTAssertEqual(try appending.infer(members: m), .string)
     XCTAssertEqual(try count.infer(members: m), .int)
+  }
+
+  func testMemberOfMember() throws {
+    let literal = Expr.literal("Test")
+    let magnitude = Expr.member(.member(literal, "count"), "magnitude")
+    let error = Expr.member(.member(literal, "magnitude"), "count")
+
+    let m: Members = [
+      "String": [
+        "count": .init(.int),
+      ],
+      "Int": [
+        "magnitude": .init(.int),
+      ],
+    ]
+
+    XCTAssertEqual(try magnitude.infer(members: m), .int)
+    XCTAssertThrowsError(try error.infer(members: m))
+  }
+
+  func testLambdaMember() throws {
+    let lambda = Expr.application(
+      .lambda("x", .ternary("x", .literal("one"), .literal("zero"))), .literal(true)
+    )
+    let count = Expr.member(lambda, "count")
+    let error = Expr.member(lambda, "magnitude")
+
+    let m: Members = [
+      "String": [
+        "count": .init(.int),
+      ],
+      "Int": [
+        "magnitude": .init(.int),
+      ],
+    ]
+
+    XCTAssertEqual(try count.infer(members: m), .int)
+    XCTAssertThrowsError(try error.infer(members: m))
   }
 
   func testTupleMember() throws {

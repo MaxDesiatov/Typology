@@ -16,7 +16,7 @@ indirect enum Expr: Statement {
 
   func infer(
     environment: Environment = [:],
-    members: TypeMembers = [:]
+    members: Members = [:]
   ) throws -> Type {
     var inference = Inference(
       environment,
@@ -26,7 +26,8 @@ indirect enum Expr: Statement {
 
     let solver = Solver(
       substitution: [:],
-      constraints: inference.constraints
+      constraints: inference.constraints,
+      members: members
     )
     return try type.apply(solver.solve())
   }

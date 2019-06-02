@@ -87,8 +87,9 @@ enum Type: Equatable {
    */
   case constructor(TypeIdentifier, [Type])
 
-  /** A type variable used as a temporary placeholder type during type
-   inference.
+  /** A free type variable that can be used as a temporary placeholder type
+   during type inference, or as a type variable in a generic declaration as a
+   part of a `Scheme` value.
    */
   case variable(TypeVariable)
 

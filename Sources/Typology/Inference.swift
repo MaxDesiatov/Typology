@@ -7,18 +7,19 @@
 
 enum Constraint {
   case equal(Type, Type)
+  case member(Type, member: Identifier, memberType: Type)
 }
 
 typealias Environment = [Identifier: Scheme]
-typealias TypeMembers = [TypeIdentifier: Environment]
+typealias Members = [TypeIdentifier: Environment]
 
 struct Inference {
   private var typeVariableCount = 0
   private var environment: Environment
-  private let members: TypeMembers
-  var constraints = [Constraint]()
+  private let members: Members
+  private(set) var constraints = [Constraint]()
 
-  init(_ environment: Environment, members: TypeMembers) {
+  init(_ environment: Environment, members: Members) {
     self.environment = environment
     self.members = members
   }
@@ -55,11 +56,11 @@ struct Inference {
   }
 
   private mutating func lookup(
-    _ id: Identifier,
+    _ member: Identifier,
     in typeID: TypeIdentifier
   ) throws -> Type {
-    guard let scheme = members[typeID]?[id] else {
-      throw TypeError.unknownMember(typeID, id)
+    guard let scheme = members[typeID]?[member] else {
+      throw TypeError.unknownMember(typeID, member)
     }
 
     return instantiate(scheme)
@@ -111,11 +112,13 @@ struct Inference {
       case .arrow:
         throw TypeError.arrowMember(id)
       case let .constructor(typeID, _):
-        let typeVariable = fresh()
-        try constraints.append(.equal(typeVariable, lookup(id, in: typeID)))
-        return typeVariable
-      case .variable:
-        fatalError("unhandled type variable")
+        return try lookup(id, in: typeID)
+      case let .variable(v):
+        let memberType = fresh()
+        constraints.append(
+          .member(.variable(v), member: id, memberType: memberType)
+        )
+        return memberType
       case let .tuple(types):
         guard let idx = Int(id) else {
           throw TypeError.unknownTupleMember(id)
