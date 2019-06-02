@@ -129,7 +129,8 @@ final class InferenceTests: XCTestCase {
 
   func testLambdaMember() throws {
     let lambda = Expr.application(
-      .lambda("x", .ternary("x", .literal("one"), .literal("zero"))), .literal(true)
+      .lambda("x", .ternary("x", .literal("one"), .literal("zero"))),
+      .literal(true)
     )
     let count = Expr.member(lambda, "count")
     let error = Expr.member(lambda, "magnitude")
