@@ -6,16 +6,17 @@
 //
 
 struct Solver {
-  var substitution = Substitution()
-  var constraints: [Constraint]
+  private let substitution: Substitution
+  private let constraints: [Constraint]
 
-  private static var empty: Solver {
-    return .init(substitution: [:], constraints: [])
+  init(substitution: Substitution = [:], constraints: [Constraint] = []) {
+    self.substitution = substitution
+    self.constraints = constraints
   }
 
   private func bind(type: Type, to variable: TypeVariable) throws -> Solver {
     if type == .variable(variable) {
-      return .empty
+      return Solver()
     } else if type.occurs(variable) {
       throw TypeError.infiniteType(variable, type)
     }
@@ -40,12 +41,14 @@ struct Solver {
     case let (t, .variable(v)):
       return try bind(type: t, to: v)
     case let (.constructor(a), .constructor(b)) where a == b:
-      return .empty
+      return Solver()
     case let (.tuple(t1), .tuple(t2)) where t1.count == t2.count:
-      let solvers = try zip(t1, t2).map { try unify($0, $1) }
-      return solvers.reduce(.empty) { Solver(
-        substitution: $0.substitution.compose($1.substitution),
-        constraints: $0.constraints + $1.constraints) }
+      return try zip(t1, t2).map { try unify($0, $1) }.reduce(Solver()) {
+        Solver(
+          substitution: $0.substitution.compose($1.substitution),
+          constraints: $0.constraints + $1.constraints
+        )
+      }
     case let (a, b):
       throw TypeError.unificationFailure(a, b)
     }
