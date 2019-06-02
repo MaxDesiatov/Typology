@@ -21,10 +21,7 @@ struct Solver {
       throw TypeError.infiniteType(variable, type)
     }
 
-    return Solver(
-      substitution: [variable: type],
-      constraints: []
-    )
+    return Solver(substitution: [variable: type])
   }
 
   private func unify(_ t1: Type, _ t2: Type) throws -> Solver {
