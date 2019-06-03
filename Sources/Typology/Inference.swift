@@ -6,7 +6,18 @@
 //
 
 enum Constraint {
+  /// Type equality constraint
   case equal(Type, Type)
+
+  /** Constraint used to resolve function overloads. This constraint is valid
+   if `assumption` can be unified with any of the types passed as
+   `alternatives`.
+   */
+  case disjunction(Identifier, assumption: Type, alternatives: [Type])
+
+  /** Member constraint representing members of type declarations: functions and
+   properties.
+   */
   case member(Type, member: Identifier, memberType: Type)
 }
 

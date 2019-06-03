@@ -50,7 +50,16 @@ struct Solver {
 
       return try Solver(
         substitution: substitution,
-        constraints: [.equal(memberType, assumedType)],
+        constraints: [.equal(memberType, assumedType)] + rest,
+        members: members
+      ).solve()
+    case let .disjunction(id, type, alternatives):
+      guard alternatives.contains(type) else {
+        throw TypeError.unbound(id)
+      }
+      return try Solver(
+        substitution: substitution,
+        constraints: rest,
         members: members
       ).solve()
     }

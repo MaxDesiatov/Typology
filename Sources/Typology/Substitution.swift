@@ -110,6 +110,12 @@ extension Constraint: Substitutable {
       return .equal(t1.apply(sub), t2.apply(sub))
     case let .member(type, member, mt):
       return .member(type.apply(sub), member: member, memberType: mt.apply(sub))
+    case let .disjunction(id, type, alternatives):
+      return .disjunction(
+        id,
+        assumption: type.apply(sub),
+        alternatives: alternatives.apply(sub)
+      )
     }
   }
 
@@ -119,6 +125,8 @@ extension Constraint: Substitutable {
       return t1.freeTypeVariables.union(t2.freeTypeVariables)
     case let .member(type, _, memberType):
       return type.freeTypeVariables.union(memberType.freeTypeVariables)
+    case let .disjunction(_, type, alternatives):
+      return type.freeTypeVariables.union(alternatives.freeTypeVariables)
     }
   }
 }
