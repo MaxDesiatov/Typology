@@ -8,6 +8,7 @@
 enum TypeError: Error {
   case arrowMember(Identifier)
   case infiniteType(TypeVariable, Type)
+  case noOverloadFound(Identifier, Type)
   case tupleIndexOutOfRange(total: Int, addressed: Int)
   case unificationFailure(Type, Type)
   case unknownMember(TypeIdentifier, Identifier)

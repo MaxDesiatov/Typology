@@ -55,7 +55,7 @@ struct Solver {
       ).solve()
     case let .disjunction(id, type, alternatives):
       guard alternatives.contains(type) else {
-        throw TypeError.unbound(id)
+        throw TypeError.noOverloadFound(id, type)
       }
       return try Solver(
         substitution: substitution,
