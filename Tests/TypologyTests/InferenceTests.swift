@@ -38,8 +38,8 @@ final class InferenceTests: XCTestCase {
     let error = Expr.application("increment", .literal(false))
 
     let e: Environment = [
-      "increment": .init(.arrow(.int, .int)),
-      "stringify": .init(.arrow(.int, .string)),
+      "increment": [.init(.arrow(.int, .int))],
+      "stringify": [.init(.arrow(.int, .string))],
     ]
 
     XCTAssertEqual(try increment.infer(environment: e), .int)
@@ -71,9 +71,9 @@ final class InferenceTests: XCTestCase {
     )
 
     let e: Environment = [
-      "increment": .init(.arrow(.int, .int)),
-      "stringify": .init(.arrow(.int, .string)),
-      "decode": .init(.arrow(.string, .int)),
+      "increment": [.init(.arrow(.int, .int))],
+      "stringify": [.init(.arrow(.int, .string))],
+      "decode": [.init(.arrow(.string, .int))],
     ]
 
     XCTAssertEqual(try lambda.infer(environment: e), .arrow(.int, .int))
@@ -100,8 +100,8 @@ final class InferenceTests: XCTestCase {
 
     let m: Members = [
       "String": [
-        "appending": .init(.arrow(.string, .string)),
-        "count": .init(.arrow(.tuple([]), .int)),
+        "appending": [.init(.arrow(.string, .string))],
+        "count": [.init(.arrow(.tuple([]), .int))],
       ],
     ]
 
@@ -116,10 +116,10 @@ final class InferenceTests: XCTestCase {
 
     let m: Members = [
       "String": [
-        "count": .init(.int),
+        "count": [.init(.int)],
       ],
       "Int": [
-        "magnitude": .init(.int),
+        "magnitude": [.init(.int)],
       ],
     ]
 
@@ -137,10 +137,10 @@ final class InferenceTests: XCTestCase {
 
     let m: Members = [
       "String": [
-        "count": .init(.int),
+        "count": [.init(.int)],
       ],
       "Int": [
-        "magnitude": .init(.int),
+        "magnitude": [.init(.int)],
       ],
     ]
 
@@ -153,6 +153,10 @@ final class InferenceTests: XCTestCase {
 
     XCTAssertEqual(try Expr.member(tuple, "0").infer(), .int)
     XCTAssertEqual(try Expr.member(tuple, "1").infer(), .string)
+  }
+
+  func testOverload() throws {
+    
   }
 
   static var allTests = [

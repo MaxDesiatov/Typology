@@ -5,63 +5,104 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
+/** `Solver` takes an array of `Constraint` values and recursively finds a
+ suitable `Substitution` that satisfies these `constraints`. `Solver` values are
+ immutable, which allows separate solver iterations to operate independently.
+ For example, backtracking is implemented as discarding failed
+ `Solver` values and proceeding from the last known consistent iteration with
+ new assumptions.
+ */
 struct Solver {
   private let substitution: Substitution
-  private let constraints: [Constraint]
-  private let members: Members
+  private let system: ConstraintSystem
 
   init(
     substitution: Substitution,
-    constraints: [Constraint],
-    members: Members
+    system: ConstraintSystem
   ) {
     self.substitution = substitution
-    self.constraints = constraints
-    self.members = members
+    self.system = system
   }
 
   private var empty: Solver {
-    return Solver(substitution: [:], constraints: [], members: members)
+    return Solver(
+      substitution: [:],
+      system: ConstraintSystem(system.environment, members: system.members)
+    )
   }
 
+  /** Return a `Substitution` value that satisfies `constraints` within
+   the current solver.
+   */
   func solve() throws -> Substitution {
-    guard let constraint = constraints.first else { return substitution }
-
-    let rest = Array(constraints.dropFirst())
+    var system = self.system
+    guard let constraint = system.removeFirst() else { return substitution }
 
     switch constraint {
     case let .equal(t1, t2):
       let s = try unify(t1, t2)
 
+      system.apply(s.substitution)
+
       return try Solver(
         substitution: s.substitution.compose(substitution),
-        constraints: s.constraints + rest.apply(s.substitution),
-        members: members
+        system: s.system.appending(system.constraints)
       ).solve()
+
     case let .member(type, member, memberType):
       guard case let .constructor(typeID, _) = type else {
         fatalError("unhandled member constraint")
       }
 
-      guard let assumedType = members[typeID]?[member]?.type
-      else {
-        throw TypeError.unknownMember(typeID, member)
+      // generate new constraints for member lookup
+      let assumedType = try system.lookup(member, in: typeID)
+
+      if case .constructor = assumedType {
+        system.prepend(.equal(memberType, assumedType))
       }
 
       return try Solver(
         substitution: substitution,
-        constraints: [.equal(memberType, assumedType)] + rest,
-        members: members
+        system: system
       ).solve()
+
     case let .disjunction(id, type, alternatives):
-      guard alternatives.contains(type) else {
-        throw TypeError.noOverloadFound(id, type)
+      switch type {
+      case .variable:
+        // run multiple independent solvers with each `alternative` prepended as
+        // a new `equal` constraint. Potentially, these solvers could run on
+        // multiple threads in parallel?
+        let result = alternatives.compactMap { alternative -> Substitution? in
+          do {
+            var localSystem = system
+            localSystem.prepend(.equal(type, alternative))
+            return try Solver(
+              substitution: substitution,
+              system: localSystem
+            ).solve()
+          } catch {
+            return nil
+          }
+        }
+
+        switch result.count {
+        case 0:
+          throw TypeError.noOverloadFound(id, type)
+        case 1:
+          return result[0]
+        default:
+          throw TypeError.ambiguous(id)
+        }
+
+      default:
+        guard alternatives.contains(type) else {
+          throw TypeError.noOverloadFound(id, type)
+        }
+        return try Solver(
+          substitution: substitution,
+          system: system
+        ).solve()
       }
-      return try Solver(
-        substitution: substitution,
-        constraints: rest,
-        members: members
-      ).solve()
     }
   }
 
@@ -72,8 +113,7 @@ struct Solver {
       let s2 = try unify(o1.apply(s1.substitution), o2.apply(s1.substitution))
       return Solver(
         substitution: s2.substitution.compose(s1.substitution),
-        constraints: s1.constraints + s2.constraints,
-        members: members
+        system: s1.system.appending(s2.system.constraints)
       )
 
     case let (.variable(v), t):
@@ -89,8 +129,7 @@ struct Solver {
       return try zip(t1, t2).map { try unify($0, $1) }.reduce(empty) {
         Solver(
           substitution: $0.substitution.compose($1.substitution),
-          constraints: $0.constraints + $1.constraints,
-          members: members
+          system: $0.system.appending($1.system.constraints)
         )
       }
 
@@ -112,8 +151,7 @@ struct Solver {
 
     return Solver(
       substitution: [variable: type],
-      constraints: [],
-      members: members
+      system: empty.system
     )
   }
 }

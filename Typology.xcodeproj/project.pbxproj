@@ -29,7 +29,7 @@
 		D1B239E622885CF000746A12 /* Expr.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1B239E522885CF000746A12 /* Expr.swift */; };
 		D1ECA97B229C7A8D00BB8765 /* Scheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ECA97A229C7A8D00BB8765 /* Scheme.swift */; };
 		OBJ_101 /* AST.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AST.swift */; };
-		OBJ_102 /* Inference.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Inference.swift */; };
+		OBJ_102 /* ConstraintSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* ConstraintSystem.swift */; };
 		OBJ_103 /* Solver.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Solver.swift */; };
 		OBJ_104 /* Substitution.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Substitution.swift */; };
 		OBJ_105 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Type.swift */; };
@@ -107,7 +107,7 @@
 		D1A6A65E22A30B6A00F78D9A /* ASTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASTTests.swift; sourceTree = "<group>"; };
 		D1B239E522885CF000746A12 /* Expr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expr.swift; sourceTree = "<group>"; };
 		D1ECA97A229C7A8D00BB8765 /* Scheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheme.swift; sourceTree = "<group>"; };
-		OBJ_10 /* Inference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inference.swift; sourceTree = "<group>"; };
+		OBJ_10 /* ConstraintSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintSystem.swift; sourceTree = "<group>"; };
 		OBJ_11 /* Solver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solver.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Substitution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Substitution.swift; sourceTree = "<group>"; };
 		OBJ_13 /* Type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
@@ -313,7 +313,7 @@
 		OBJ_8 /* Typology */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_10 /* Inference.swift */,
+				OBJ_10 /* ConstraintSystem.swift */,
 				D1147419229C3C9100CDBEB0 /* Protocol.swift */,
 				D1ECA97A229C7A8D00BB8765 /* Scheme.swift */,
 				OBJ_11 /* Solver.swift */,
@@ -447,7 +447,7 @@
 			files = (
 				OBJ_101 /* AST.swift in Sources */,
 				D1055B21229D3B760018F4BF /* TypeError.swift in Sources */,
-				OBJ_102 /* Inference.swift in Sources */,
+				OBJ_102 /* ConstraintSystem.swift in Sources */,
 				OBJ_103 /* Solver.swift in Sources */,
 				D1B239E622885CF000746A12 /* Expr.swift in Sources */,
 				D1ECA97B229C7A8D00BB8765 /* Scheme.swift in Sources */,

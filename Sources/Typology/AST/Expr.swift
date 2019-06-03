@@ -18,16 +18,15 @@ indirect enum Expr: Statement {
     environment: Environment = [:],
     members: Members = [:]
   ) throws -> Type {
-    var inference = Inference(
+    var system = ConstraintSystem(
       environment,
       members: members
     )
-    let type = try inference.infer(self)
+    let type = try system.infer(self)
 
     let solver = Solver(
       substitution: [:],
-      constraints: inference.constraints,
-      members: members
+      system: system
     )
     return try type.apply(solver.solve())
   }

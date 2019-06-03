@@ -1,5 +1,5 @@
 //
-//  Inference.swift
+//  ConstraintSystem.swift
 //  Typology
 //
 //  Created by Max Desiatov on 27/04/2019.
@@ -21,25 +21,50 @@ enum Constraint {
   case member(Type, member: Identifier, memberType: Type)
 }
 
-typealias Environment = [Identifier: Scheme]
+/** Environment of possible overloads for `Identifier`. There's an assumption
+ that `[Scheme]` array can't be empty, since an empty array of overloads is
+ meaningless. If no overloads are available for `Identifier`, it shouldn't be
+ in the `Environoment` dictionary as a key in the first place.
+  */
+typealias Environment = [Identifier: [Scheme]]
 typealias Members = [TypeIdentifier: Environment]
 
-struct Inference {
+struct ConstraintSystem {
   private var typeVariableCount = 0
-  private var environment: Environment
-  private let members: Members
   private(set) var constraints = [Constraint]()
+
+  private(set) var environment: Environment
+  let members: Members
 
   init(_ environment: Environment, members: Members) {
     self.environment = environment
     self.members = members
   }
 
+  mutating func removeFirst() -> Constraint? {
+    return constraints.count > 0 ? constraints.removeFirst() : nil
+  }
+
+  mutating func prepend(_ constraint: Constraint) {
+    self.constraints.insert(constraint, at: 0)
+  }
+
+  func appending(_ constraints: [Constraint]) -> ConstraintSystem {
+    var result = self
+    result.constraints.append(contentsOf: constraints)
+    return result
+  }
+
+  mutating func apply(_ sub: Substitution) {
+    constraints = constraints.apply(sub)
+  }
+
   /// Temporarily injects `scheme` for `id` in the current environment to
   /// infer the type of `inferred` expression. Is used to infer
   /// type of an expression evaluated in a lambda.
-  private mutating func infer(
-    inExtendedEnvironment extendedEnvironment: [(Identifier, Scheme)],
+  private mutating func inferInExtendedEnvironment(
+    _ id: Identifier,
+    _ scheme: Scheme,
     _ inferred: Expr
   ) throws -> Type {
     // preserve old environment to be restored after inference in extended
@@ -48,33 +73,54 @@ struct Inference {
 
     defer { environment = old }
 
-    for (id, scheme) in extendedEnvironment {
-      environment[id] = scheme
-    }
+    environment[id] = [scheme]
     return try infer(inferred)
   }
 
+  /** Generate a new type variable that can be stored in `constraints`. If
+   constraints are consistent and a single solution ca be found, this
+   type variable will be resolved to a concrete type with a substitution created
+   by a `Solver`.
+   */
   private mutating func fresh() -> Type {
     defer { typeVariableCount += 1 }
 
     return .variable("T\(typeVariableCount)")
   }
 
-  private mutating func lookup(_ id: Identifier) throws -> Type {
-    guard let scheme = environment[id] else { throw TypeError.unbound(id) }
-
-    return instantiate(scheme)
-  }
-
-  private mutating func lookup(
+  mutating func lookup(
     _ member: Identifier,
     in typeID: TypeIdentifier
   ) throws -> Type {
-    guard let scheme = members[typeID]?[member] else {
-      throw TypeError.unknownMember(typeID, member)
+    guard let environment = members[typeID] else {
+      throw TypeError.unknownType(typeID)
     }
 
-    return instantiate(scheme)
+    return try lookup(
+      member,
+      in: environment,
+      orThrow: .unknownMember(typeID, member)
+    )
+  }
+
+  private mutating func lookup(
+    _ id: Identifier,
+    in environment: Environment,
+    orThrow error: TypeError
+  ) throws -> Type {
+    guard let schemes = environment[id] else { throw error }
+
+    let results = schemes.map { instantiate($0) }
+
+    assert(results.count > 0)
+    guard results.count > 1 else { return results[0] }
+
+    let typeVariable = fresh()
+
+    constraints.append(
+      .disjunction(id, assumption: typeVariable, alternatives: results)
+    )
+    return typeVariable
   }
 
   /// Converting a σ type into a τ type by creating fresh names for each type
@@ -90,14 +136,14 @@ struct Inference {
       return literal.defaultType
 
     case let .identifier(id):
-      return try lookup(id)
+      return try lookup(id, in: environment, orThrow: .unbound(id))
 
     case let .lambda(id, expr):
       let typeVariable = fresh()
       let localScheme = Scheme(typeVariable)
       return .arrow(
         typeVariable,
-        try infer(inExtendedEnvironment: [(id, localScheme)], expr)
+        try inferInExtendedEnvironment(id, localScheme, expr)
       )
 
     case let .application(callable, arguments):
@@ -122,14 +168,17 @@ struct Inference {
       switch try infer(expr) {
       case .arrow:
         throw TypeError.arrowMember(id)
+
       case let .constructor(typeID, _):
         return try lookup(id, in: typeID)
+
       case let .variable(v):
         let memberType = fresh()
         constraints.append(
           .member(.variable(v), member: id, memberType: memberType)
         )
         return memberType
+
       case let .tuple(types):
         guard let idx = Int(id) else {
           throw TypeError.unknownTupleMember(id)
