@@ -7,7 +7,7 @@
 
 indirect enum Expr: Statement {
   case identifier(Identifier)
-  case application(Expr, Expr)
+  case application(Expr, [Expr])
   case lambda([Identifier], Expr)
   case literal(Literal)
   case ternary(Expr, Expr, Expr)

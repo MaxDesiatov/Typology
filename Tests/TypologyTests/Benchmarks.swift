@@ -18,21 +18,21 @@ class Benchmarks: XCTestCase {
           ["x"],
           .application(
             "decode",
-            .application(
+            [.application(
               "stringify",
-              .application("increment", .ternary(
+              [.application("increment", [.ternary(
                 .literal(.bool(false)),
                 "x",
                 .literal(42)
-              ))
-            )
+              )])]
+            )]
           )
         )
 
         _ = try lambda.infer(environment: [
-          "increment": [.init(.arrow(.int, .int))],
-          "stringify": [.init(.arrow(.int, .string))],
-          "decode": [.init(.arrow(.string, .int))],
+          "increment": [.init(.arrow([.int], .int))],
+          "stringify": [.init(.arrow([.int], .string))],
+          "decode": [.init(.arrow([.string], .int))],
         ])
       } catch {
         caughtError = error

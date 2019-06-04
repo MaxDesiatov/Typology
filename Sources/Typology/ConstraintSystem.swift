@@ -145,17 +145,16 @@ struct ConstraintSystem {
       let typeVariable = fresh()
       let localScheme = Scheme(typeVariable)
       return .arrow(
-        typeVariable,
+        [typeVariable],
         try inferInExtendedEnvironment(ids, localScheme, expr)
       )
 
     case let .application(callable, arguments):
       let callableType = try infer(callable)
-      let argumentsType = try infer(arguments)
       let typeVariable = fresh()
       constraints.append(.equal(
         callableType,
-        .arrow(argumentsType, typeVariable)
+        .arrow(try arguments.map { try infer($0) }, typeVariable)
       ))
       return typeVariable
 

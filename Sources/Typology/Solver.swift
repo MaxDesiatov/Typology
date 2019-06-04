@@ -109,7 +109,7 @@ struct Solver {
   private func unify(_ t1: Type, _ t2: Type) throws -> Solver {
     switch (t1, t2) {
     case let (.arrow(i1, o1), .arrow(i2, o2)):
-      let s1 = try unify(i1, i2)
+      let s1 = try unify(.tuple(i1), .tuple(i2))
       let s2 = try unify(o1.apply(s1.substitution), o2.apply(s1.substitution))
       return Solver(
         substitution: s2.substitution.compose(s1.substitution),
