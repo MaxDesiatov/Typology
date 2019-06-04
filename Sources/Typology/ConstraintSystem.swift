@@ -64,7 +64,7 @@ struct ConstraintSystem {
   /// type of an expression evaluated in a lambda.
   private mutating func inferInExtendedEnvironment(
     _ ids: [Identifier],
-    _ scheme: Scheme,
+    _ schemes: [Scheme],
     _ inferred: Expr
   ) throws -> Type {
     // preserve old environment to be restored after inference in extended
@@ -73,8 +73,8 @@ struct ConstraintSystem {
 
     defer { environment = old }
 
-    for id in ids {
-      environment[id] = [scheme]
+    for (index, id) in ids.enumerated() {
+      environment[id] = [schemes[index]]
     }
 
     return try infer(inferred)
@@ -142,11 +142,16 @@ struct ConstraintSystem {
       return try lookup(id, in: environment, orThrow: .unbound(id))
 
     case let .lambda(ids, expr):
-      let typeVariable = fresh()
-      let localScheme = Scheme(typeVariable)
+      var typeVariables: [Type] = []
+      var localSchemes: [Scheme] = []
+      ids.forEach { _ in
+        let typeVariable = fresh()
+        typeVariables.append(typeVariable)
+        localSchemes.append(Scheme(typeVariable))
+      }
       return .arrow(
-        [typeVariable],
-        try inferInExtendedEnvironment(ids, localScheme, expr)
+        typeVariables,
+        try inferInExtendedEnvironment(ids, localSchemes, expr)
       )
 
     case let .application(callable, arguments):
