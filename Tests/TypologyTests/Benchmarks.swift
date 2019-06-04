@@ -15,7 +15,7 @@ class Benchmarks: XCTestCase {
     closure {
       do {
         let lambda = Expr.lambda(
-          "x",
+          ["x"],
           .application(
             "decode",
             .application(

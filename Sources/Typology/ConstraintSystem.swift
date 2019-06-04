@@ -25,7 +25,7 @@ enum Constraint {
  that `[Scheme]` array can't be empty, since an empty array of overloads is
  meaningless. If no overloads are available for `Identifier`, it shouldn't be
  in the `Environoment` dictionary as a key in the first place.
-  */
+ */
 typealias Environment = [Identifier: [Scheme]]
 typealias Members = [TypeIdentifier: Environment]
 
@@ -46,7 +46,7 @@ struct ConstraintSystem {
   }
 
   mutating func prepend(_ constraint: Constraint) {
-    self.constraints.insert(constraint, at: 0)
+    constraints.insert(constraint, at: 0)
   }
 
   func appending(_ constraints: [Constraint]) -> ConstraintSystem {
@@ -63,7 +63,7 @@ struct ConstraintSystem {
   /// infer the type of `inferred` expression. Is used to infer
   /// type of an expression evaluated in a lambda.
   private mutating func inferInExtendedEnvironment(
-    _ id: Identifier,
+    _ ids: [Identifier],
     _ scheme: Scheme,
     _ inferred: Expr
   ) throws -> Type {
@@ -73,7 +73,10 @@ struct ConstraintSystem {
 
     defer { environment = old }
 
-    environment[id] = [scheme]
+    for id in ids {
+      environment[id] = [scheme]
+    }
+
     return try infer(inferred)
   }
 
@@ -138,12 +141,12 @@ struct ConstraintSystem {
     case let .identifier(id):
       return try lookup(id, in: environment, orThrow: .unbound(id))
 
-    case let .lambda(id, expr):
+    case let .lambda(ids, expr):
       let typeVariable = fresh()
       let localScheme = Scheme(typeVariable)
       return .arrow(
         typeVariable,
-        try inferInExtendedEnvironment(id, localScheme, expr)
+        try inferInExtendedEnvironment(ids, localScheme, expr)
       )
 
     case let .application(callable, arguments):

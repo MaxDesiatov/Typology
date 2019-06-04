@@ -49,7 +49,7 @@ final class InferenceTests: XCTestCase {
 
   func testLambda() throws {
     let lambda = Expr.lambda(
-      "x",
+      ["x"],
       .application(
         "decode",
         .application(
@@ -60,7 +60,7 @@ final class InferenceTests: XCTestCase {
     )
 
     let error = Expr.lambda(
-      "x",
+      ["x"],
       .application(
         "stringify",
         .application(
@@ -82,11 +82,11 @@ final class InferenceTests: XCTestCase {
 
   func testLambdaApplication() throws {
     let lambda = Expr.application(
-      .lambda("x", .ternary("x", .literal(1), .literal(0))), .literal(true)
+      .lambda(["x"], .ternary("x", .literal(1), .literal(0))), .literal(true)
     )
 
     let error = Expr.application(
-      .lambda("x", .ternary("x", .literal(1), .literal(0))), .literal("blah")
+      .lambda(["x"], .ternary("x", .literal(1), .literal(0))), .literal("blah")
     )
 
     XCTAssertEqual(try lambda.infer(), .int)
@@ -129,7 +129,7 @@ final class InferenceTests: XCTestCase {
 
   func testLambdaMember() throws {
     let lambda = Expr.application(
-      .lambda("x", .ternary("x", .literal("one"), .literal("zero"))),
+      .lambda(["x"], .ternary("x", .literal("one"), .literal("zero"))),
       .literal(true)
     )
     let count = Expr.member(lambda, "count")
@@ -175,7 +175,7 @@ final class InferenceTests: XCTestCase {
     let e: Environment = [
       "f": [
         .init(.arrow(.tuple([]), .int)),
-        .init(.arrow(.tuple([]), .string))
+        .init(.arrow(.tuple([]), .string)),
       ],
     ]
 
@@ -230,7 +230,7 @@ final class InferenceTests: XCTestCase {
     let e: Environment = [
       "f": [
         .init(.arrow(.tuple([]), a)),
-        .init(.arrow(.tuple([]), b))
+        .init(.arrow(.tuple([]), b)),
       ],
     ]
 

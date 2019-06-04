@@ -8,7 +8,7 @@
 /** Schemes are types containing one or more generic variables. A scheme
  explicitly specifies variables bound in the current type, which allows those
  variables to be distinguished from those that were bound in an outer scope.
-*/
+ */
 struct Scheme {
   /** Type containing variables bound in `variables` property.
    */
