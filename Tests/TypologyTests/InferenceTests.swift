@@ -156,7 +156,91 @@ final class InferenceTests: XCTestCase {
   }
 
   func testOverload() throws {
-    
+    let uint = Type.constructor("UInt", [])
+
+    let count = Expr.member(.application("f", .tuple([])), "count")
+    let magnitude = Expr.member(.application("f", .tuple([])), "magnitude")
+    let error = Expr.member(.application("f", .tuple(
+      [.literal("blah")]
+    )), "count")
+
+    let m: Members = [
+      "String": [
+        "count": [.init(.int)],
+      ],
+      "Int": [
+        "magnitude": [.init(uint)],
+      ],
+    ]
+    let e: Environment = [
+      "f": [
+        .init(.arrow(.tuple([]), .int)),
+        .init(.arrow(.tuple([]), .string))
+      ],
+    ]
+
+    XCTAssertEqual(try count.infer(environment: e, members: m), .int)
+    XCTAssertEqual(try magnitude.infer(environment: e, members: m), uint)
+    XCTAssertThrowsError(try error.infer(environment: e, members: m))
+  }
+
+  func testNestedOverload() throws {
+    let uint = Type.constructor("UInt", [])
+    let a = Type.constructor("A", [])
+    let b = Type.constructor("B", [])
+
+    let magnitude = Expr.member(
+      .member(.application("f", .tuple([])), "a"),
+      "magnitude"
+    )
+    let count = Expr.member(
+      .member(.application("f", .tuple([])), "b"),
+      "count"
+    )
+    let ambiguousCount = Expr.member(
+      .member(.application("f", .tuple([])), "ambiguous"),
+      "count"
+    )
+    let ambiguousMagnitude = Expr.member(
+      .member(.application("f", .tuple([])), "ambiguous"),
+      "magnitude"
+    )
+    let ambiguous = Expr.member(.application("f", .tuple([])), "ambiguous")
+    let error = Expr.member(
+      .member(.application("f", .tuple([])), "ambiguous"),
+      "ambiguous"
+    )
+
+    let m: Members = [
+      "A": [
+        "a": [.init(.int)],
+        "ambiguous": [.init(.string)],
+      ],
+      "B": [
+        "b": [.init(.string)],
+        "ambiguous": [.init(.int)],
+      ],
+      "String": [
+        "count": [.init(.int)],
+      ],
+      "Int": [
+        "magnitude": [.init(uint)],
+      ],
+    ]
+    let e: Environment = [
+      "f": [
+        .init(.arrow(.tuple([]), a)),
+        .init(.arrow(.tuple([]), b))
+      ],
+    ]
+
+    XCTAssertEqual(try count.infer(environment: e, members: m), .int)
+    XCTAssertEqual(try magnitude.infer(environment: e, members: m), uint)
+    XCTAssertEqual(try ambiguousCount.infer(environment: e, members: m), .int)
+    XCTAssertEqual(try ambiguousMagnitude.infer(environment: e, members: m),
+                   uint)
+    XCTAssertThrowsError(try ambiguous.infer(environment: e, members: m))
+    XCTAssertThrowsError(try error.infer(environment: e, members: m))
   }
 
   static var allTests = [
