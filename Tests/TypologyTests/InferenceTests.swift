@@ -121,7 +121,6 @@ final class InferenceTests: XCTestCase {
       "decode": [.init(.arrow([.string, .string], .int))],
     ]
 
-    let l = try lambda.infer(environment: e)
     XCTAssertEqual(try lambda.infer(environment: e), .arrow([.int, .int], .int))
     XCTAssertThrowsError(try error.infer())
   }
