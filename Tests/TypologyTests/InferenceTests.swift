@@ -38,8 +38,8 @@ final class InferenceTests: XCTestCase {
     let error = Expr.application("increment", [.literal(false)])
 
     let e: Environment = [
-      "increment": [.init(.arrow([.int], .int))],
-      "stringify": [.init(.arrow([.int], .string))],
+      "increment": [.init(.int --> .int)],
+      "stringify": [.init(.int --> .string)],
     ]
 
     XCTAssertEqual(try increment.infer(environment: e), .int)
@@ -71,12 +71,12 @@ final class InferenceTests: XCTestCase {
     )
 
     let e: Environment = [
-      "increment": [.init(.arrow([.int], .int))],
-      "stringify": [.init(.arrow([.int], .string))],
-      "decode": [.init(.arrow([.string], .int))],
+      "increment": [.init(.int --> .int)],
+      "stringify": [.init(.int --> .string)],
+      "decode": [.init(.string --> .int)],
     ]
 
-    XCTAssertEqual(try lambda.infer(environment: e), .arrow([.int], .int))
+    XCTAssertEqual(try lambda.infer(environment: e), .int --> .int)
     XCTAssertThrowsError(try error.infer())
   }
 
@@ -152,15 +152,12 @@ final class InferenceTests: XCTestCase {
       .member(.literal("Hello, "), "appending"),
       [.literal(" World")]
     )
-    let count = Expr.application(
-      .member(.literal("Test"), "count"),
-      [.tuple([])]
-    )
+    let count = Expr.member(.literal("Test"), "count")
 
     let m: Members = [
       "String": [
-        "appending": [.init(.arrow([.string], .string))],
-        "count": [.init(.arrow([.tuple([])], .int))],
+        "appending": [.init(.string --> .string)],
+        "count": [.init(.int)],
       ],
     ]
 
@@ -217,8 +214,8 @@ final class InferenceTests: XCTestCase {
   func testOverload() throws {
     let uint = Type.constructor("UInt", [])
 
-    let count = Expr.member(.application("f", [.tuple([])]), "count")
-    let magnitude = Expr.member(.application("f", [.tuple([])]), "magnitude")
+    let count = Expr.member(.application("f", []), "count")
+    let magnitude = Expr.member(.application("f", []), "magnitude")
     let error = Expr.member(
       .application("f",
                    [.tuple(
@@ -236,8 +233,8 @@ final class InferenceTests: XCTestCase {
     ]
     let e: Environment = [
       "f": [
-        .init(.arrow([.tuple([])], .int)),
-        .init(.arrow([.tuple([])], .string)),
+        .init([] --> .int),
+        .init([] --> .string),
       ],
     ]
 
@@ -252,24 +249,24 @@ final class InferenceTests: XCTestCase {
     let b = Type.constructor("B", [])
 
     let magnitude = Expr.member(
-      .member(.application("f", [.tuple([])]), "a"),
+      .member(.application("f", []), "a"),
       "magnitude"
     )
     let count = Expr.member(
-      .member(.application("f", [.tuple([])]), "b"),
+      .member(.application("f", []), "b"),
       "count"
     )
     let ambiguousCount = Expr.member(
-      .member(.application("f", [.tuple([])]), "ambiguous"),
+      .member(.application("f", []), "ambiguous"),
       "count"
     )
     let ambiguousMagnitude = Expr.member(
-      .member(.application("f", [.tuple([])]), "ambiguous"),
+      .member(.application("f", []), "ambiguous"),
       "magnitude"
     )
-    let ambiguous = Expr.member(.application("f", [.tuple([])]), "ambiguous")
+    let ambiguous = Expr.member(.application("f", []), "ambiguous")
     let error = Expr.member(
-      .member(.application("f", [.tuple([])]), "ambiguous"),
+      .member(.application("f", []), "ambiguous"),
       "ambiguous"
     )
 
@@ -291,8 +288,8 @@ final class InferenceTests: XCTestCase {
     ]
     let e: Environment = [
       "f": [
-        .init(.arrow([.tuple([])], a)),
-        .init(.arrow([.tuple([])], b)),
+        .init([] --> a),
+        .init([] --> b),
       ],
     ]
 

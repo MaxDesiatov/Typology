@@ -117,3 +117,15 @@ enum Type: Equatable {
   static let double = Type.constructor("Double", [])
   static let int = Type.constructor("Int", [])
 }
+
+infix operator -->
+
+/// A shorthand version of `Type.arrow`
+func -->(arguments: [Type], returned: Type) -> Type {
+  return Type.arrow(arguments, returned)
+}
+
+/// A shorthand version of `Type.arrow` for single argument functions
+func -->(argument: Type, returned: Type) -> Type {
+  return Type.arrow([argument], returned)
+}
