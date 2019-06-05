@@ -89,15 +89,15 @@ final class InferenceTests: XCTestCase {
           .application(
             "stringify",
             [
-              .application("increment", ["x", "y"]),
-              .application("increment", ["x", "y"]),
+              .application("sum", ["x", "y"]),
+              .application("sum", ["x", "y"]),
             ]
           ),
           .application(
             "stringify",
             [
-              .application("increment", ["x", "y"]),
-              .application("increment", ["x", "y"]),
+              .application("sum", ["x", "y"]),
+              .application("sum", ["x", "y"]),
             ]
           ),
         ]
@@ -105,7 +105,7 @@ final class InferenceTests: XCTestCase {
     )
 
     let e: Environment = [
-      "increment": [.init(.arrow([.int, .int], .int))],
+      "sum": [.init(.arrow([.int, .int], .int))],
       "stringify": [.init(.arrow([.int, .int], .string))],
       "decode": [.init(.arrow([.string, .string], .int))],
     ]
@@ -120,15 +120,14 @@ final class InferenceTests: XCTestCase {
         "decode",
         [
           .application("concatenate", ["int", "str"]),
-          .application("parseInt", ["str", "int"]),
+          .application("sum", ["int", "int"]),
         ]
       )
     )
 
     let e: Environment = [
       "concatenate": [.init(.arrow([.int, .string], .string))],
-      "stringify": [.init(.arrow([.int, .int], .string))],
-      "parseInt": [.init(.arrow([.string, .int], .int))],
+      "sum": [.init(.arrow([.int, .int], .int))],
       "decode": [.init(.arrow([.string, .int], .int))],
     ]
 
