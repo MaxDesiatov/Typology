@@ -16,7 +16,7 @@ enum ASTError: Error {
 extension Array where Element == Statement {
   init(_ statements: CodeBlockItemListSyntax) throws {
     self = try statements.flatMap { statement -> [Statement] in
-      return try statement.children.flatMap { syntax -> [Statement] in
+      try statement.children.flatMap { syntax -> [Statement] in
         switch syntax {
         case let sequence as SequenceExprSyntax:
           return try sequence.elements.map(Expr.init)
@@ -24,23 +24,23 @@ extension Array where Element == Statement {
         case let function as FunctionDeclSyntax:
           let returns = function.signature.output?.returnType
           let body = function.body?.statements
-            return try [FunctionDecl(
-              genericParameters: function.genericParameterClause?
-                .genericParameterList.map {
-                  TypeVariable(value: $0.name.text)
-                } ?? [],
-              parameters: function.signature.input.parameterList
-                .compactMap { parameter -> (String?, String?, Type)? in
-                  guard let type = parameter.type else { return nil }
-                  return try (
-                    parameter.firstName?.text,
-                    parameter.secondName?.text,
-                    Type(type)
-                  )
-                },
-              statements: body.flatMap([Statement].init) ?? [],
-              returns: returns.map(Type.init) ?? .tuple([])
-            )]
+          return try [FunctionDecl(
+            genericParameters: function.genericParameterClause?
+              .genericParameterList.map {
+                TypeVariable(value: $0.name.text)
+              } ?? [],
+            parameters: function.signature.input.parameterList
+              .compactMap { parameter -> (String?, String?, Type)? in
+                guard let type = parameter.type else { return nil }
+                return try (
+                  parameter.firstName?.text,
+                  parameter.secondName?.text,
+                  Type(type)
+                )
+              },
+            statements: body.flatMap([Statement].init) ?? [],
+            returns: returns.map(Type.init) ?? .tuple([])
+          )]
 
         case let stmt as ReturnStmtSyntax:
           return try [ReturnStmt(expr: stmt.expression.map(Expr.init))]
