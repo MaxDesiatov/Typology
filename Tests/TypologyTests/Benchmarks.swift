@@ -30,9 +30,9 @@ class Benchmarks: XCTestCase {
         )
 
         _ = try lambda.infer(environment: [
-          "increment": [.init(.arrow([.int], .int))],
-          "stringify": [.init(.arrow([.int], .string))],
-          "decode": [.init(.arrow([.string], .int))],
+          "increment": [.init(.int --> .int)],
+          "stringify": [.init(.int --> .string)],
+          "decode": [.init(.string --> .int)],
         ])
       } catch {
         caughtError = error
