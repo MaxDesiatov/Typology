@@ -9,7 +9,7 @@
  explicitly specifies variables bound in the current type, which allows those
  variables to be distinguished from those that were bound in an outer scope.
  */
-struct Scheme {
+struct Scheme: Equatable {
   /** Type containing variables bound in `variables` property.
    */
   let type: Type

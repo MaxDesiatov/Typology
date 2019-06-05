@@ -21,4 +21,26 @@ final class ASTTests: XCTestCase {
     XCTAssertEqual(try int?.infer(), .int)
     XCTAssertThrowsError(try error?.infer())
   }
+
+  func testFunc() throws {
+    let f = try "func x(_ x: String, y: [Int]) -> Int { return 42 }"
+      .parseAST().statements.first as? FunctionDecl
+
+    XCTAssertEqual(f?.scheme, Scheme(
+      [.string, .constructor("Array", [.int])] --> .int
+    ))
+  }
+
+  func testGenericFunc() throws {
+    let f = try "func x<T>(_ x: T, _ y: T) -> T { return x }"
+      .parseAST().statements.first as? FunctionDecl
+
+    let tVar = "T"
+    let t = Type.constructor(TypeIdentifier(value: tVar), [])
+
+    XCTAssertEqual(f?.scheme, Scheme(
+      [t, t] --> t,
+      variables: [TypeVariable(value: tVar)]
+    ))
+  }
 }
