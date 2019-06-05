@@ -13,18 +13,49 @@ enum ASTError: Error {
   case unknownSyntax
 }
 
-extension File {
-  init(_ file: SourceFileSyntax) throws {
-    statements = try file.statements.flatMap { statement -> [Statement] in
+extension Array where Element == Statement {
+  init(_ statements: CodeBlockItemListSyntax) throws {
+    self = try statements.flatMap { statement -> [Statement] in
       try statement.children.flatMap { syntax -> [Statement] in
         switch syntax {
         case let sequence as SequenceExprSyntax:
-          return try sequence.elements.map { try Expr($0) }
+          return try sequence.elements.map(Expr.init)
+
+        case let function as FunctionDeclSyntax:
+          let returns = function.signature.output?.returnType
+          let body = function.body?.statements
+          return try [FunctionDecl(
+            genericParameters: function.genericParameterClause?
+              .genericParameterList.map {
+                TypeVariable(value: $0.name.text)
+              } ?? [],
+            parameters: function.signature.input.parameterList
+              .compactMap { parameter -> (String?, String?, Type)? in
+                guard let type = parameter.type else { return nil }
+                return try (
+                  parameter.firstName?.text,
+                  parameter.secondName?.text,
+                  Type(type)
+                )
+              },
+            statements: body.flatMap([Statement].init) ?? [],
+            returns: returns.map(Type.init) ?? .tuple([])
+          )]
+
+        case let stmt as ReturnStmtSyntax:
+          return try [ReturnStmt(expr: stmt.expression.map(Expr.init))]
+
         default:
           throw ASTError.unknownSyntax
         }
       }
     }
+  }
+}
+
+extension File {
+  init(_ file: SourceFileSyntax) throws {
+    statements = try .init(file.statements)
   }
 }
 
@@ -61,6 +92,24 @@ extension Expr {
 
     case let literal as StringLiteralExprSyntax:
       self = .literal(.string(literal.stringLiteral.text))
+
+    default:
+      throw ASTError.unknownSyntax
+    }
+  }
+}
+
+extension Type {
+  init(_ type: TypeSyntax) throws {
+    switch type {
+    case let tuple as TupleTypeSyntax:
+      self = try .tuple(tuple.elements.map { try Type($0.type) })
+
+    case let identifier as SimpleTypeIdentifierSyntax:
+      self = .constructor(TypeIdentifier(value: identifier.name.text), [])
+
+    case let array as ArrayTypeSyntax:
+      self = try .constructor("Array", [Type(array.elementType)])
 
     default:
       throw ASTError.unknownSyntax
