@@ -59,24 +59,22 @@ struct ConstraintSystem {
     constraints = constraints.apply(sub)
   }
 
-  /// Temporarily injects `scheme` for `id` in the current environment to
+  /// Temporarily extends the current `self.environment` with `environment` to
   /// infer the type of `inferred` expression. Is used to infer
   /// type of an expression evaluated in a lambda.
-  private mutating func inferInExtendedEnvironment(
-    _ ids: [Identifier],
-    _ schemes: [Scheme],
+  private mutating func infer<T>(
+    inExtended environment: T,
     _ inferred: Expr
-  ) throws -> Type {
+  ) throws -> Type where T: Sequence, T.Element == (Identifier, Scheme) {
     // preserve old environment to be restored after inference in extended
     // environment has finished
-    var old = environment
+    var old = self.environment
 
-    defer { environment = old }
+    defer { self.environment = old }
 
-    for (index, id) in ids.enumerated() {
-      environment[id] = [schemes[index]]
+    for (id, scheme) in environment {
+      self.environment[id] = [scheme]
     }
-
     return try infer(inferred)
   }
 
@@ -142,16 +140,10 @@ struct ConstraintSystem {
       return try lookup(id, in: environment, orThrow: .unbound(id))
 
     case let .lambda(ids, expr):
-      var typeVariables: [Type] = []
-      var localSchemes: [Scheme] = []
-      ids.forEach { _ in
-        let typeVariable = fresh()
-        typeVariables.append(typeVariable)
-        localSchemes.append(Scheme(typeVariable))
-      }
-      return .arrow(
-        typeVariables,
-        try inferInExtendedEnvironment(ids, localSchemes, expr)
+      let parameters = ids.map { _ in fresh() }
+      return try .arrow(
+        parameters,
+        infer(inExtended: zip(ids, parameters.map { Scheme($0) }), expr)
       )
 
     case let .application(callable, arguments):
