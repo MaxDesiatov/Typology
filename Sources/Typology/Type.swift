@@ -127,5 +127,5 @@ func -->(arguments: [Type], returned: Type) -> Type {
 
 /// A shorthand version of `Type.arrow` for single argument functions
 func -->(argument: Type, returned: Type) -> Type {
-    return Type.arrow([argument], returned)
+  return Type.arrow([argument], returned)
 }
