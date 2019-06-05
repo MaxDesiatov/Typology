@@ -5,12 +5,13 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
-/** `Solver` takes an array of `Constraint` values and recursively finds a
- suitable `Substitution` that satisfies these `constraints`. `Solver` values are
- immutable, which allows separate solver iterations to operate independently.
- For example, backtracking is implemented as discarding failed
- `Solver` values and proceeding from the last known consistent iteration with
- new assumptions.
+/** `Solver` operates on a constraint system, which contains an array of
+ `Constraint` values. These constraints reduced one by one to find a
+ suitable `Substitution` that make the constraints consistent with each other.
+ `Solver` values are immutable, which allows separate solver iterations to
+ operate independently. For example, backtracking is implemented as discarding
+ failed `Solver` values and proceeding from the last known consistent iteration
+ with new assumptions.
  */
 struct Solver {
   private let substitution: Substitution
