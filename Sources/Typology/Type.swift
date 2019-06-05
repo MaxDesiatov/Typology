@@ -95,7 +95,7 @@ enum Type: Equatable {
 
   /** Binary type operator `->` representing function types.
    */
-  indirect case arrow(Type, Type)
+  indirect case arrow([Type], Type)
 
   /** Tuple types, where each element of an associated array is a corresponding
    type of the tuple's element.

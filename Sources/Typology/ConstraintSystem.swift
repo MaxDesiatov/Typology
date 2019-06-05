@@ -25,7 +25,7 @@ enum Constraint {
  that `[Scheme]` array can't be empty, since an empty array of overloads is
  meaningless. If no overloads are available for `Identifier`, it shouldn't be
  in the `Environoment` dictionary as a key in the first place.
-  */
+ */
 typealias Environment = [Identifier: [Scheme]]
 typealias Members = [TypeIdentifier: Environment]
 
@@ -46,7 +46,7 @@ struct ConstraintSystem {
   }
 
   mutating func prepend(_ constraint: Constraint) {
-    self.constraints.insert(constraint, at: 0)
+    constraints.insert(constraint, at: 0)
   }
 
   func appending(_ constraints: [Constraint]) -> ConstraintSystem {
@@ -59,21 +59,22 @@ struct ConstraintSystem {
     constraints = constraints.apply(sub)
   }
 
-  /// Temporarily injects `scheme` for `id` in the current environment to
+  /// Temporarily extends the current `self.environment` with `environment` to
   /// infer the type of `inferred` expression. Is used to infer
   /// type of an expression evaluated in a lambda.
-  private mutating func inferInExtendedEnvironment(
-    _ id: Identifier,
-    _ scheme: Scheme,
+  private mutating func infer<T>(
+    inExtended environment: T,
     _ inferred: Expr
-  ) throws -> Type {
+  ) throws -> Type where T: Sequence, T.Element == (Identifier, Scheme) {
     // preserve old environment to be restored after inference in extended
     // environment has finished
-    var old = environment
+    var old = self.environment
 
-    defer { environment = old }
+    defer { self.environment = old }
 
-    environment[id] = [scheme]
+    for (id, scheme) in environment {
+      self.environment[id] = [scheme]
+    }
     return try infer(inferred)
   }
 
@@ -138,21 +139,19 @@ struct ConstraintSystem {
     case let .identifier(id):
       return try lookup(id, in: environment, orThrow: .unbound(id))
 
-    case let .lambda(id, expr):
-      let typeVariable = fresh()
-      let localScheme = Scheme(typeVariable)
-      return .arrow(
-        typeVariable,
-        try inferInExtendedEnvironment(id, localScheme, expr)
+    case let .lambda(ids, expr):
+      let parameters = ids.map { _ in fresh() }
+      return try .arrow(
+        parameters,
+        infer(inExtended: zip(ids, parameters.map { Scheme($0) }), expr)
       )
 
     case let .application(callable, arguments):
       let callableType = try infer(callable)
-      let argumentsType = try infer(arguments)
       let typeVariable = fresh()
       constraints.append(.equal(
         callableType,
-        .arrow(argumentsType, typeVariable)
+        .arrow(try arguments.map { try infer($0) }, typeVariable)
       ))
       return typeVariable
 
