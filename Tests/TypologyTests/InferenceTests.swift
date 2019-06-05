@@ -234,7 +234,7 @@ final class InferenceTests: XCTestCase {
     let e: Environment = [
       "f": [
         .init([] --> .int),
-        .init([] --> .string)
+        .init([] --> .string),
       ],
     ]
 
@@ -289,7 +289,7 @@ final class InferenceTests: XCTestCase {
     let e: Environment = [
       "f": [
         .init([] --> a),
-        .init([] --> b)
+        .init([] --> b),
       ],
     ]
 
