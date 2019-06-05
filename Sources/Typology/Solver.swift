@@ -6,7 +6,7 @@
 //
 
 /** `Solver` operates on a constraint system, which contains an array of
- `Constraint` values. These constraints reduced one by one to find a
+ `Constraint` values. These constraints are reduced one by one to find a
  suitable `Substitution` that make the constraints consistent with each other.
  `Solver` values are immutable, which allows separate solver iterations to
  operate independently. For example, backtracking is implemented as discarding
