@@ -126,7 +126,7 @@ struct Solver {
     case let (.constructor(a), .constructor(b)) where a == b:
       return empty
 
-    case let (.tuple(t1), .tuple(t2)) where t1.count == t2.count:
+    case let (.namedTuple(t1), .namedTuple(t2)) where t1.count == t2.count:
       return try zip(t1, t2).map { try unify($0, $1) }.reduce(empty) {
         Solver(
           substitution: $0.substitution.compose($1.substitution),
