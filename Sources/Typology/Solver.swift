@@ -128,16 +128,21 @@ struct Solver {
 
     case let (.namedTuple(t1), .namedTuple(t2)) where t1.count == t2.count:
       return try zip(t1, t2).map {
+        // check that we are on the lowest level of the tuple, otherwise
+        // call unify on children
         guard let name1 = $0.0, let name2 = $1.0 else {
           return try unify($0.1, $1.1)
         }
 
+        // if corresponding elements of both tuples have names,
+        // they need to be the same to unify the tuples
         guard name1 == name2 else {
           throw TypeError.tupleUnificationFailure(name1, name2)
         }
 
         return try unify($0.1, $1.1)
       }.reduce(empty) { (s1: Solver, s2: Solver) -> Solver in
+        // merge new solver with a solver produced for previous tuple elements
         Solver(
           substitution: s1.substitution.compose(s2.substitution),
           system: s1.system.appending(s2.system.constraints)
