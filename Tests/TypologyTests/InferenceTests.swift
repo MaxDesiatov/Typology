@@ -209,6 +209,7 @@ final class InferenceTests: XCTestCase {
 
     XCTAssertEqual(try Expr.member(tuple, "0").infer(), .int)
     XCTAssertEqual(try Expr.member(tuple, "1").infer(), .string)
+    XCTAssertThrowsError(try Expr.member(tuple, "2").infer())
   }
 
   func testNamedTupleMember() throws {
@@ -241,6 +242,7 @@ final class InferenceTests: XCTestCase {
 
     XCTAssertEqual(try Expr.member(namedTuple, "text").infer(), .string)
     XCTAssertEqual(try Expr.member(namedTuple, "count").infer(), .int)
+    XCTAssertThrowsError(try Expr.member(namedTuple, "name").infer())
 
     XCTAssertEqual(try Expr.application("acceptNamedTuple", [namedTuple]).infer(environment: e), .string)
     XCTAssertEqual(try Expr.application("acceptNamedTuple", [tuple]).infer(environment: e), .string)
