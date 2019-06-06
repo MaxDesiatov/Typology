@@ -16,4 +16,5 @@ enum TypeError: Error {
   case unknownMember(TypeIdentifier, Identifier)
   case unknownTupleMember(Identifier)
   case unbound(Identifier)
+  case tupleUnificationFailure(Identifier, Identifier)
 }

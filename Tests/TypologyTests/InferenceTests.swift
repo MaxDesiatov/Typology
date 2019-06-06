@@ -209,6 +209,67 @@ final class InferenceTests: XCTestCase {
 
     XCTAssertEqual(try Expr.member(tuple, "0").infer(), .int)
     XCTAssertEqual(try Expr.member(tuple, "1").infer(), .string)
+    XCTAssertThrowsError(try Expr.member(tuple, "2").infer())
+  }
+
+  func testNamedTupleMember() throws {
+    let namedTuple = Expr.namedTuple([
+      ("text", .literal("some text")),
+      ("count", .literal(10)),
+    ])
+    let tuple = Expr.tuple([.literal("some text"), .literal(10)])
+    let mixedTuple = Expr.namedTuple([
+      ("text", .literal("some text")),
+      (nil, .literal(10)),
+    ])
+    let mixedTuple2 = Expr.namedTuple([
+      (nil, .literal("some text")),
+      ("count", .literal(10)),
+    ])
+    let fewArguments = Expr.tuple([.literal("some text")])
+    let wrongOrder = Expr.tuple([.literal(10), .literal("some text")])
+
+    let e: Environment = [
+      "acceptNamedTuple": [.init(.namedTuple([
+        ("text", .string),
+        ("count", .int),
+      ]) --> .string)],
+      "acceptTuple": [.init(.namedTuple([
+        (nil, .string),
+        (nil, .int),
+      ]) --> .string)],
+      "acceptMixedTuple": [.init(.namedTuple([
+        ("text", .string),
+        (nil, .int),
+      ]) --> .string)],
+    ]
+
+    XCTAssertEqual(try Expr.member(namedTuple, "text").infer(), .string)
+    XCTAssertEqual(try Expr.member(namedTuple, "count").infer(), .int)
+    XCTAssertThrowsError(try Expr.member(namedTuple, "name").infer())
+
+    XCTAssertEqual(try Expr.application("acceptNamedTuple", [namedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptNamedTuple", [tuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptNamedTuple", [mixedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptNamedTuple", [mixedTuple2]).infer(environment: e), .string)
+
+    XCTAssertEqual(try Expr.application("acceptTuple", [namedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptTuple", [tuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptTuple", [mixedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptTuple", [mixedTuple2]).infer(environment: e), .string)
+
+    XCTAssertEqual(try Expr.application("acceptMixedTuple", [namedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptMixedTuple", [tuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptMixedTuple", [mixedTuple]).infer(environment: e), .string)
+    XCTAssertEqual(try Expr.application("acceptMixedTuple", [mixedTuple2]).infer(environment: e), .string)
+
+    XCTAssertThrowsError(try Expr.application("acceptNamedTuple", [fewArguments]).infer(environment: e))
+    XCTAssertThrowsError(try Expr.application("acceptTuple", [fewArguments]).infer(environment: e))
+    XCTAssertThrowsError(try Expr.application("acceptMixedTuple", [fewArguments]).infer(environment: e))
+
+    XCTAssertThrowsError(try Expr.application("acceptNamedTuple", [wrongOrder]).infer(environment: e))
+    XCTAssertThrowsError(try Expr.application("acceptTuple", [wrongOrder]).infer(environment: e))
+    XCTAssertThrowsError(try Expr.application("acceptMixedTuple", [wrongOrder]).infer(environment: e))
   }
 
   func testOverload() throws {

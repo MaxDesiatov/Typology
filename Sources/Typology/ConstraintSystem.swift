@@ -178,23 +178,25 @@ struct ConstraintSystem {
         )
         return memberType
 
-      case let .tuple(types):
-        guard let idx = Int(id) else {
+      case let .namedTuple(elements):
+        if let idx = Int(id) {
+          guard (0..<elements.count).contains(idx) else {
+            throw TypeError.tupleIndexOutOfRange(
+              total: elements.count,
+              addressed: idx
+            )
+          }
+
+          return elements[idx].1
+        } else if let idx = elements.firstIndex(where: { $0.0 == id }) {
+          return elements[idx].1
+        } else {
           throw TypeError.unknownTupleMember(id)
         }
-
-        guard (0..<types.count).contains(idx) else {
-          throw TypeError.tupleIndexOutOfRange(
-            total: types.count,
-            addressed: idx
-          )
-        }
-
-        return types[idx]
       }
 
-    case let .tuple(expressions):
-      return try .tuple(expressions.map { try infer($0) })
+    case let .namedTuple(expressions):
+      return try .namedTuple(expressions.map { ($0.0, try infer($0.1)) })
     }
   }
 }

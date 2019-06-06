@@ -110,7 +110,13 @@ enum Type: Equatable {
    Type.tuple([.int, .string, .bool])
    ```
    */
-  case tuple([Type])
+  case namedTuple([(Identifier?, Type)])
+
+  static func tuple(_ types: [Type]) -> Type {
+    return .namedTuple(types.enumerated().map {
+      (nil, $0.1)
+    })
+  }
 
   static let bool = Type.constructor("Bool", [])
   static let string = Type.constructor("String", [])
@@ -128,4 +134,23 @@ func -->(arguments: [Type], returned: Type) -> Type {
 /// A shorthand version of `Type.arrow` for single argument functions
 func -->(argument: Type, returned: Type) -> Type {
   return Type.arrow([argument], returned)
+}
+
+extension Type {
+  static func ==(lhs: Type, rhs: Type) -> Bool {
+    switch (lhs, rhs) {
+    case let (.constructor(id1, t1), .constructor(id2, t2)):
+      return id1 == id2 && t1 == t2
+    case let (.variable(v1), .variable(v2)):
+      return v1 == v2
+    case let (.arrow(i1, o1), .arrow(i2, o2)):
+      return i1 == i2 && o1 == o2
+    case let (.namedTuple(t1), .namedTuple(t2)):
+      return zip(t1, t2).allSatisfy {
+        $0.0 == $1.0 && $0.1 == $1.1
+      }
+    default:
+      return false
+    }
+  }
 }
