@@ -127,10 +127,20 @@ struct Solver {
       return empty
 
     case let (.namedTuple(t1), .namedTuple(t2)) where t1.count == t2.count:
-      return try zip(t1, t2).map { try unify($0, $1) }.reduce(empty) {
+      return try zip(t1, t2).map {
+        guard let name1 = $0.0, let name2 = $1.0 else {
+          return try unify($0.1, $1.1)
+        }
+
+        guard name1 == name2 else {
+          throw TypeError.tupleUnificationFailure(name1, name2)
+        }
+
+        return try unify($0.1, $1.1)
+      }.reduce(empty) { (s1: Solver, s2: Solver) -> Solver in
         Solver(
-          substitution: $0.substitution.compose($1.substitution),
-          system: $0.system.appending($1.system.constraints)
+          substitution: s1.substitution.compose(s2.substitution),
+          system: s1.system.appending(s2.system.constraints)
         )
       }
 

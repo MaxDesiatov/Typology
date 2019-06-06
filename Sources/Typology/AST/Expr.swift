@@ -12,7 +12,7 @@ indirect enum Expr: Statement {
   case literal(Literal)
   case ternary(Expr, Expr, Expr)
   case member(Expr, Identifier)
-  case namedTuple([(Identifier, Type)])
+  case namedTuple([(Identifier?, Expr)])
 
   static func tuple(_ expressions: [Expr]) -> Expr {
     return .namedTuple(expressions.enumerated().map {
