@@ -26,6 +26,8 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 
 ## See also
 
+### Type systems and type checkers
+
 * [Apple's Swift Compiler Type Checker Design and Implementation](https://github.com/apple/swift/blob/master/docs/TypeChecker.rst) by multiple contributors
 * [A Type System From Scratch](https://www.youtube.com/watch?v=IbjoA5xVUq0) by [@CodaFi](https://github.com/CodaFi)
 * [Write You a Haskell: Hindley-Milner Inference](http://dev.stephendiehl.com/fun/006_hindley_milner.html) by [@sdiehl](https://github.com/sdiehl)
@@ -34,3 +36,12 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 * [So you want to write a type checker...](http://languagengine.co/blog/so-you-want-to-write-a-type-checker/) by [@psygnisfive](https://github.com/psygnisfive)
 * [Exponential time complexity in the Swift type checker](https://www.cocoawithlove.com/blog/2016/07/12/type-checker-issues.html) by [@mattgallagher](https://github.com/mattgallagher)
 * [A Swift Playground containing Martin Grabmüller's "Algorithm W Step-by-Step"](https://gist.github.com/CodaFi/ca35a0c22fbd96eca505b5df45f2509e) by [@CodaFi](https://github.com/CodaFi)
+
+### Error reporting
+
+* [Compiler Errors for Humans](https://elm-lang.org/blog/compiler-errors-for-humans) on [Elm blog](https://elm-lang.org/blog)
+* [Shape of errors to come in Rust compiler](https://blog.rust-lang.org/2016/08/10/Shape-of-errors-to-come.html) by [Jonathan Turner](https://github.com/jonathandturner)
+
+### Optimizing type checker's performance for large projects
+
+* [Apple's Swift Compiler Dependency Analysis](https://github.com/apple/swift/blob/master/docs/DependencyAnalysis.rst) by multiple contributors
