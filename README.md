@@ -41,3 +41,7 @@ on types that are resolved through [unification](https://en.wikipedia.org/wiki/U
 
 * [Compiler Errors for Humans](https://elm-lang.org/blog/compiler-errors-for-humans) on [Elm blog](https://elm-lang.org/blog)
 * [Shape of errors to come in Rust compiler](https://blog.rust-lang.org/2016/08/10/Shape-of-errors-to-come.html) by [Jonathan Turner](https://github.com/jonathandturner)
+
+### Optimizing type checker's performance for large projects
+
+* [Apple's Swift Compiler Dependency Analysis](https://github.com/apple/swift/blob/master/docs/DependencyAnalysis.rst) by multiple contributors
