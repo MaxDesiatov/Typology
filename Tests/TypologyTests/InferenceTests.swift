@@ -223,9 +223,9 @@ final class InferenceTests: XCTestCase {
       (nil, .literal(10)),
     ])
     let mixedTuple2 = Expr.namedTuple([
-        (nil, .literal("some text")),
-        ("count", .literal(10)),
-        ])
+      (nil, .literal("some text")),
+      ("count", .literal(10)),
+    ])
     let fewArguments = Expr.tuple([.literal("some text")])
     let wrongOrder = Expr.tuple([.literal(10), .literal("some text")])
 
