@@ -105,12 +105,12 @@ final class InferenceTests: XCTestCase {
     )
 
     let e: Environment = [
-      "sum": [.init(.arrow([.int, .int], .int))],
-      "stringify": [.init(.arrow([.int, .int], .string))],
-      "decode": [.init(.arrow([.string, .string], .int))],
+      "sum": [.init([.int, .int] --> .int)],
+      "stringify": [.init([.int, .int] --> .string)],
+      "decode": [.init([.string, .string] --> .int)],
     ]
 
-    XCTAssertEqual(try lambda.infer(environment: e), .arrow([.int, .int], .int))
+    XCTAssertEqual(try lambda.infer(environment: e), [.int, .int] --> .int)
   }
 
   func testLambdaWithMultipleArgumentsDiffrentTypes() throws {
@@ -126,12 +126,14 @@ final class InferenceTests: XCTestCase {
     )
 
     let e: Environment = [
-      "concatenate": [.init(.arrow([.int, .string], .string))],
-      "sum": [.init(.arrow([.int, .int], .int))],
-      "decode": [.init(.arrow([.string, .int], .int))],
+      "concatenate": [.init([.int, .string] --> .string)],
+      "sum": [.init([.int, .int] --> .int)],
+      "decode": [.init([.string, .int] --> .int)],
     ]
 
-    XCTAssertEqual(try lambda.infer(environment: e), .arrow([.string, .int], .int))
+    XCTAssertEqual(
+      try lambda.infer(environment: e),
+      [.string, .int] --> .int)
   }
 
   func testLambdaApplication() throws {
