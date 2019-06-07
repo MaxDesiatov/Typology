@@ -13,6 +13,7 @@ struct AccessorDecl: Location {
     case get
     case set
   }
+
   let body: [Statement]
   let kind: Kind
 

@@ -175,4 +175,3 @@ extension Type {
     }
   }
 }
-
