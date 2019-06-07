@@ -11,15 +11,15 @@ import XCTest
 final class ASTTests: XCTestCase {
   func testTernary() throws {
     let string = try #"true ? "then" : "else""# .parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
     let int = try "false ? 0 : 42".parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
     let error = try #"true ? "then" : 42"# .parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
 
-    XCTAssertEqual(try string?.infer(), .string)
-    XCTAssertEqual(try int?.infer(), .int)
-    XCTAssertThrowsError(try error?.infer())
+    XCTAssertEqual(try string?.expr.infer(), .string)
+    XCTAssertEqual(try int?.expr.infer(), .int)
+    XCTAssertThrowsError(try error?.expr.infer())
   }
 
   func testFunc() throws {
@@ -42,5 +42,37 @@ final class ASTTests: XCTestCase {
       [t, t] --> t,
       variables: [TypeVariable(value: tVar)]
     ))
+  }
+
+  func testPosition() throws {
+    let functions = try
+      """
+          // declare function #commentsForComments
+          //This is also a comment
+          //    but is written over multiple lines.
+          func first(_ x: String) -> String {
+              return x
+          }
+
+          /* This is also a comment
+              but is written over multiple lines. */
+          // declare another function with double offset #commentsForComments
+              func second(_ x: String) -> String {
+                  return x
+              }
+      """.parseAST()
+
+    let firstFunc = functions.statements[0]
+    let secondFunc = functions.statements[1]
+
+    XCTAssertEqual(firstFunc.startPosition.line, 4)
+    XCTAssertEqual(firstFunc.startPosition.column, 5)
+    XCTAssertEqual(firstFunc.endPosition.line, 6)
+    XCTAssertEqual(firstFunc.endPosition.column, 6)
+
+    XCTAssertEqual(secondFunc.startPosition.line, 11)
+    XCTAssertEqual(secondFunc.startPosition.column, 9)
+    XCTAssertEqual(secondFunc.endPosition.line, 13)
+    XCTAssertEqual(secondFunc.endPosition.column, 10)
   }
 }

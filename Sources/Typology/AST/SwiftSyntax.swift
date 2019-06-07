@@ -19,7 +19,7 @@ extension Array where Element == Statement {
       try statement.children.flatMap { syntax -> [Statement] in
         switch syntax {
         case let sequence as SequenceExprSyntax:
-          return try sequence.elements.map(Expr.init)
+          return try sequence.elements.map { ExprNode(startPosition: $0.positionAfterSkippingLeadingTrivia, endPosition: $0.endPosition, expr: try Expr($0)) }
 
         case let function as FunctionDeclSyntax:
           let returns = function.signature.output?.returnType
@@ -39,11 +39,11 @@ extension Array where Element == Statement {
                 )
               },
             statements: body.flatMap([Statement].init) ?? [],
-            returns: returns.map(Type.init) ?? .tuple([])
+            returns: returns.map(Type.init) ?? .tuple([]), startPosition: function.positionAfterSkippingLeadingTrivia, endPosition: function.endPosition
           )]
 
         case let stmt as ReturnStmtSyntax:
-          return try [ReturnStmt(expr: stmt.expression.map(Expr.init))]
+          return try [ReturnStmt(expr: stmt.expression.map(Expr.init), startPosition: stmt.positionAfterSkippingLeadingTrivia, endPosition: stmt.endPosition)]
 
         default:
           throw ASTError.unknownSyntax
