@@ -5,6 +5,8 @@
 //  Created by Max Desiatov on 19/04/2019.
 //
 
+import SwiftSyntax
+
 typealias Identifier = String
 typealias Operator = String
 
@@ -12,10 +14,13 @@ struct File {
   let statements: [Statement]
 }
 
-protocol Statement {}
+protocol Statement {
+  var position: AbsolutePosition { get }
+}
 
 struct ReturnStmt: Statement {
   let expr: Expr?
+  let position: AbsolutePosition
 }
 
 struct FunctionDecl: Statement {
@@ -23,6 +28,7 @@ struct FunctionDecl: Statement {
   let parameters: [(String?, String?, Type)]
   let statements: [Statement]
   let returns: Type
+  let position: AbsolutePosition
 
   var scheme: Scheme {
     return Scheme(parameters.map { $0.2 } --> returns, variables: genericParameters)

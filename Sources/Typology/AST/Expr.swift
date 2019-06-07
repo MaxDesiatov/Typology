@@ -5,7 +5,14 @@
 //  Created by Max Desiatov on 12/05/2019.
 //
 
-indirect enum Expr: Statement {
+import SwiftSyntax
+
+struct ExprNode: Statement {
+  var position: AbsolutePosition
+  var expr: Expr
+}
+
+indirect enum Expr {
   case identifier(Identifier)
   case application(Expr, [Expr])
   case lambda([Identifier], Expr)

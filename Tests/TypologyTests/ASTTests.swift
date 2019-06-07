@@ -11,15 +11,15 @@ import XCTest
 final class ASTTests: XCTestCase {
   func testTernary() throws {
     let string = try #"true ? "then" : "else""# .parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
     let int = try "false ? 0 : 42".parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
     let error = try #"true ? "then" : 42"# .parseAST()
-      .statements.first as? Expr
+      .statements.first as? ExprNode
 
-    XCTAssertEqual(try string?.infer(), .string)
-    XCTAssertEqual(try int?.infer(), .int)
-    XCTAssertThrowsError(try error?.infer())
+    XCTAssertEqual(try string?.expr.infer(), .string)
+    XCTAssertEqual(try int?.expr.infer(), .int)
+    XCTAssertThrowsError(try error?.expr.infer())
   }
 
   func testFunc() throws {
