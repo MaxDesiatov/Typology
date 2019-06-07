@@ -43,4 +43,24 @@ final class ASTTests: XCTestCase {
       variables: [TypeVariable(value: tVar)]
     ))
   }
+
+  func testPosition() throws {
+    let functions = try """
+        func first(_ x: String) -> String {
+            return x
+        }
+            func second(_ x: String) -> String {
+                return x
+            }
+    """.parseAST()
+
+    let firstFunc = functions.statements[0]
+    let secondFunc = functions.statements[1]
+
+    XCTAssertEqual(firstFunc.position.line, 1)
+    XCTAssertEqual(firstFunc.position.column, 1)
+
+    XCTAssertEqual(secondFunc.position.line, 3)
+    XCTAssertEqual(secondFunc.position.column, 6)
+  }
 }
