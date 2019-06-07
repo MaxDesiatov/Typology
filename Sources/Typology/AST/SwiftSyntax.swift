@@ -24,7 +24,7 @@ extension Array where Element == Statement {
         case let function as FunctionDeclSyntax:
           let returns = function.signature.output?.returnType
           let body = function.body?.statements
-          let position = function.body?.position
+          let position = function.position
           return try [FunctionDecl(
             genericParameters: function.genericParameterClause?
               .genericParameterList.map {
@@ -40,7 +40,7 @@ extension Array where Element == Statement {
                 )
               },
             statements: body.flatMap([Statement].init) ?? [],
-            returns: returns.map(Type.init) ?? .tuple([]), position: position ?? AbsolutePosition(line: 1, column: 1, utf8Offset: 0)
+            returns: returns.map(Type.init) ?? .tuple([]), position: position
           )]
 
         case let stmt as ReturnStmtSyntax:
