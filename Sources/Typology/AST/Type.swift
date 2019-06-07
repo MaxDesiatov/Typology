@@ -5,6 +5,9 @@
 //  Created by Max Desiatov on 27/04/2019.
 //
 
+import Foundation
+import SwiftSyntax
+
 struct TypeVariable: Hashable {
   let value: String
 }
@@ -31,7 +34,7 @@ extension TypeIdentifier: ExpressibleByStringLiteral {
   }
 }
 
-enum Type: Equatable {
+enum Type {
   /** A type constructor is an abstraction on which generics system is built.
    It is a "type function", which takes other types as arguments and returns
    a new type. `Type.constructor("Int", [])` represents an `Int` type, while
@@ -136,7 +139,7 @@ func -->(argument: Type, returned: Type) -> Type {
   return Type.arrow([argument], returned)
 }
 
-extension Type {
+extension Type: Equatable {
   static func ==(lhs: Type, rhs: Type) -> Bool {
     switch (lhs, rhs) {
     case let (.constructor(id1, t1), .constructor(id2, t2)):
@@ -154,3 +157,22 @@ extension Type {
     }
   }
 }
+
+extension Type {
+  init(_ type: TypeSyntax, _ file: URL) throws {
+    switch type {
+    case let tuple as TupleTypeSyntax:
+      self = try .tuple(tuple.elements.map { try Type($0.type, file) })
+
+    case let identifier as SimpleTypeIdentifierSyntax:
+      self = .constructor(TypeIdentifier(value: identifier.name.text), [])
+
+    case let array as ArrayTypeSyntax:
+      self = try .constructor("Array", [Type(array.elementType, file)])
+
+    default:
+      throw ASTError(type, .unknownSyntax, file)
+    }
+  }
+}
+

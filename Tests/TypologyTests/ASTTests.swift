@@ -44,13 +44,28 @@ final class ASTTests: XCTestCase {
     ))
   }
 
-  func testPosition() throws {
+  func testFuncPosition() throws {
     let functions = try
       """
           // declare function #commentsForComments
           //This is also a comment
           //    but is written over multiple lines.
           func first(_ x: String) -> String {
+              var x: String {
+                return "Hello"
+              }
+              var y: String {
+                get {
+                  return "Hello, "
+                }
+                set {
+                  print("world!")
+                }
+              }
+              dynamic private(set) let a: Double = 3.14, b: Int
+              let z = 5
+              let (x, y) = z
+
               return x
           }
 
@@ -62,17 +77,17 @@ final class ASTTests: XCTestCase {
               }
       """.parseAST()
 
-    let firstFunc = functions.statements[0]
-    let secondFunc = functions.statements[1]
+    let firstFunc = functions.statements.first
+    let secondFunc = functions.statements.last
 
-    XCTAssertEqual(firstFunc.startPosition.line, 4)
-    XCTAssertEqual(firstFunc.startPosition.column, 5)
-    XCTAssertEqual(firstFunc.endPosition.line, 6)
-    XCTAssertEqual(firstFunc.endPosition.column, 6)
+    XCTAssertEqual(firstFunc?.range.start.line, 4)
+    XCTAssertEqual(firstFunc?.range.start.column, 5)
+    XCTAssertEqual(firstFunc?.range.end.line, 21)
+    XCTAssertEqual(firstFunc?.range.end.column, 6)
 
-    XCTAssertEqual(secondFunc.startPosition.line, 11)
-    XCTAssertEqual(secondFunc.startPosition.column, 9)
-    XCTAssertEqual(secondFunc.endPosition.line, 13)
-    XCTAssertEqual(secondFunc.endPosition.column, 10)
+    XCTAssertEqual(secondFunc?.range.start.line, 26)
+    XCTAssertEqual(secondFunc?.range.start.column, 9)
+    XCTAssertEqual(secondFunc?.range.end.line, 28)
+    XCTAssertEqual(secondFunc?.range.end.column, 10)
   }
 }
