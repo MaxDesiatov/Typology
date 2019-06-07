@@ -133,7 +133,8 @@ final class InferenceTests: XCTestCase {
 
     XCTAssertEqual(
       try lambda.infer(environment: e),
-      [.string, .int] --> .int)
+      [.string, .int] --> .int
+    )
   }
 
   func testLambdaApplication() throws {
