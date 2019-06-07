@@ -15,12 +15,14 @@ struct File {
 }
 
 protocol Statement {
-  var position: AbsolutePosition { get }
+  var startPosition: AbsolutePosition { get }
+  var endPosition: AbsolutePosition { get }
 }
 
 struct ReturnStmt: Statement {
   let expr: Expr?
-  let position: AbsolutePosition
+  let startPosition: AbsolutePosition
+  let endPosition: AbsolutePosition
 }
 
 struct FunctionDecl: Statement {
@@ -28,7 +30,8 @@ struct FunctionDecl: Statement {
   let parameters: [(String?, String?, Type)]
   let statements: [Statement]
   let returns: Type
-  let position: AbsolutePosition
+  let startPosition: AbsolutePosition
+  let endPosition: AbsolutePosition
 
   var scheme: Scheme {
     return Scheme(parameters.map { $0.2 } --> returns, variables: genericParameters)

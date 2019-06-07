@@ -45,22 +45,34 @@ final class ASTTests: XCTestCase {
   }
 
   func testPosition() throws {
-    let functions = try """
-        func first(_ x: String) -> String {
-            return x
-        }
-            func second(_ x: String) -> String {
-                return x
-            }
-    """.parseAST()
+    let functions = try
+      """
+          // declare function #commentsForComments
+          //This is also a comment
+          //    but is written over multiple lines.
+          func first(_ x: String) -> String {
+              return x
+          }
+
+          /* This is also a comment
+              but is written over multiple lines. */
+          // declare another function with double offset #commentsForComments
+              func second(_ x: String) -> String {
+                  return x
+              }
+      """.parseAST()
 
     let firstFunc = functions.statements[0]
     let secondFunc = functions.statements[1]
 
-    XCTAssertEqual(firstFunc.position.line, 1)
-    XCTAssertEqual(firstFunc.position.column, 1)
+    XCTAssertEqual(firstFunc.startPosition.line, 4)
+    XCTAssertEqual(firstFunc.startPosition.column, 5)
+    XCTAssertEqual(firstFunc.endPosition.line, 6)
+    XCTAssertEqual(firstFunc.endPosition.column, 6)
 
-    XCTAssertEqual(secondFunc.position.line, 3)
-    XCTAssertEqual(secondFunc.position.column, 6)
+    XCTAssertEqual(secondFunc.startPosition.line, 11)
+    XCTAssertEqual(secondFunc.startPosition.column, 9)
+    XCTAssertEqual(secondFunc.endPosition.line, 13)
+    XCTAssertEqual(secondFunc.endPosition.column, 10)
   }
 }

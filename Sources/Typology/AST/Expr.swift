@@ -8,7 +8,8 @@
 import SwiftSyntax
 
 struct ExprNode: Statement {
-  var position: AbsolutePosition
+  let startPosition: AbsolutePosition
+  let endPosition: AbsolutePosition
   var expr: Expr
 }
 
