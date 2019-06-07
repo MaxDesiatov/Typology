@@ -7,9 +7,9 @@ disabled_rules:
 - cyclomatic_complexity
 
 line_length:
-- 80
-- 100
-- ignores_comments
+  warning: 80
+  error: 100
+  ignores_comments: true
 
 
 function_body_length:
