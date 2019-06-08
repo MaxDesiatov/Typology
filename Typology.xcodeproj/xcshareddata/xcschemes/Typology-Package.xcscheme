@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Typology::Typology"
-               BuildableName = "Typology.framework"
-               BlueprintName = "Typology"
+               BlueprintIdentifier = "Typology::TypologyCLI"
+               BuildableName = "TypologyCLI"
+               BlueprintName = "TypologyCLI"
                ReferencedContainer = "container:Typology.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Typology::TypologyCLI"
-               BuildableName = "TypologyCLI"
-               BlueprintName = "TypologyCLI"
+               BlueprintIdentifier = "Typology::Typology"
+               BuildableName = "Typology.framework"
+               BlueprintName = "Typology"
                ReferencedContainer = "container:Typology.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -69,9 +69,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Typology::Typology"
-            BuildableName = "Typology.framework"
-            BlueprintName = "Typology"
+            BlueprintIdentifier = "Typology::TypologyCLI"
+            BuildableName = "TypologyCLI"
+            BlueprintName = "TypologyCLI"
             ReferencedContainer = "container:Typology.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
