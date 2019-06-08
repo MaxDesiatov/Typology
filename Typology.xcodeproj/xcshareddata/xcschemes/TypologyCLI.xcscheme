@@ -14,20 +14,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Typology::Typology"
-               BuildableName = "Typology.framework"
-               BlueprintName = "Typology"
-               ReferencedContainer = "container:Typology.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "Typology::TypologyCLI"
                BuildableName = "TypologyCLI"
                BlueprintName = "TypologyCLI"
@@ -42,16 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "Typology::TypologyTests"
-               BuildableName = "TypologyTests.xctest"
-               BlueprintName = "TypologyTests"
-               ReferencedContainer = "container:Typology.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <AdditionalOptions>
       </AdditionalOptions>
@@ -66,15 +42,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "Typology::Typology"
-            BuildableName = "Typology.framework"
-            BlueprintName = "Typology"
+            BlueprintIdentifier = "Typology::TypologyCLI"
+            BuildableName = "TypologyCLI"
+            BlueprintName = "TypologyCLI"
             ReferencedContainer = "container:Typology.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
