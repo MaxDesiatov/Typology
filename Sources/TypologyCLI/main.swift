@@ -12,13 +12,13 @@ import SwiftSyntax
 class Diagnose: Command {
   let name = "diagnose"
   func execute() throws {
-    let diagnositcEngine = DiagnosticEngine()
+    let diagnosticEngine = DiagnosticEngine()
     let consoleConsumer = ConsoleConsumer()
     let diagnose = Diagnostic.Message(.note, "Diagnose note")
 
-    diagnositcEngine.addConsumer(consoleConsumer)
+    diagnosticEngine.addConsumer(consoleConsumer)
 
-    diagnositcEngine.diagnose(diagnose)
+    diagnosticEngine.diagnose(diagnose)
   }
 }
 
