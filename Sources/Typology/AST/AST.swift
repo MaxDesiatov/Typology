@@ -5,6 +5,7 @@
 //  Created by Max Desiatov on 19/04/2019.
 //
 
+import Foundation
 import SwiftSyntax
 
 typealias Identifier = String
@@ -14,29 +15,11 @@ struct File {
   let statements: [Statement]
 }
 
-protocol Statement {
-  var startPosition: AbsolutePosition { get }
-  var endPosition: AbsolutePosition { get }
+protocol Location {
+  var range: SourceRange { get }
 }
 
-struct ReturnStmt: Statement {
-  let expr: Expr?
-  let startPosition: AbsolutePosition
-  let endPosition: AbsolutePosition
-}
-
-struct FunctionDecl: Statement {
-  let genericParameters: [TypeVariable]
-  let parameters: [(String?, String?, Type)]
-  let statements: [Statement]
-  let returns: Type
-  let startPosition: AbsolutePosition
-  let endPosition: AbsolutePosition
-
-  var scheme: Scheme {
-    return Scheme(parameters.map { $0.2 } --> returns, variables: genericParameters)
-  }
-}
+protocol Statement: Location {}
 
 struct CaseDecl {}
 
@@ -55,4 +38,62 @@ struct Module {
 struct Target {
   let dependencies: [Module]
   let main: Module
+}
+
+extension Syntax {
+  func toStatement(_ file: URL) throws -> [Statement] {
+    switch self {
+    case let syntax as VariableDeclSyntax:
+      return try [BindingDecl(syntax, file)]
+
+    case let syntax as SequenceExprSyntax:
+      return try syntax.elements.map { try ExprNode($0, file) }
+
+    case let syntax as FunctionDeclSyntax:
+      return try [FunctionDecl(syntax, file)]
+
+    case let syntax as ReturnStmtSyntax:
+      return try [ReturnStmt(syntax, file)]
+
+    case let syntax as CodeBlockItemSyntax:
+      return try syntax.item.toStatement(file)
+
+    case let syntax as FunctionCallExprSyntax:
+      return try [ExprNode(
+        expr: Expr.application(
+          Expr(syntax.calledExpression, file),
+          syntax.argumentList.map { try Expr($0.expression, file) }
+        ),
+        range: syntax.sourceRange(in: file)
+      )]
+
+    default:
+      throw ASTError(self, .unknownSyntax, file)
+    }
+  }
+}
+
+extension Array where Element == Statement {
+  init(_ syntax: CodeBlockItemListSyntax, _ file: URL) throws {
+    self = try syntax.flatMap { try $0.item.toStatement(file) }
+  }
+}
+
+extension File {
+  init(_ syntax: SourceFileSyntax, _ url: URL) throws {
+    statements = try .init(syntax.statements, url)
+  }
+}
+
+extension String {
+  func parseAST() throws -> File {
+    let url = URL(fileURLWithPath: NSTemporaryDirectory())
+      .appendingPathComponent("typology.swift")
+
+    try write(toFile: url.path, atomically: true, encoding: .utf8)
+
+    let syntax = try SyntaxTreeParser.parse(url)
+    try FileManager.default.removeItem(at: url)
+    return try File(syntax, url)
+  }
 }
