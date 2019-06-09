@@ -31,8 +31,23 @@ public class ConsoleDiagnosticConsumer: DiagnosticConsumer {
 
   /// Prints each of the fields in a diagnositic to stderr.
   public func write(_ diagnostic: Diagnostic) {
+    var errorString = ""
+    var errorLine = 0
+    var errorColumn = 0
     if let loc = diagnostic.location {
       write("\(loc.file):\(loc.line):\(loc.column): ")
+      do {
+        // Read the contents of the specified file
+        let contents = try String(contentsOfFile: loc.file)
+        // Split the file into separate lines
+        let lines = contents.split(separator: "\n")
+        errorString = String(lines[loc.line])
+        errorLine = loc.line
+        errorColumn = loc.column
+      } catch {
+        print(error)
+      }
+
     } else {
       write("<unknown>:0:0: ")
     }
@@ -44,7 +59,14 @@ public class ConsoleDiagnosticConsumer: DiagnosticConsumer {
     write(diagnostic.message.text)
     write("\n")
 
-    // TODO: Write original file contents out and highlight them.
+    if !errorString.isEmpty {
+      let offset = String(repeating: " ", count: "\(errorLine)".count)
+      let errorOffset = String(repeating: " ", count: errorColumn - 1)
+      let verticalSeparator = " | ".applyingColor(.blue)
+      print(offset, verticalSeparator)
+      print("\(errorLine)".applyingColor(.blue), verticalSeparator, "\(errorString)")
+      print(offset, verticalSeparator, "\(errorOffset)^^^")
+    }
   }
 
   public func finalize() {
