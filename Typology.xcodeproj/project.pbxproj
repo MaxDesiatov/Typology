@@ -32,6 +32,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A61BC21122AE8DCB0095D1DF /* AbsolutePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */; };
+		A6F4A55822AE54F000A98AE7 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */; };
+		A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */; };
+		A6F4A55C22AE622100A98AE7 /* DiagnosticEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */; };
 		OBJ_133 /* BackgroundColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_48 /* BackgroundColor.swift */; };
 		OBJ_134 /* CodesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_49 /* CodesParser.swift */; };
 		OBJ_135 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_50 /* Color.swift */; };
@@ -198,9 +202,27 @@
 			remoteGlobalIDString = "SwiftSyntax::SwiftSyntax";
 			remoteInfo = SwiftSyntax;
 		};
+		A6F4A55422AD4E4B00A98AE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Typology::TypologyTests";
+			remoteInfo = TypologyTests;
+		};
+		A6F4A55522AD4E4B00A98AE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Typology::TypologyCLI";
+			remoteInfo = TypologyCLI;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsolutePosition.swift; sourceTree = "<group>"; };
+		A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
+		A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticConsumer.swift; sourceTree = "<group>"; };
+		A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticEngine.swift; sourceTree = "<group>"; };
 		OBJ_10 /* AST.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AST.swift; sourceTree = "<group>"; };
 		OBJ_100 /* SyntaxChildren.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxChildren.swift; sourceTree = "<group>"; };
 		OBJ_101 /* SyntaxData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxData.swift; sourceTree = "<group>"; };
@@ -361,6 +383,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A6F4A55622AE54BF00A98AE7 /* Diagnostic */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_30 /* DiagnosticConsumers */,
+				A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */,
+				A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */,
+				A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */,
+			);
+			path = Diagnostic;
+			sourceTree = "<group>";
+		};
 		OBJ_103 /* gyb_generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,6 +466,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_31 /* ConsoleDiagnosticConsumer.swift */,
+				A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */,
 			);
 			path = DiagnosticConsumers;
 			sourceTree = "<group>";
@@ -495,7 +529,7 @@
 			path = .build/checkouts/Rainbow/Sources;
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -510,7 +544,6 @@
 				OBJ_126 /* README.md */,
 				OBJ_127 /* ci.sh */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_59 /* SwiftCLI 5.3.0 */ = {
@@ -564,9 +597,9 @@
 		OBJ_8 /* Typology */ = {
 			isa = PBXGroup;
 			children = (
+				A6F4A55622AE54BF00A98AE7 /* Diagnostic */,
 				OBJ_9 /* AST */,
 				OBJ_29 /* ConstraintSystem.swift */,
-				OBJ_30 /* DiagnosticConsumers */,
 				OBJ_32 /* DiagnosticError.swift */,
 				OBJ_33 /* Protocol.swift */,
 				OBJ_34 /* Scheme.swift */,
@@ -811,7 +844,7 @@
 				English,
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_115 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -941,17 +974,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				A6F4A55C22AE622100A98AE7 /* DiagnosticEngine.swift in Sources */,
 				OBJ_228 /* AST.swift in Sources */,
 				OBJ_229 /* ASTError.swift in Sources */,
 				OBJ_230 /* Accessor.swift in Sources */,
 				OBJ_231 /* Attribute.swift in Sources */,
+				A61BC21122AE8DCB0095D1DF /* AbsolutePosition.swift in Sources */,
 				OBJ_232 /* Binding.swift in Sources */,
 				OBJ_233 /* Function.swift in Sources */,
 				OBJ_234 /* Modifier.swift in Sources */,
 				OBJ_235 /* PatternBinding.swift in Sources */,
+				A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */,
 				OBJ_236 /* Expr.swift in Sources */,
 				OBJ_237 /* Literal.swift in Sources */,
 				OBJ_238 /* IdentifierPattern.swift in Sources */,
+				A6F4A55822AE54F000A98AE7 /* Diagnostic.swift in Sources */,
 				OBJ_239 /* Pattern.swift in Sources */,
 				OBJ_240 /* TuplePattern.swift in Sources */,
 				OBJ_241 /* Return.swift in Sources */,
@@ -1030,7 +1067,7 @@
 		OBJ_282 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Typology::TypologyTests" /* TypologyTests */;
-			targetProxy = "Typology::TypologyTests" /* TypologyTests */;
+			targetProxy = A6F4A55422AD4E4B00A98AE7 /* PBXContainerItemProxy */;
 		};
 		OBJ_295 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1050,7 +1087,7 @@
 		OBJ_302 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Typology::TypologyCLI" /* TypologyCLI */;
-			targetProxy = "Typology::TypologyCLI" /* TypologyCLI */;
+			targetProxy = A6F4A55522AD4E4B00A98AE7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
