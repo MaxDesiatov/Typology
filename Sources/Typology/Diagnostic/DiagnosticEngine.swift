@@ -15,6 +15,9 @@ public class TypologyDiagnosticEngine {
   /// The list of consumers of the diagnostic passing through this engine.
   internal var consumers = [TypologyDiagnosticConsumer]()
 
+  /// The file content
+  public var fileContent = [Substring]()
+
   public private(set) var diagnostics = [TypologyDiagnostic]()
 
   /// Adds the provided consumer to the consumers list.
@@ -23,7 +26,7 @@ public class TypologyDiagnosticEngine {
 
     // Start the consumer with all previous diagnostics.
     for diagnostic in diagnostics {
-      consumer.handle(diagnostic)
+      consumer.handle(diagnostic, fileContent)
     }
   }
 
@@ -39,7 +42,7 @@ public class TypologyDiagnosticEngine {
                                         actions: actions)
     diagnostics.append(diagnostic)
     for consumer in consumers {
-      consumer.handle(diagnostic)
+      consumer.handle(diagnostic, fileContent)
     }
   }
 

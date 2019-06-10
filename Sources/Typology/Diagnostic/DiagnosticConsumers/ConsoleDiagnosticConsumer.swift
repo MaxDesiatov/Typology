@@ -21,8 +21,8 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
   }
 
   /// Prints the contents of a diagnostic to stderr.
-  public func handle(_ diagnostic: TypologyDiagnostic) {
-    write(diagnostic)
+  public func handle(_ diagnostic: TypologyDiagnostic, _ fileContent: [Substring]) {
+    write(diagnostic, fileContent)
     // FIXIT implement Note.asDiagnostic
     // for note in diagnostic.notes {
     //   write(note.asDiagnostic())
@@ -30,13 +30,13 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
   }
 
   /// Prints each of the fields in a diagnositic to stderr.
-  public func write(_ diagnostic: TypologyDiagnostic) {
+  public func write(_ diagnostic: TypologyDiagnostic, _ fileContent: [Substring]) {
     var errorString = ""
     var errorLine = 0
     var errorColumn = 0
     if let loc = diagnostic.location {
       write("\(loc.file):\(loc.line):\(loc.column): ")
-      errorString = ""
+      errorString = String(fileContent[loc.line])
       errorLine = loc.line
       errorColumn = loc.column
     } else {

@@ -32,7 +32,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		A61BC21122AE8DCB0095D1DF /* AbsolutePosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */; };
 		A6F4A55822AE54F000A98AE7 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */; };
 		A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */; };
 		A6F4A55C22AE622100A98AE7 /* DiagnosticEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */; };
@@ -219,7 +218,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbsolutePosition.swift; sourceTree = "<group>"; };
 		A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
 		A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticConsumer.swift; sourceTree = "<group>"; };
 		A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticEngine.swift; sourceTree = "<group>"; };
@@ -466,7 +464,6 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_31 /* ConsoleDiagnosticConsumer.swift */,
-				A61BC21022AE8DCB0095D1DF /* AbsolutePosition.swift */,
 			);
 			path = DiagnosticConsumers;
 			sourceTree = "<group>";
@@ -979,7 +976,6 @@
 				OBJ_229 /* ASTError.swift in Sources */,
 				OBJ_230 /* Accessor.swift in Sources */,
 				OBJ_231 /* Attribute.swift in Sources */,
-				A61BC21122AE8DCB0095D1DF /* AbsolutePosition.swift in Sources */,
 				OBJ_232 /* Binding.swift in Sources */,
 				OBJ_233 /* Function.swift in Sources */,
 				OBJ_234 /* Modifier.swift in Sources */,
