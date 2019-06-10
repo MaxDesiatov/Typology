@@ -52,11 +52,17 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
 
     if !errorString.isEmpty {
       let offset = String(repeating: " ", count: "\(errorLine)".count)
-      let errorOffset = String(repeating: " ", count: errorColumn - 1)
+      // FIXIT errorOffset is not in right position
+      let errorOffset = String(repeating: "^", count: errorColumn - 1)
+        .applyingColor(.red)
+      // FIXIT errorUnderscore sometimes zero string some
+      // times more than code that is should underscore
+      let errorUnderscore = String(repeating: "^", count: diagnostic.highlights[0].end.line - diagnostic.highlights[0].start.line)
+        .applyingColor(.red)
       let verticalSeparator = " | ".applyingColor(.blue)
       print(offset, verticalSeparator)
       print("\(errorLine)".applyingColor(.blue), verticalSeparator, "\(errorString)")
-      print(offset, verticalSeparator, "\(errorOffset)^^^")
+      print(offset, verticalSeparator, errorOffset, errorUnderscore)
     }
   }
 

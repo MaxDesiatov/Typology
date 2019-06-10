@@ -38,8 +38,18 @@ public class TypologyDiagnosticEngine {
   public func diagnose(_ message: TypologyDiagnostic.Message,
                        location: TypologySourceLocation? = nil,
                        actions: ((inout TypologyDiagnostic.Builder) -> ())? = nil) {
-    let diagnostic = TypologyDiagnostic(message: message, location: location,
-                                        actions: actions)
+    let diagnostic = TypologyDiagnostic(
+      message: message,
+      location: location,
+      actions: actions
+    )
+    diagnostics.append(diagnostic)
+    for consumer in consumers {
+      consumer.handle(diagnostic, fileContent)
+    }
+  }
+
+  public func diagnose(_ diagnostic: TypologyDiagnostic) {
     diagnostics.append(diagnostic)
     for consumer in consumers {
       consumer.handle(diagnostic, fileContent)

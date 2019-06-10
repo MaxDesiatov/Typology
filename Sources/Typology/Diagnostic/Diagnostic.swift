@@ -292,8 +292,13 @@ public struct TypologyDiagnostic: Codable {
   ///   - location: The location the diagnostic is attached to.
   ///   - highlights: An array of SourceRanges which will be highlighted when
   ///                 the diagnostic is presented.
-  public init(message: Message, location: TypologySourceLocation?, notes: [Note],
-              highlights: [TypologySourceRange], fixIts: [FixIt]) {
+  public init(
+    message: Message,
+    location: TypologySourceLocation?,
+    notes: [Note],
+    highlights: [TypologySourceRange],
+    fixIts: [FixIt]
+  ) {
     self.message = message
     self.location = location
     self.notes = notes

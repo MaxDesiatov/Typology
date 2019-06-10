@@ -5,14 +5,6 @@
 //  Created by Matvii Hodovaniuk on 6/8/19.
 //
 
-//          let diagnostic = TypologyDiagnostic(
-//            message: diagnose,
-//            location: error.range.start as? TypologySourceLocation,
-//            notes: [Note](),
-//            highlights: [TypologySourceRange](),
-//            fixIts: [FixIt]()
-//          )
-
 import Foundation
 import SwiftCLI
 import SwiftSyntax
@@ -57,6 +49,7 @@ class Diagnose: Command {
 
         let diagnose = TypologyDiagnostic.Message(.note, "Diagnosing \(fileURL.lastPathComponent) (\(i + 1)/\(count))")
         diagnosticEngine.diagnose(diagnose)
+
         parseFile(path: fileURL.path, engine: diagnosticEngine)
       }
     }
@@ -68,7 +61,16 @@ private func parseFile(path: String, engine: TypologyDiagnosticEngine) {
     _ = try File(path: path)
   } catch let error as ASTError {
     let diagnose = TypologyDiagnostic.Message(.error, "\(error.value)")
-    engine.diagnose(diagnose, location: TypologySourceLocation(from: error.range.start))
+
+    let diagnostic = TypologyDiagnostic(
+      message: diagnose,
+      location: TypologySourceLocation(from: error.range.start),
+      notes: [],
+      highlights: [TypologySourceRange(start: TypologySourceLocation(from: error.range.start), end: TypologySourceLocation(from: error.range.end))],
+      fixIts: []
+    )
+
+    engine.diagnose(diagnostic)
   } catch {
     let diagnose = TypologyDiagnostic.Message(.note, error.localizedDescription)
     engine.diagnose(diagnose)
