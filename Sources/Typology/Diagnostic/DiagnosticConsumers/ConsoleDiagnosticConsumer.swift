@@ -28,10 +28,6 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
     _ fileContent: [String]
   ) {
     write(diagnostic, fileContent)
-    // FIXIT implement Note.asDiagnostic
-    // for note in diagnostic.notes {
-    //   write(note.asDiagnostic())
-    // }
   }
 
   /// Prints each of the fields in a diagnositic to stderr.
