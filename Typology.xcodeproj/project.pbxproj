@@ -34,6 +34,7 @@
 /* Begin PBXBuildFile section */
 		A698562822AFB61C005C2A94 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A698562722AFB61C005C2A94 /* Helpers.swift */; };
 		A698562922AFB64B005C2A94 /* DiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A698562522AFB5CA005C2A94 /* DiagnosticTests.swift */; };
+		A698562B22AFF773005C2A94 /* Diagnose.swift in Sources */ = {isa = PBXBuildFile; fileRef = A698562A22AFF773005C2A94 /* Diagnose.swift */; };
 		A6F4A55822AE54F000A98AE7 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */; };
 		A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */; };
 		A6F4A55C22AE622100A98AE7 /* DiagnosticEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */; };
@@ -222,6 +223,7 @@
 /* Begin PBXFileReference section */
 		A698562522AFB5CA005C2A94 /* DiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticTests.swift; sourceTree = "<group>"; };
 		A698562722AFB61C005C2A94 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		A698562A22AFF773005C2A94 /* Diagnose.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnose.swift; sourceTree = "<group>"; };
 		A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
 		A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticConsumer.swift; sourceTree = "<group>"; };
 		A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticEngine.swift; sourceTree = "<group>"; };
@@ -393,6 +395,7 @@
 				A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */,
 				A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */,
 				A698562722AFB61C005C2A94 /* Helpers.swift */,
+				A698562A22AFF773005C2A94 /* Diagnose.swift */,
 			);
 			path = Diagnostic;
 			sourceTree = "<group>";
@@ -981,6 +984,7 @@
 				OBJ_228 /* AST.swift in Sources */,
 				OBJ_229 /* ASTError.swift in Sources */,
 				OBJ_230 /* Accessor.swift in Sources */,
+				A698562B22AFF773005C2A94 /* Diagnose.swift in Sources */,
 				OBJ_231 /* Attribute.swift in Sources */,
 				OBJ_232 /* Binding.swift in Sources */,
 				OBJ_233 /* Function.swift in Sources */,
