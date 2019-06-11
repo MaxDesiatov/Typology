@@ -12,7 +12,8 @@ import XCTest
 final class DiagnosticTests: XCTestCase {
   func testOffsetGenerateFunction() throws {
     XCTAssertEqual("\(offset(1, 234))", "   ")
-    XCTAssertEqual("\(offset(56, 7890))", "    ")
+    XCTAssertEqual("\(offset(56, 7890))", "   ")
+    XCTAssertEqual("\(offset(11, 123))", "  ")
   }
 
   func testTypologyDiagnosticEngine() throws {
