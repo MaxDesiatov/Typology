@@ -25,7 +25,7 @@ final class DiagnosticTests: XCTestCase {
     XCTAssertEqual(engine.consumers.count, 1)
 
     // Test diagnose handle message functional
-    let message = TypologyDiagnostic.Message(.note, "note message")
+    let message = Diagnostic.Message(.note, "note message")
     XCTAssertNoThrow(engine.diagnose(message))
 
     // Test when diagnose handle diagnostic that takes one line

@@ -55,7 +55,7 @@ private func parseFile(
   do {
     _ = try File(path: path)
   } catch let error as ASTError {
-    let diagnose = TypologyDiagnostic.Message(.error, "\(error.value)")
+    let diagnose = Diagnostic.Message(.error, "\(error.value)")
 
     let diagnostic = TypologyDiagnostic(
       message: diagnose,
@@ -72,7 +72,7 @@ private func parseFile(
 
     engine.diagnose(diagnostic)
   } catch {
-    let diagnose = TypologyDiagnostic.Message(.note, error.localizedDescription)
+    let diagnose = Diagnostic.Message(.note, error.localizedDescription)
     engine.diagnose(diagnose)
   }
 }

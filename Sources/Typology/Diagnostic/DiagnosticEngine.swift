@@ -39,7 +39,7 @@ public class TypologyDiagnosticEngine {
   ///              a severity and text that will be conveyed when the diagnostic
   ///              is serialized.
   public func diagnose(
-    _ message: TypologyDiagnostic.Message,
+    _ message: Diagnostic.Message,
     location: SourceLocation? = nil
   ) {
     let diagnostic = TypologyDiagnostic(
