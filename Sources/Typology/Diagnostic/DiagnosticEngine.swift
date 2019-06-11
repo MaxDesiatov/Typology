@@ -40,14 +40,11 @@ public class TypologyDiagnosticEngine {
   ///              is serialized.
   public func diagnose(
     _ message: TypologyDiagnostic.Message,
-    location: SourceLocation? = nil,
-    actions: ((inout TypologyDiagnostic.Builder
-    ) -> ())? = nil
+    location: SourceLocation? = nil
   ) {
     let diagnostic = TypologyDiagnostic(
       message: message,
-      location: location,
-      actions: actions
+      location: location
     )
     diagnostics.append(diagnostic)
     for consumer in consumers {

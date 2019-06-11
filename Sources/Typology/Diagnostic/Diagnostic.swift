@@ -78,66 +78,6 @@ public struct TypologyDiagnostic: Codable {
   /// An array of possible FixIts to apply to this diagnostic.
   public let fixIts: [FixIt]
 
-  /// A diagnostic builder that exposes mutating operations for notes,
-  /// highlights, and FixIts. When a Diagnostic is created, a builder
-  /// will be provided in a closure where the user can conditionally
-  /// add notes, highlights, and FixIts, that will then be wrapped
-  /// into the immutable Diagnostic object.
-  public struct Builder {
-    /// An in-flight array of notes.
-    internal var notes = [Note]()
-
-    /// An in-flight array of highlighted source ranges.
-    internal var highlights = [SourceRange]()
-
-    /// An in-flight array of FixIts.
-    internal var fixIts = [FixIt]()
-
-    internal init() {}
-
-    /// Adds a Note to the diagnostic builder.
-    /// - parameters:
-    ///   - message: The message associated with the note. This must have the
-    ///              `.note` severity.
-    ///   - location: The source location to which this note is attached.
-    ///   - highlights: Any source ranges that should be highlighted by this
-    ///                 note.
-    ///   - fixIts: Any FixIts that should be attached to this note.
-    public mutating func note(_ message: Message,
-                              location: SourceLocation? = nil,
-                              highlights: [SourceRange] = [],
-                              fixIts: [FixIt] = []) {
-      notes.append(Note(message: message, location: location,
-                        highlights: highlights, fixIts: fixIts))
-    }
-
-    /// Adds the provided source ranges as highlights of this diagnostic.
-    public mutating func highlight(_ ranges: SourceRange...) {
-      highlights += ranges
-    }
-
-    /// Adds a FixIt to remove the contents of the provided SourceRange.
-    /// When applied, this FixIt will delete the characters corresponding to
-    /// this range in the original source file.
-    public mutating func fixItRemove(_ sourceRange: SourceRange) {
-      fixIts.append(.remove(sourceRange))
-    }
-
-    /// Adds a FixIt to insert the provided text at the provided SourceLocation
-    /// in the file where the location resides.
-    public mutating
-    func fixItInsert(_ text: String, at sourceLocation: SourceLocation) {
-      fixIts.append(.insert(sourceLocation, text))
-    }
-
-    /// Adds a FixIt to replace the contents of the source file corresponding
-    /// to the provided SourceRange with the provided text.
-    public mutating
-    func fixItReplace(_ sourceRange: SourceRange, with text: String) {
-      fixIts.append(.replace(sourceRange, text))
-    }
-  }
-
   /// Creates a new Diagnostic with the provided message, pointing to the
   /// provided location (if any).
   /// This initializer also takes a closure that will be passed a Diagnostic
@@ -148,12 +88,14 @@ public struct TypologyDiagnostic: Codable {
   ///   - location: The location the diagnostic is attached to.
   ///   - actions: A closure that's used to attach notes and highlights to
   ///              diagnostics.
-  init(message: Message, location: SourceLocation?,
-       actions: ((inout Builder) -> ())?) {
-    var builder = Builder()
-    actions?(&builder)
-    self.init(message: message, location: location, notes: builder.notes,
-              highlights: builder.highlights, fixIts: builder.fixIts)
+  init(message: Message, location: SourceLocation?) {
+    self.init(
+      message: message,
+      location: location,
+      notes: [],
+      highlights: [],
+      fixIts: []
+    )
   }
 
   /// Creates a new Diagnostic with the provided message, pointing to the
