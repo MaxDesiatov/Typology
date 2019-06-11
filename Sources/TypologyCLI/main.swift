@@ -20,7 +20,8 @@ class Diagnose: Command {
 
     if isSwiftFile(path.value) {
       let contents = try String(contentsOfFile: path.value)
-      let lines = contents.split(separator: "\n")
+      let lines = contents.components(separatedBy: .newlines)
+
       diagnosticEngine.fileContent = lines
       parseFile(path: path.value, engine: diagnosticEngine)
     } else {
@@ -39,16 +40,12 @@ class Diagnose: Command {
       else {
         fatalError("Enumerator is nil")
       }
-      let count = enumerator.count
       let enumerated = enumerator.enumerated()
 
-      for (i, fileURL) in enumerated {
+      for (_, fileURL) in enumerated {
         let contents = try String(contentsOfFile: fileURL.path)
-        let lines = contents.split(separator: "\n")
+        let lines = contents.components(separatedBy: .newlines)
         diagnosticEngine.fileContent = lines
-
-        let diagnose = TypologyDiagnostic.Message(.note, "Diagnosing \(fileURL.lastPathComponent) (\(i + 1)/\(count))")
-        diagnosticEngine.diagnose(diagnose)
 
         parseFile(path: fileURL.path, engine: diagnosticEngine)
       }

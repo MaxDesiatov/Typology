@@ -9,6 +9,12 @@ import Foundation
 import Rainbow
 import SwiftSyntax
 
+let verticalSeparator = "|".applyingColor(.blue)
+
+private func offset(_ startIndex: Int, _ endIndex: Int) -> String {
+    return String(repeating: " ", count: "\(endIndex)".count - "\(startIndex)".count + 1)
+}
+
 /// ConsoleDiagnosticConsumer formats diagnostics and prints them to the
 /// console.
 public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
@@ -21,7 +27,7 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
   }
 
   /// Prints the contents of a diagnostic to stderr.
-  public func handle(_ diagnostic: TypologyDiagnostic, _ fileContent: [Substring]) {
+  public func handle(_ diagnostic: TypologyDiagnostic, _ fileContent: [String]) {
     write(diagnostic, fileContent)
     // FIXIT implement Note.asDiagnostic
     // for note in diagnostic.notes {
@@ -30,15 +36,9 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
   }
 
   /// Prints each of the fields in a diagnositic to stderr.
-  public func write(_ diagnostic: TypologyDiagnostic, _ fileContent: [Substring]) {
-    var errorString = ""
-    var errorLine = 0
-    var errorColumn = 0
+  public func write(_ diagnostic: TypologyDiagnostic, _ fileContent: [String]) {
     if let loc = diagnostic.location {
       write("\(loc.file):\(loc.line):\(loc.column): ")
-      errorString = String(fileContent[loc.line])
-      errorLine = loc.line
-      errorColumn = loc.column
     } else {
       write("<unknown>:0:0: ")
     }
@@ -47,22 +47,41 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
     case .warning: write("warning: ".applyingColor(.yellow))
     case .error: write("error: ".applyingColor(.red))
     }
+
     write(diagnostic.message.text)
     write("\n")
 
-    if !errorString.isEmpty {
-      let offset = String(repeating: " ", count: "\(errorLine)".count)
-      // FIXIT errorOffset is not in right position
-      let errorOffset = String(repeating: "^", count: errorColumn - 1)
-        .applyingColor(.red)
-      // FIXIT errorUnderscore sometimes zero string some
-      // times more than code that is should underscore
-      let errorUnderscore = String(repeating: "^", count: diagnostic.highlights[0].end.line - diagnostic.highlights[0].start.line)
-        .applyingColor(.red)
-      let verticalSeparator = " | ".applyingColor(.blue)
-      print(offset, verticalSeparator)
-      print("\(errorLine)".applyingColor(.blue), verticalSeparator, "\(errorString)")
-      print(offset, verticalSeparator, errorOffset, errorUnderscore)
+    if !diagnostic.highlights.isEmpty {
+      for highlight in diagnostic.highlights {
+        let maxOffset = String(repeating: " ", count: "\(highlight.end.line)".count + 1)
+
+        if highlight.end.line != highlight.start.line {
+          // show multiline error
+          let errorLines = highlight.start.line...highlight.end.line
+
+          print(maxOffset, verticalSeparator)
+
+          for line in errorLines {
+            let lineOffset = offset(line, highlight.end.line)
+            let errorString = fileContent[line]
+
+            print("\(String(line).applyingColor(.blue))\(lineOffset)\(">".applyingColor(.red))\(verticalSeparator) \(errorString)")
+          }
+
+          print(maxOffset, verticalSeparator)
+        } else {
+          // show one line error
+          let errorLine = highlight.start.line
+          let errorOffset = String(repeating: " ", count: highlight.start.line)
+          let errorString = fileContent[errorLine]
+          let errorUnderscore = String(repeating: "^", count: highlight.end.line - highlight.start.line)
+            .applyingColor(.red)
+
+          print(maxOffset, verticalSeparator)
+          print("\(String(errorLine).applyingColor(.blue))  \(verticalSeparator) \(errorString)")
+          print(maxOffset, verticalSeparator, errorOffset, errorUnderscore)
+        }
+      }
     }
   }
 

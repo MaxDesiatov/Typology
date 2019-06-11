@@ -16,7 +16,7 @@ public class TypologyDiagnosticEngine {
   internal var consumers = [TypologyDiagnosticConsumer]()
 
   /// The file content
-  public var fileContent = [Substring]()
+  public var fileContent = [String]()
 
   public private(set) var diagnostics = [TypologyDiagnostic]()
 
