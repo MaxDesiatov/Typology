@@ -56,7 +56,10 @@ final class DiagnosticTests: XCTestCase {
       offset: 1,
       file: filePath
     )
-    let location3 = TypologySourceLocation(file: filePath, position: AbsolutePosition(line: 4, column: 4, utf8Offset: 4))
+    let location3 = TypologySourceLocation(
+      file: filePath,
+      position: AbsolutePosition(line: 4, column: 4, utf8Offset: 4)
+    )
 
     let diagnostic2 = TypologyDiagnostic(
       message: message,
