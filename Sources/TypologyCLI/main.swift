@@ -59,12 +59,12 @@ private func parseFile(
 
     let diagnostic = TypologyDiagnostic(
       message: diagnose,
-      location: TypologySourceLocation(from: error.range.start),
+      location: error.range.start,
       notes: [],
       highlights: [
-        TypologySourceRange(
-          start: TypologySourceLocation(from: error.range.start),
-          end: TypologySourceLocation(from: error.range.end)
+        SourceRange(
+          start: error.range.start,
+          end: error.range.end
         ),
       ],
       fixIts: []

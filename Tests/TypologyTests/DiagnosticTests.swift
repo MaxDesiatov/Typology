@@ -29,7 +29,7 @@ final class DiagnosticTests: XCTestCase {
     XCTAssertNoThrow(engine.diagnose(message))
 
     // Test when diagnose handle diagnostic that takes one line
-    let location = TypologySourceLocation(
+    let location = SourceLocation(
       line: 1,
       column: 1,
       offset: 1,
@@ -40,7 +40,7 @@ final class DiagnosticTests: XCTestCase {
       location: location,
       notes: [],
       highlights: [
-        TypologySourceRange(
+        SourceRange(
           start: location,
           end: location
         ),
@@ -56,17 +56,17 @@ final class DiagnosticTests: XCTestCase {
       offset: 1,
       file: filePath
     )
-    let location3 = TypologySourceLocation(
+    let location3 = SourceLocation(
       file: filePath,
       position: AbsolutePosition(line: 4, column: 4, utf8Offset: 4)
     )
 
     let diagnostic2 = TypologyDiagnostic(
       message: message,
-      location: TypologySourceLocation(from: location2),
+      location: location2,
       notes: [],
       highlights: [
-        TypologySourceRange(
+        SourceRange(
           start: location,
           end: location3
         ),

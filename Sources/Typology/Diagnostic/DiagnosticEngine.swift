@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftSyntax
 
 /// The DiagnosticEngine allows Swift tools to emit diagnostics.
 public class TypologyDiagnosticEngine {
@@ -39,7 +40,7 @@ public class TypologyDiagnosticEngine {
   ///              is serialized.
   public func diagnose(
     _ message: TypologyDiagnostic.Message,
-    location: TypologySourceLocation? = nil,
+    location: SourceLocation? = nil,
     actions: ((inout TypologyDiagnostic.Builder
     ) -> ())? = nil
   ) {

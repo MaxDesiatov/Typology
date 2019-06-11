@@ -8,136 +8,6 @@
 import Foundation
 import SwiftSyntax
 
-/// Represents a source location in a Swift file.
-public struct TypologySourceLocation: Codable {
-  /// The line in the file where this location resides.
-  public let line: Int
-
-  /// The UTF-8 byte offset from the beginning of the line where this location
-  /// resides.
-  public let column: Int
-
-  /// The UTF-8 byte offset into the file where this location resides.
-  public let offset: Int
-
-  /// The file in which this location resides.
-  public let file: String
-
-  public init(file: String, position: AbsolutePosition) {
-    self.init(line: position.line, column: position.column,
-              offset: position.utf8Offset, file: file)
-  }
-
-//  public init(file: String, position: AbsolutePosition) {
-//    self.init(line: position.line, column: position.column,
-//              offset: position.utf8Offset, file: file)
-//  }
-
-  public init(line: Int, column: Int, offset: Int, file: String) {
-    self.line = line
-    self.column = column
-    self.offset = offset
-    self.file = file
-  }
-
-  public init(from source: SourceLocation) {
-    line = source.line
-    column = source.column
-    offset = source.offset
-    file = source.file
-  }
-}
-
-/// Represents a start and end location in a Swift file.
-public struct TypologySourceRange: Codable {
-  /// The beginning location in the source range.
-  public let start: TypologySourceLocation
-
-  /// The beginning location in the source range.
-  public let end: TypologySourceLocation
-
-  public init(start: TypologySourceLocation, end: TypologySourceLocation) {
-    self.start = start
-    self.end = end
-  }
-}
-
-/// A FixIt represents a change to source code in order to "correct" a
-/// diagnostic.
-public enum FixIt: Codable {
-  /// Remove the characters from the source file over the provided source range.
-  case remove(TypologySourceRange)
-
-  /// Insert, at the provided source location, the provided string.
-  case insert(TypologySourceLocation, String)
-
-  /// Replace the characters at the provided source range with the provided
-  /// string.
-  case replace(TypologySourceRange, String)
-
-  enum CodingKeys: String, CodingKey {
-    case type
-    case range
-    case location
-    case string
-  }
-
-  public init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    let type = try container.decode(String.self, forKey: .type)
-    switch type {
-    case "remove":
-      let range = try container.decode(TypologySourceRange.self, forKey: .range)
-      self = .remove(range)
-    case "insert":
-      let string = try container.decode(String.self, forKey: .string)
-      let loc = try container.decode(
-        TypologySourceLocation.self,
-        forKey: .location
-      )
-      self = .insert(loc, string)
-    case "replace":
-      let string = try container.decode(String.self, forKey: .string)
-      let range = try container.decode(TypologySourceRange.self, forKey: .range)
-      self = .replace(range, string)
-    default:
-      fatalError("unknown FixIt type \(type)")
-    }
-  }
-
-  public func encode(to encoder: Encoder) throws {
-    var container = encoder.container(keyedBy: CodingKeys.self)
-    switch self {
-    case let .remove(range):
-      try container.encode(range, forKey: .range)
-    case let .insert(location, string):
-      try container.encode(location, forKey: .location)
-      try container.encode(string, forKey: .string)
-    case let .replace(range, string):
-      try container.encode(range, forKey: .range)
-      try container.encode(string, forKey: .string)
-    }
-  }
-
-  /// The source range associated with a FixIt. If this is an insertion,
-  /// it is a range with the same start and end location.
-  public var range: TypologySourceRange {
-    switch self {
-    case let .remove(range), .replace(let range, _): return range
-    case .insert(let loc, _): return TypologySourceRange(start: loc, end: loc)
-    }
-  }
-
-  /// The text associated with this FixIt. If this is a removal, the text is
-  /// the empty string.
-  public var text: String {
-    switch self {
-    case .remove: return ""
-    case let .insert(_, text), let .replace(_, text): return text
-    }
-  }
-}
-
 /// A Note attached to a Diagnostic. This provides more context for a specific
 /// error, and optionally allows for FixIts.
 public struct Note: Codable {
@@ -145,10 +15,10 @@ public struct Note: Codable {
   public let message: TypologyDiagnostic.Message
 
   /// The source location where the note should point.
-  public let location: TypologySourceLocation?
+  public let location: SourceLocation?
 
   /// An array of source ranges that should be highlighted.
-  public let highlights: [TypologySourceRange]
+  public let highlights: [SourceRange]
 
   /// An array of FixIts that apply to this note.
   public let fixIts: [FixIt]
@@ -156,8 +26,8 @@ public struct Note: Codable {
   /// Constructs a new Note from the constituent parts.
   internal init(
     message: TypologyDiagnostic.Message,
-    location: TypologySourceLocation?,
-    highlights: [TypologySourceRange],
+    location: SourceLocation?,
+    highlights: [SourceRange],
     fixIts: [FixIt]
   ) {
     precondition(message.severity == .note,
@@ -197,13 +67,13 @@ public struct TypologyDiagnostic: Codable {
   public let message: Message
 
   /// The location the diagnostic should point.
-  public let location: TypologySourceLocation?
+  public let location: SourceLocation?
 
   /// An array of notes providing more context for this diagnostic.
   public let notes: [Note]
 
   /// An array of source ranges to highlight.
-  public let highlights: [TypologySourceRange]
+  public let highlights: [SourceRange]
 
   /// An array of possible FixIts to apply to this diagnostic.
   public let fixIts: [FixIt]
@@ -218,7 +88,7 @@ public struct TypologyDiagnostic: Codable {
     internal var notes = [Note]()
 
     /// An in-flight array of highlighted source ranges.
-    internal var highlights = [TypologySourceRange]()
+    internal var highlights = [SourceRange]()
 
     /// An in-flight array of FixIts.
     internal var fixIts = [FixIt]()
@@ -234,36 +104,36 @@ public struct TypologyDiagnostic: Codable {
     ///                 note.
     ///   - fixIts: Any FixIts that should be attached to this note.
     public mutating func note(_ message: Message,
-                              location: TypologySourceLocation? = nil,
-                              highlights: [TypologySourceRange] = [],
+                              location: SourceLocation? = nil,
+                              highlights: [SourceRange] = [],
                               fixIts: [FixIt] = []) {
       notes.append(Note(message: message, location: location,
                         highlights: highlights, fixIts: fixIts))
     }
 
     /// Adds the provided source ranges as highlights of this diagnostic.
-    public mutating func highlight(_ ranges: TypologySourceRange...) {
+    public mutating func highlight(_ ranges: SourceRange...) {
       highlights += ranges
     }
 
-    /// Adds a FixIt to remove the contents of the provided TypologySourceRange.
+    /// Adds a FixIt to remove the contents of the provided SourceRange.
     /// When applied, this FixIt will delete the characters corresponding to
     /// this range in the original source file.
-    public mutating func fixItRemove(_ sourceRange: TypologySourceRange) {
+    public mutating func fixItRemove(_ sourceRange: SourceRange) {
       fixIts.append(.remove(sourceRange))
     }
 
-    /// Adds a FixIt to insert the provided text at the provided TypologySourceLocation
+    /// Adds a FixIt to insert the provided text at the provided SourceLocation
     /// in the file where the location resides.
     public mutating
-    func fixItInsert(_ text: String, at sourceLocation: TypologySourceLocation) {
+    func fixItInsert(_ text: String, at sourceLocation: SourceLocation) {
       fixIts.append(.insert(sourceLocation, text))
     }
 
     /// Adds a FixIt to replace the contents of the source file corresponding
     /// to the provided SourceRange with the provided text.
     public mutating
-    func fixItReplace(_ sourceRange: TypologySourceRange, with text: String) {
+    func fixItReplace(_ sourceRange: SourceRange, with text: String) {
       fixIts.append(.replace(sourceRange, text))
     }
   }
@@ -278,7 +148,7 @@ public struct TypologyDiagnostic: Codable {
   ///   - location: The location the diagnostic is attached to.
   ///   - actions: A closure that's used to attach notes and highlights to
   ///              diagnostics.
-  init(message: Message, location: TypologySourceLocation?,
+  init(message: Message, location: SourceLocation?,
        actions: ((inout Builder) -> ())?) {
     var builder = Builder()
     actions?(&builder)
@@ -295,9 +165,9 @@ public struct TypologyDiagnostic: Codable {
   ///                 the diagnostic is presented.
   public init(
     message: Message,
-    location: TypologySourceLocation?,
+    location: SourceLocation?,
     notes: [Note],
-    highlights: [TypologySourceRange],
+    highlights: [SourceRange],
     fixIts: [FixIt]
   ) {
     self.message = message
