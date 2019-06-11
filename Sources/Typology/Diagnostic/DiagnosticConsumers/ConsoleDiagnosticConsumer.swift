@@ -30,7 +30,10 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
   }
 
   /// Prints the contents of a diagnostic to stderr.
-  public func handle(_ diagnostic: TypologyDiagnostic, _ fileContent: [String]) {
+  public func handle(
+    _ diagnostic: TypologyDiagnostic,
+    _ fileContent: [String]
+  ) {
     write(diagnostic, fileContent)
     // FIXIT implement Note.asDiagnostic
     // for note in diagnostic.notes {

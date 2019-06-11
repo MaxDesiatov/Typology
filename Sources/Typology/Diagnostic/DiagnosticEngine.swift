@@ -35,9 +35,12 @@ public class TypologyDiagnosticEngine {
   ///   - message: The message for the diagnostic. This message includes
   ///              a severity and text that will be conveyed when the diagnostic
   ///              is serialized.
-  public func diagnose(_ message: TypologyDiagnostic.Message,
-                       location: TypologySourceLocation? = nil,
-                       actions: ((inout TypologyDiagnostic.Builder) -> ())? = nil) {
+  public func diagnose(
+    _ message: TypologyDiagnostic.Message,
+    location: TypologySourceLocation? = nil,
+    actions: ((inout TypologyDiagnostic.Builder
+    ) -> ())? = nil
+  ) {
     let diagnostic = TypologyDiagnostic(
       message: message,
       location: location,

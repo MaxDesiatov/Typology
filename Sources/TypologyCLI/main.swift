@@ -33,7 +33,8 @@ final class Diagnose: Command {
                     includingPropertiesForKeys: resourceKeys,
                     options: [.skipsHiddenFiles],
                     errorHandler: { (url, error) -> Bool in
-                      print("Error while reading a list of files in folder at \(url.path): ", error)
+                      print("Error while reading a list of files" +
+                        " in folder at \(url.path): ", error)
                       return true
         })?.compactMap({ $0 as? URL })
         .filter({ isSwiftFile($0.path) })

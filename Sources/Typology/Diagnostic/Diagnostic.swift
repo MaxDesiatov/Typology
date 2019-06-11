@@ -91,7 +91,10 @@ public enum FixIt: Codable {
       self = .remove(range)
     case "insert":
       let string = try container.decode(String.self, forKey: .string)
-      let loc = try container.decode(TypologySourceLocation.self, forKey: .location)
+      let loc = try container.decode(
+        TypologySourceLocation.self,
+        forKey: .location
+      )
       self = .insert(loc, string)
     case "replace":
       let string = try container.decode(String.self, forKey: .string)
@@ -151,8 +154,12 @@ public struct Note: Codable {
   public let fixIts: [FixIt]
 
   /// Constructs a new Note from the constituent parts.
-  internal init(message: TypologyDiagnostic.Message, location: TypologySourceLocation?,
-                highlights: [TypologySourceRange], fixIts: [FixIt]) {
+  internal init(
+    message: TypologyDiagnostic.Message,
+    location: TypologySourceLocation?,
+    highlights: [TypologySourceRange],
+    fixIts: [FixIt]
+  ) {
     precondition(message.severity == .note,
                  "notes can only have the `note` severity")
     self.message = message
