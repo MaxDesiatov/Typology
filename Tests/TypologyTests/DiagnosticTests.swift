@@ -10,7 +10,7 @@ import SwiftSyntax
 import XCTest
 
 final class DiagnosticTests: XCTestCase {
-  func testOffsetGenearateFunction() throws {
+  func testOffsetGenerateFunction() throws {
     XCTAssertEqual("\(offset(0, 100))".count, 3)
   }
 

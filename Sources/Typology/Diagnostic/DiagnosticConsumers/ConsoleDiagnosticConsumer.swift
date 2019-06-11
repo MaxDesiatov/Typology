@@ -30,7 +30,7 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
     write(diagnostic, fileContent)
   }
 
-  /// Prints each of the fields in a diagnositic to stderr.
+  /// Prints each of the fields in a diagnostic to stderr.
   public func write(_ diagnostic: TypologyDiagnostic, _ fileContent: [String]) {
     if let loc = diagnostic.location {
       write("\(loc.file):\(loc.line):\(loc.column): ")
