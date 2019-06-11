@@ -10,13 +10,15 @@ import Foundation
 /// The DiagnosticEngine allows Swift tools to emit diagnostics.
 public class TypologyDiagnosticEngine {
   /// Creates a new DiagnosticEngine with no diagnostics.
-  public init() {}
+  public init(fileContent: [String]) {
+    self.fileContent = fileContent
+  }
 
   /// The list of consumers of the diagnostic passing through this engine.
   internal var consumers = [TypologyDiagnosticConsumer]()
 
   /// The file content
-  public var fileContent = [String]()
+  public var fileContent: [String]
 
   public private(set) var diagnostics = [TypologyDiagnostic]()
 
@@ -57,11 +59,6 @@ public class TypologyDiagnosticEngine {
     for consumer in consumers {
       consumer.handle(diagnostic, fileContent)
     }
-  }
-
-  /// If any of the diagnostics in this engine have the `error` severity.
-  public var hasErrors: Bool {
-    return diagnostics.contains(where: { $0.message.severity == .error })
   }
 
   /// Tells each consumer to finalize their diagnostic output.

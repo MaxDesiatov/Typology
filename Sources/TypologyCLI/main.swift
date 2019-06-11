@@ -14,16 +14,9 @@ final class Diagnose: Command {
   let name = "diagnose"
   let path = Parameter()
   func execute() throws {
-    let diagnosticEngine = TypologyDiagnosticEngine()
     let consoleConsumer = ConsoleDiagnosticConsumer()
-    diagnosticEngine.addConsumer(consoleConsumer)
-
     if isSwiftFile(path.value) {
-      let contents = try String(contentsOfFile: path.value)
-      let lines = contents.components(separatedBy: .newlines)
-
-      diagnosticEngine.fileContent = lines
-      parseFile(path: path.value, engine: diagnosticEngine)
+      try parseFile(path: path.value, consumers: [consoleConsumer])
     } else {
       let resourceKeys: [URLResourceKey] = [.creationDateKey, .isDirectoryKey]
       let baseurl = URL(fileURLWithPath: path.value)
@@ -44,17 +37,19 @@ final class Diagnose: Command {
       let enumerated = enumerator.enumerated()
 
       for (_, fileURL) in enumerated {
-        let contents = try String(contentsOfFile: fileURL.path)
-        let lines = contents.components(separatedBy: .newlines)
-        diagnosticEngine.fileContent = lines
-
-        parseFile(path: fileURL.path, engine: diagnosticEngine)
+        try parseFile(path: fileURL.path, consumers: [consoleConsumer])
       }
     }
   }
 }
 
-private func parseFile(path: String, engine: TypologyDiagnosticEngine) {
+private func parseFile(path: String, consumers: [TypologyDiagnosticConsumer]) throws {
+  let contents = try String(contentsOfFile: path)
+  let lines = contents.components(separatedBy: .newlines)
+  let engine = TypologyDiagnosticEngine(fileContent: lines)
+  for consumer in consumers {
+    engine.addConsumer(consumer)
+  }
   do {
     _ = try File(path: path)
   } catch let error as ASTError {

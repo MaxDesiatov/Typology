@@ -50,45 +50,45 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
     write(diagnostic.message.text)
     write("\n")
 
-    if !diagnostic.highlights.isEmpty {
-      for highlight in diagnostic.highlights {
-        let maxOffset = String(
-          repeating: " ",
-          count: "\(highlight.end.line)".count + 1
-        )
+    guard !diagnostic.highlights.isEmpty else { return }
 
-        if highlight.end.line != highlight.start.line {
-          // show multiline error
-          let errorLines = highlight.start.line...highlight.end.line
+    for highlight in diagnostic.highlights {
+      let maxOffset = String(
+        repeating: " ",
+        count: "\(highlight.end.line)".count + 1
+      )
 
-          print(maxOffset, verticalSeparator)
+      if highlight.end.line != highlight.start.line {
+        // show multiline error
+        let errorLines = highlight.start.line...highlight.end.line
 
-          for line in errorLines {
-            let lineOffset = offset(line, highlight.end.line)
-            let errorString = fileContent[line]
+        print(maxOffset, verticalSeparator)
 
-            print("\(String(line).applyingColor(.blue))" +
-              "\(lineOffset)\(">".applyingColor(.red))" +
-              "\(verticalSeparator) \(errorString)")
-          }
+        for line in errorLines {
+          let lineOffset = offset(line, highlight.end.line)
+          let errorString = fileContent[line]
 
-          print(maxOffset, verticalSeparator)
-        } else {
-          // show one line error
-          let errorLine = highlight.start.line
-          let errorOffset = String(repeating: " ", count: highlight.start.line)
-          let errorString = fileContent[errorLine]
-          let errorUnderscore = String(
-            repeating: "^",
-            count: highlight.end.line - highlight.start.line
-          )
-          .applyingColor(.red)
-
-          print(maxOffset, verticalSeparator)
-          print("\(String(errorLine).applyingColor(.blue))" +
-            "  \(verticalSeparator) \(errorString)")
-          print(maxOffset, verticalSeparator, errorOffset, errorUnderscore)
+          print("\(String(line).applyingColor(.blue))" +
+            "\(lineOffset)\(">".applyingColor(.red))" +
+            "\(verticalSeparator) \(errorString)")
         }
+
+        print(maxOffset, verticalSeparator)
+      } else {
+        // show one line error
+        let errorLine = highlight.start.line
+        let errorOffset = String(repeating: " ", count: highlight.start.line)
+        let errorString = fileContent[errorLine]
+        let errorUnderscore = String(
+          repeating: "^",
+          count: highlight.end.line - highlight.start.line
+        )
+        .applyingColor(.red)
+
+        print(maxOffset, verticalSeparator)
+        print("\(String(errorLine).applyingColor(.blue))" +
+          "  \(verticalSeparator) \(errorString)")
+        print(maxOffset, verticalSeparator, errorOffset, errorUnderscore)
       }
     }
   }
