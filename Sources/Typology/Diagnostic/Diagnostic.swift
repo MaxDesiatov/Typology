@@ -28,11 +28,6 @@ public struct TypologySourceLocation: Codable {
               offset: position.utf8Offset, file: file)
   }
 
-//  public init(file: String, position: AbsolutePosition) {
-//    self.init(line: position.line, column: position.column,
-//              offset: position.utf8Offset, file: file)
-//  }
-
   public init(line: Int, column: Int, offset: Int, file: String) {
     self.line = line
     self.column = column
