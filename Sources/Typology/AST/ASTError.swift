@@ -8,13 +8,13 @@
 import Foundation
 import SwiftSyntax
 
-public struct ASTError: DiagnosticError {
-  public enum Value {
+struct ASTError: DiagnosticError {
+  enum Value {
     case unknownSyntax
   }
 
-  public let range: SourceRange
-  public let value: Value
+  let range: SourceRange
+  let value: Value
 }
 
 extension ASTError {

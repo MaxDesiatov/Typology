@@ -11,15 +11,15 @@ import SwiftSyntax
 typealias Identifier = String
 typealias Operator = String
 
-public struct File {
+struct File {
   let statements: [Statement]
 }
 
-public protocol Location {
+protocol Location {
   var range: SourceRange { get }
 }
 
-public protocol Statement: Location {}
+protocol Statement: Location {}
 
 struct CaseDecl {}
 
@@ -94,7 +94,7 @@ extension File {
 }
 
 extension String {
-  public func parseAST() throws -> File {
+  func parseAST() throws -> File {
     let url = URL(fileURLWithPath: NSTemporaryDirectory())
       .appendingPathComponent("typology.swift")
 
