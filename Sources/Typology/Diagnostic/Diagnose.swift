@@ -35,9 +35,9 @@ public final class Diagnose: Command {
         fatalError("Enumerator is nil")
       }
 
-        for fileURL in enumerator {
-            try parseFile(path: fileURL.path, consumers: [consoleConsumer])
-        }
+      for fileURL in enumerator {
+        try parseFile(path: fileURL.path, consumers: [consoleConsumer])
+      }
     }
   }
 }
