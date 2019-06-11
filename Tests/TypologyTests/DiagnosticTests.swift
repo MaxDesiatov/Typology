@@ -5,6 +5,7 @@
 //  Created by Matvii Hodovaniuk on 6/11/19.
 //
 
+import SwiftSyntax
 @testable import Typology
 import XCTest
 
@@ -49,20 +50,22 @@ final class DiagnosticTests: XCTestCase {
     XCTAssertNoThrow(engine.diagnose(diagnostic))
 
     // Test when diagnose handle diagnostic that takes multiple lines
-    let location2 = TypologySourceLocation(
+    let location2 = SourceLocation(
       line: 3,
       column: 1,
       offset: 1,
       file: filePath
     )
+    let location3 = TypologySourceLocation(file: filePath, position: AbsolutePosition(line: 4, column: 4, utf8Offset: 4))
+
     let diagnostic2 = TypologyDiagnostic(
       message: message,
-      location: location,
+      location: TypologySourceLocation(from: location2),
       notes: [],
       highlights: [
         TypologySourceRange(
           start: location,
-          end: location2
+          end: location3
         ),
       ],
       fixIts: []

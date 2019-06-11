@@ -28,6 +28,11 @@ public struct TypologySourceLocation: Codable {
               offset: position.utf8Offset, file: file)
   }
 
+//  public init(file: String, position: AbsolutePosition) {
+//    self.init(line: position.line, column: position.column,
+//              offset: position.utf8Offset, file: file)
+//  }
+
   public init(line: Int, column: Int, offset: Int, file: String) {
     self.line = line
     self.column = column
@@ -219,6 +224,48 @@ public struct TypologyDiagnostic: Codable {
     internal var fixIts = [FixIt]()
 
     internal init() {}
+
+    /// Adds a Note to the diagnostic builder.
+    /// - parameters:
+    ///   - message: The message associated with the note. This must have the
+    ///              `.note` severity.
+    ///   - location: The source location to which this note is attached.
+    ///   - highlights: Any source ranges that should be highlighted by this
+    ///                 note.
+    ///   - fixIts: Any FixIts that should be attached to this note.
+    public mutating func note(_ message: Message,
+                              location: TypologySourceLocation? = nil,
+                              highlights: [TypologySourceRange] = [],
+                              fixIts: [FixIt] = []) {
+      notes.append(Note(message: message, location: location,
+                        highlights: highlights, fixIts: fixIts))
+    }
+
+    /// Adds the provided source ranges as highlights of this diagnostic.
+    public mutating func highlight(_ ranges: TypologySourceRange...) {
+      highlights += ranges
+    }
+
+    /// Adds a FixIt to remove the contents of the provided TypologySourceRange.
+    /// When applied, this FixIt will delete the characters corresponding to
+    /// this range in the original source file.
+    public mutating func fixItRemove(_ sourceRange: TypologySourceRange) {
+      fixIts.append(.remove(sourceRange))
+    }
+
+    /// Adds a FixIt to insert the provided text at the provided TypologySourceLocation
+    /// in the file where the location resides.
+    public mutating
+    func fixItInsert(_ text: String, at sourceLocation: TypologySourceLocation) {
+      fixIts.append(.insert(sourceLocation, text))
+    }
+
+    /// Adds a FixIt to replace the contents of the source file corresponding
+    /// to the provided SourceRange with the provided text.
+    public mutating
+    func fixItReplace(_ sourceRange: TypologySourceRange, with text: String) {
+      fixIts.append(.replace(sourceRange, text))
+    }
   }
 
   /// Creates a new Diagnostic with the provided message, pointing to the
