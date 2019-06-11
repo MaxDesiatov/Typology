@@ -12,7 +12,10 @@ import SwiftSyntax
 let verticalSeparator = "|".applyingColor(.blue)
 
 private func offset(_ startIndex: Int, _ endIndex: Int) -> String {
-  return String(repeating: " ", count: "\(endIndex)".count - "\(startIndex)".count + 1)
+  return String(
+    repeating: " ",
+    count: "\(endIndex)".count - "\(startIndex)".count + 1
+  )
 }
 
 /// ConsoleDiagnosticConsumer formats diagnostics and prints them to the
@@ -53,7 +56,10 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
 
     if !diagnostic.highlights.isEmpty {
       for highlight in diagnostic.highlights {
-        let maxOffset = String(repeating: " ", count: "\(highlight.end.line)".count + 1)
+        let maxOffset = String(
+          repeating: " ",
+          count: "\(highlight.end.line)".count + 1
+        )
 
         if highlight.end.line != highlight.start.line {
           // show multiline error
@@ -65,7 +71,9 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
             let lineOffset = offset(line, highlight.end.line)
             let errorString = fileContent[line]
 
-            print("\(String(line).applyingColor(.blue))\(lineOffset)\(">".applyingColor(.red))\(verticalSeparator) \(errorString)")
+            print("\(String(line).applyingColor(.blue))" +
+              "\(lineOffset)\(">".applyingColor(.red))" +
+              "\(verticalSeparator) \(errorString)")
           }
 
           print(maxOffset, verticalSeparator)
@@ -74,11 +82,15 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
           let errorLine = highlight.start.line
           let errorOffset = String(repeating: " ", count: highlight.start.line)
           let errorString = fileContent[errorLine]
-          let errorUnderscore = String(repeating: "^", count: highlight.end.line - highlight.start.line)
-            .applyingColor(.red)
+          let errorUnderscore = String(
+            repeating: "^",
+            count: highlight.end.line - highlight.start.line
+          )
+          .applyingColor(.red)
 
           print(maxOffset, verticalSeparator)
-          print("\(String(errorLine).applyingColor(.blue))  \(verticalSeparator) \(errorString)")
+          print("\(String(errorLine).applyingColor(.blue))" +
+            "  \(verticalSeparator) \(errorString)")
           print(maxOffset, verticalSeparator, errorOffset, errorUnderscore)
         }
       }

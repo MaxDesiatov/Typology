@@ -63,7 +63,12 @@ private func parseFile(path: String, engine: TypologyDiagnosticEngine) {
       message: diagnose,
       location: TypologySourceLocation(from: error.range.start),
       notes: [],
-      highlights: [TypologySourceRange(start: TypologySourceLocation(from: error.range.start), end: TypologySourceLocation(from: error.range.end))],
+      highlights: [
+        TypologySourceRange(
+          start: TypologySourceLocation(from: error.range.start),
+          end: TypologySourceLocation(from: error.range.end)
+        ),
+      ],
       fixIts: []
     )
 
