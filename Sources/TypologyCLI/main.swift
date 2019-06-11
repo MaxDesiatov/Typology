@@ -10,7 +10,7 @@ import SwiftCLI
 import SwiftSyntax
 import Typology
 
-class Diagnose: Command {
+final class Diagnose: Command {
   let name = "diagnose"
   let path = Parameter()
   func execute() throws {
