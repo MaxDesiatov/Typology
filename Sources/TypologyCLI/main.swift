@@ -43,7 +43,9 @@ final class Diagnose: Command {
   }
 }
 
-private func parseFile(path: String, consumers: [TypologyDiagnosticConsumer]) throws {
+private func parseFile(
+  path: String, consumers: [TypologyDiagnosticConsumer]
+) throws {
   let contents = try String(contentsOfFile: path)
   let lines = contents.components(separatedBy: .newlines)
   let engine = TypologyDiagnosticEngine(fileContent: lines)
