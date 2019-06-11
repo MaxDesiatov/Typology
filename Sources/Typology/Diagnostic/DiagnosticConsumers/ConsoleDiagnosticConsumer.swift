@@ -11,13 +11,6 @@ import SwiftSyntax
 
 let verticalSeparator = "|".applyingColor(.blue)
 
-private func offset(_ startIndex: Int, _ endIndex: Int) -> String {
-  return String(
-    repeating: " ",
-    count: "\(endIndex)".count - "\(startIndex)".count + 1
-  )
-}
-
 /// ConsoleDiagnosticConsumer formats diagnostics and prints them to the
 /// console.
 public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {

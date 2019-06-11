@@ -32,6 +32,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		A698562822AFB61C005C2A94 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A698562722AFB61C005C2A94 /* Helpers.swift */; };
+		A698562922AFB64B005C2A94 /* DiagnosticTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A698562522AFB5CA005C2A94 /* DiagnosticTests.swift */; };
 		A6F4A55822AE54F000A98AE7 /* Diagnostic.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */; };
 		A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */; };
 		A6F4A55C22AE622100A98AE7 /* DiagnosticEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */; };
@@ -218,6 +220,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A698562522AFB5CA005C2A94 /* DiagnosticTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticTests.swift; sourceTree = "<group>"; };
+		A698562722AFB61C005C2A94 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diagnostic.swift; sourceTree = "<group>"; };
 		A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticConsumer.swift; sourceTree = "<group>"; };
 		A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticEngine.swift; sourceTree = "<group>"; };
@@ -388,6 +392,7 @@
 				A6F4A55722AE54F000A98AE7 /* Diagnostic.swift */,
 				A6F4A55922AE61A500A98AE7 /* DiagnosticConsumer.swift */,
 				A6F4A55B22AE622100A98AE7 /* DiagnosticEngine.swift */,
+				A698562722AFB61C005C2A94 /* Helpers.swift */,
 			);
 			path = Diagnostic;
 			sourceTree = "<group>";
@@ -491,6 +496,7 @@
 				OBJ_42 /* ASTTests.swift */,
 				OBJ_43 /* Benchmarks.swift */,
 				OBJ_44 /* InferenceTests.swift */,
+				A698562522AFB5CA005C2A94 /* DiagnosticTests.swift */,
 			);
 			name = TypologyTests;
 			path = Tests/TypologyTests;
@@ -978,6 +984,7 @@
 				OBJ_231 /* Attribute.swift in Sources */,
 				OBJ_232 /* Binding.swift in Sources */,
 				OBJ_233 /* Function.swift in Sources */,
+				A698562822AFB61C005C2A94 /* Helpers.swift in Sources */,
 				OBJ_234 /* Modifier.swift in Sources */,
 				OBJ_235 /* PatternBinding.swift in Sources */,
 				A6F4A55A22AE61A500A98AE7 /* DiagnosticConsumer.swift in Sources */,
@@ -1021,6 +1028,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				A698562922AFB64B005C2A94 /* DiagnosticTests.swift in Sources */,
 				OBJ_288 /* ASTTests.swift in Sources */,
 				OBJ_289 /* Benchmarks.swift in Sources */,
 				OBJ_290 /* InferenceTests.swift in Sources */,
