@@ -34,11 +34,10 @@ public final class Diagnose: Command {
       else {
         fatalError("Enumerator is nil")
       }
-      let enumerated = enumerator.enumerated()
 
-      for (_, fileURL) in enumerated {
-        try parseFile(path: fileURL.path, consumers: [consoleConsumer])
-      }
+        for fileURL in enumerator {
+            try parseFile(path: fileURL.path, consumers: [consoleConsumer])
+        }
     }
   }
 }
