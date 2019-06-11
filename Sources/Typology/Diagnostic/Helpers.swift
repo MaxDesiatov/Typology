@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Function to generate string of spaces that will be equalent to
+// Function to generate string of spaces that will be equivalent to
 // difference between strings length + 1
 //
 // Example:
