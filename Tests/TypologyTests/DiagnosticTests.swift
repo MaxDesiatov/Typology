@@ -48,12 +48,16 @@ final class DiagnosticTests: XCTestCase {
     let lines = contents.components(separatedBy: .newlines)
     let engine = TypologyDiagnosticEngine(fileContent: lines)
     let consoleConsumer = ConsoleDiagnosticConsumer()
+    let consoleConsumer1 = ConsoleDiagnosticConsumer()
     engine.addConsumer(consoleConsumer)
     XCTAssertEqual(engine.consumers.count, 1)
 
     // Test diagnose handle message functional
     let message = Diagnostic.Message(.note, "note message")
     XCTAssertNoThrow(engine.diagnose(message))
+
+    // Test diagnose on previous added diagnostic with new added comsumer
+    engine.addConsumer(consoleConsumer1)
 
     // Test when diagnose handle diagnostic that takes one line
     let location = SourceLocation(
