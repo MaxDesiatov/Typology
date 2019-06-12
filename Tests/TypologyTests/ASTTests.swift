@@ -8,6 +8,12 @@
 @testable import Typology
 import XCTest
 
+let root = URL(fileURLWithPath: #file)
+  .deletingLastPathComponent()
+  .deletingLastPathComponent()
+  .deletingLastPathComponent()
+  .appendingPathComponent("ValidationTests/AST/")
+
 final class ASTTests: XCTestCase {
   func testTernary() throws {
     let string = try #"true ? "then" : "else""# .parseAST()
@@ -89,5 +95,15 @@ final class ASTTests: XCTestCase {
     XCTAssertEqual(secondFunc?.range.start.column, 9)
     XCTAssertEqual(secondFunc?.range.end.line, 28)
     XCTAssertEqual(secondFunc?.range.end.column, 10)
+  }
+
+  func testInitFromFilePositive() throws {
+    let url = root.appendingPathComponent("Positive.swift")
+    XCTAssertNoThrow(try File(path: url.path))
+  }
+
+  func testInitFromFileNegative() throws {
+    let url = root.appendingPathComponent("Negative.swift")
+    XCTAssertThrowsError(try File(path: url.path))
   }
 }

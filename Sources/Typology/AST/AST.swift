@@ -85,6 +85,14 @@ extension File {
   }
 }
 
+extension File {
+  public init(path: String) throws {
+    let url = URL(fileURLWithPath: path)
+    let syntax = try SyntaxTreeParser.parse(url)
+    try self.init(syntax, url)
+  }
+}
+
 extension String {
   func parseAST() throws -> File {
     let url = URL(fileURLWithPath: NSTemporaryDirectory())
