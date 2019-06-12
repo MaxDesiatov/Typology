@@ -190,10 +190,10 @@
          children = (
             "SwiftCLI::SwiftCLI::Product",
             "Typology::TypologyCLI::Product",
-            "Typology::Typology::Product",
-            "SwiftSyntax::SwiftSyntax::Product",
+            "Typology::TypologyTests::Product",
             "Rainbow::Rainbow::Product",
-            "Typology::TypologyTests::Product"
+            "Typology::Typology::Product",
+            "SwiftSyntax::SwiftSyntax::Product"
          );
          name = "Products";
          path = "";

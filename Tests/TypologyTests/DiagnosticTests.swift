@@ -5,11 +5,24 @@
 //  Created by Matvii Hodovaniuk on 6/11/19.
 //
 
+import SwiftCLI
 import SwiftSyntax
 @testable import Typology
 import XCTest
 
 final class DiagnosticTests: XCTestCase {
+  func testIsSwiftFile() throws {
+    XCTAssertTrue(isSwiftFile("/FileName.swift"))
+    XCTAssertFalse(isSwiftFile("/FileName.sh"))
+    XCTAssertFalse(isSwiftFile("/FileName.yml"))
+  }
+
+  func testParseFile() throws {
+    let consoleConsumer = ConsoleDiagnosticConsumer()
+    let url = root.appendingPathComponent("Positive.swift")
+    XCTAssertNoThrow(try parseFile(path: url.path, consumers: [consoleConsumer]))
+  }
+
   func testOffsetGenerateFunction() throws {
     XCTAssertEqual("\(offset(1, 234))", "   ")
     XCTAssertEqual("\(offset(56, 7890))", "   ")

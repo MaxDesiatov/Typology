@@ -27,7 +27,7 @@ let package = Package(
     ),
     .target(
       name: "TypologyCLI",
-      dependencies: ["SwiftCLI", "SwiftSyntax", "Typology"]
+      dependencies: ["SwiftCLI", "Typology"]
     ),
     .testTarget(
       name: "TypologyTests",

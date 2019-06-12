@@ -42,7 +42,7 @@ public final class Diagnose: Command {
   }
 }
 
-private func parseFile(
+public func parseFile(
   path: String, consumers: [TypologyDiagnosticConsumer]
 ) throws {
   let contents = try String(contentsOfFile: path)
@@ -76,6 +76,6 @@ private func parseFile(
   }
 }
 
-private func isSwiftFile(_ path: String) -> Bool {
+public func isSwiftFile(_ path: String) -> Bool {
   return path.contains(".swift")
 }
