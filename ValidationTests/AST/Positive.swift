@@ -5,7 +5,7 @@ func first(_ xArg: String) -> String {
   var xStr = xArg
   var yStr: String {
     get {
-      return "Hello, "
+      return xStr
     }
     set {
       print("world!")

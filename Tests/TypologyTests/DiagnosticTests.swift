@@ -20,7 +20,11 @@ final class DiagnosticTests: XCTestCase {
   func testParseFile() throws {
     let consoleConsumer = ConsoleDiagnosticConsumer()
     let url = root.appendingPathComponent("Positive.swift")
-    XCTAssertNoThrow(try parseFile(path: url.path, consumers: [consoleConsumer]))
+    XCTAssertNoThrow(try parseFile(
+      path: url.path,
+      consumers: [consoleConsumer]
+    )
+    )
   }
 
   func testOffsetGenerateFunction() throws {
