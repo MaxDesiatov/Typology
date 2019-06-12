@@ -19,11 +19,19 @@ final class DiagnosticTests: XCTestCase {
 
   func testParseFile() throws {
     let consoleConsumer = ConsoleDiagnosticConsumer()
-    let url = root.appendingPathComponent("Positive.swift")
-    XCTAssertNoThrow(try parseFile(
-      path: url.path,
-      consumers: [consoleConsumer]
+    let urlPositive = root.appendingPathComponent("Positive.swift")
+    let urlNegative = root.appendingPathComponent("Negative.swift")
+    XCTAssertNoThrow(
+      try parseFile(
+        path: urlPositive.path,
+        consumers: [consoleConsumer]
+      )
     )
+    XCTAssertNoThrow(
+      try parseFile(
+        path: urlNegative.path,
+        consumers: [consoleConsumer]
+      )
     )
   }
 
