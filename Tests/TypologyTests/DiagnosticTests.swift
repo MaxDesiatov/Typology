@@ -52,6 +52,9 @@ final class DiagnosticTests: XCTestCase {
     engine.addConsumer(consoleConsumer)
     XCTAssertEqual(engine.consumers.count, 1)
 
+    // Test to call TypologyDiagnosticEngine.deinit while test
+    _ = TypologyDiagnosticEngine(fileContent: lines)
+
     // Test diagnose handle message functional
     let message = Diagnostic.Message(.note, "note message")
     XCTAssertNoThrow(engine.diagnose(message))
