@@ -14,10 +14,10 @@ struct ExprNode: Statement {
 }
 
 extension ExprNode {
-  init(_ syntax: ExprSyntax, _ file: URL) throws {
+  init(_ syntax: ExprSyntax, _ converter: SourceLocationConverter) throws {
     self.init(
-      expr: try Expr(syntax, file),
-      range: syntax.sourceRange(in: file)
+      expr: try Expr(syntax, converter),
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }
@@ -62,41 +62,43 @@ extension Expr: ExpressibleByStringLiteral {
 }
 
 extension Expr {
-  init(_ expr: ExprSyntax, _ file: URL) throws {
+  init(_ expr: ExprSyntax, _ converter: SourceLocationConverter) throws {
     switch expr {
     case let identifier as IdentifierExprSyntax:
       self = .identifier(identifier.identifier.text)
 
     case let ternary as TernaryExprSyntax:
       self = try .ternary(
-        Expr(ternary.conditionExpression, file),
-        Expr(ternary.firstChoice, file),
-        Expr(ternary.secondChoice, file)
+        Expr(ternary.conditionExpression, converter),
+        Expr(ternary.firstChoice, converter),
+        Expr(ternary.secondChoice, converter)
       )
 
     case let literal as IntegerLiteralExprSyntax:
       guard let int = Int(literal.digits.text) else {
-        throw ASTError(expr, .unknownSyntax, file)
+        throw ASTError(expr, .unknownSyntax, converter)
       }
       self = .literal(.integer(int))
 
     case let literal as FloatLiteralExprSyntax:
       guard let double = Double(literal.floatingDigits.text) else {
-        throw ASTError(expr, .unknownSyntax, file)
+        throw ASTError(expr, .unknownSyntax, converter)
       }
       self = .literal(.floating(double))
 
     case let literal as BooleanLiteralExprSyntax:
       guard let bool = Bool(literal.booleanLiteral.text) else {
-        throw ASTError(expr, .unknownSyntax, file)
+        throw ASTError(expr, .unknownSyntax, converter)
       }
       self = .literal(.bool(bool))
 
     case let literal as StringLiteralExprSyntax:
-      self = .literal(.string(literal.stringLiteral.text))
+      self = .literal(.string(literal.segments.compactMap {
+        ($0 as? StringSegmentSyntax)?.content.text
+      }.joined()))
 
     default:
-      throw ASTError(expr, .unknownSyntax, file)
+      throw ASTError(expr, .unknownSyntax, converter)
     }
   }
 }

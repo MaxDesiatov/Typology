@@ -41,55 +41,55 @@ struct Target {
 }
 
 extension Syntax {
-  func toStatement(_ file: URL) throws -> [Statement] {
+  func toStatement(_ converter: SourceLocationConverter) throws -> [Statement] {
     switch self {
     case let syntax as VariableDeclSyntax:
-      return try [BindingDecl(syntax, file)]
+      return try [BindingDecl(syntax, converter)]
 
     case let syntax as SequenceExprSyntax:
-      return try syntax.elements.map { try ExprNode($0, file) }
+      return try syntax.elements.map { try ExprNode($0, converter) }
 
     case let syntax as FunctionDeclSyntax:
-      return try [FunctionDecl(syntax, file)]
+      return try [FunctionDecl(syntax, converter)]
 
     case let syntax as ReturnStmtSyntax:
-      return try [ReturnStmt(syntax, file)]
+      return try [ReturnStmt(syntax, converter)]
 
     case let syntax as CodeBlockItemSyntax:
-      return try syntax.item.toStatement(file)
+      return try syntax.item.toStatement(converter)
 
     case let syntax as FunctionCallExprSyntax:
       return try [ExprNode(
         expr: Expr.application(
-          Expr(syntax.calledExpression, file),
-          syntax.argumentList.map { try Expr($0.expression, file) }
+          Expr(syntax.calledExpression, converter),
+          syntax.argumentList.map { try Expr($0.expression, converter) }
         ),
-        range: syntax.sourceRange(in: file)
+        range: syntax.sourceRange(converter: converter)
       )]
 
     default:
-      throw ASTError(self, .unknownSyntax, file)
+      throw ASTError(self, .unknownSyntax, converter)
     }
   }
 }
 
 extension Array where Element == Statement {
-  init(_ syntax: CodeBlockItemListSyntax, _ file: URL) throws {
-    self = try syntax.flatMap { try $0.item.toStatement(file) }
+  init(_ syntax: CodeBlockItemListSyntax, _ converter: SourceLocationConverter) throws {
+    self = try syntax.flatMap { try $0.item.toStatement(converter) }
   }
 }
 
 extension File {
-  init(_ syntax: SourceFileSyntax, _ url: URL) throws {
-    statements = try .init(syntax.statements, url)
+  init(_ syntax: SourceFileSyntax, _ converter: SourceLocationConverter) throws {
+    statements = try .init(syntax.statements, converter)
   }
 }
 
 extension File {
   public init(path: String) throws {
     let url = URL(fileURLWithPath: path)
-    let syntax = try SyntaxTreeParser.parse(url)
-    try self.init(syntax, url)
+    let syntax = try SyntaxParser.parse(url)
+    try self.init(syntax, SourceLocationConverter(file: path, tree: syntax))
   }
 }
 
@@ -100,8 +100,8 @@ extension String {
 
     try write(toFile: url.path, atomically: true, encoding: .utf8)
 
-    let syntax = try SyntaxTreeParser.parse(url)
+    let syntax = try SyntaxParser.parse(url)
     try FileManager.default.removeItem(at: url)
-    return try File(syntax, url)
+    return try File(syntax, SourceLocationConverter(file: url.path, tree: syntax))
   }
 }

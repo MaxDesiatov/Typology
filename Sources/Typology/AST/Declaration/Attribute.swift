@@ -17,11 +17,11 @@ struct Attribute: Location {
 }
 
 extension Attribute {
-  init(_ syntax: AttributeSyntax, _ file: URL) {
+  init(_ syntax: AttributeSyntax, _ converter: SourceLocationConverter) {
     self.init(
       name: syntax.attributeName.text,
       argument: (syntax.argument as? ObjCSelectorSyntax)?.description,
-      range: syntax.sourceRange(in: file)
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

@@ -15,17 +15,17 @@ struct TypeAnnotation: Location {
 }
 
 extension TypeAnnotation {
-  init(_ syntax: TypeAnnotationSyntax, _ file: URL) throws {
+  init(_ syntax: TypeAnnotationSyntax, _ converter: SourceLocationConverter) throws {
     self.init(
-      type: try Type(syntax.type, file),
-      range: syntax.sourceRange(in: file)
+      type: try Type(syntax.type, converter),
+      range: syntax.sourceRange(converter: converter)
     )
   }
 
-  init(_ syntax: TypeSyntax, _ file: URL) throws {
+  init(_ syntax: TypeSyntax, _ converter: SourceLocationConverter) throws {
     self.init(
-      type: try Type(syntax, file),
-      range: syntax.sourceRange(in: file)
+      type: try Type(syntax, converter),
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

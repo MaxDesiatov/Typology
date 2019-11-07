@@ -18,7 +18,7 @@ struct ASTError: DiagnosticError {
 }
 
 extension ASTError {
-  init(_ syntax: Syntax, _ value: Value, _ file: URL) {
-    self.init(range: syntax.sourceRange(in: file), value: value)
+  init(_ syntax: Syntax, _ value: Value, _ converter: SourceLocationConverter) {
+    self.init(range: syntax.sourceRange(converter: converter), value: value)
   }
 }

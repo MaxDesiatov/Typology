@@ -19,12 +19,12 @@ struct TuplePatternElement {
 }
 
 extension TuplePatternElement {
-  init(_ syntax: TuplePatternElementSyntax, _ file: URL) throws {
+  init(_ syntax: TuplePatternElementSyntax, _ converter: SourceLocationConverter) throws {
     try self.init(
       name: syntax.labelName.map {
-        .init(value: $0.text, range: $0.sourceRange(in: file))
+        .init(value: $0.text, range: $0.sourceRange(converter: converter))
       },
-      pattern: syntax.pattern.toPattern(file)
+      pattern: syntax.pattern.toPattern(converter)
     )
   }
 }

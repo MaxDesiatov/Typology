@@ -32,8 +32,12 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
 
   /// Prints each of the fields in a diagnostic to stderr.
   public func write(_ diagnostic: TypologyDiagnostic, _ fileContent: [String]) {
-    if let loc = diagnostic.location {
-      write("\(loc.file):\(loc.line):\(loc.column): ")
+    if
+      let loc = diagnostic.location,
+      let file = loc.file,
+      let line = loc.line,
+      let column = loc.column {
+      write("\(file):\(line):\(column): ")
     } else {
       write("<unknown>:0:0: ")
     }
@@ -49,19 +53,21 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
     guard !diagnostic.highlights.isEmpty else { return }
 
     for highlight in diagnostic.highlights {
+      guard let startLine = highlight.start.line, let endLine = highlight.end.line else { continue }
+
       let maxOffset = String(
         repeating: " ",
-        count: "\(highlight.end.line)".count + 1
+        count: "\(endLine)".count + 1
       )
 
       if highlight.end.line != highlight.start.line {
         // show multiline error
-        let errorLines = highlight.start.line...highlight.end.line
+        let errorLines = startLine...endLine
 
         print(maxOffset, verticalSeparator)
 
         for line in errorLines {
-          let lineOffset = offset(line, highlight.end.line)
+          let lineOffset = offset(line, endLine)
           let errorString = fileContent[line]
 
           print("\(String(line).applyingColor(.blue))" +
@@ -72,12 +78,12 @@ public class ConsoleDiagnosticConsumer: TypologyDiagnosticConsumer {
         print(maxOffset, verticalSeparator)
       } else {
         // show one line error
-        let errorLine = highlight.start.line
-        let errorOffset = String(repeating: " ", count: highlight.start.line)
+        let errorLine = startLine
+        let errorOffset = String(repeating: " ", count: errorLine)
         let errorString = fileContent[errorLine]
         let errorUnderscore = String(
           repeating: "^",
-          count: highlight.end.line - highlight.start.line
+          count: endLine - startLine
         )
         .applyingColor(.red)
 

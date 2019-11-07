@@ -91,8 +91,10 @@ final class DiagnosticTests: XCTestCase {
       file: filePath
     )
     let location3 = SourceLocation(
-      file: filePath,
-      position: AbsolutePosition(line: 4, column: 4, utf8Offset: 4)
+      line: 4,
+      column: 4,
+      offset: 4,
+      file: filePath
     )
 
     let diagnostic2 = TypologyDiagnostic(

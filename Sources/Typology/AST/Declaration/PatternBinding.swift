@@ -17,14 +17,14 @@ struct PatternBinding: Location {
 }
 
 extension PatternBinding {
-  init(_ syntax: PatternBindingSyntax, _ file: URL) throws {
+  init(_ syntax: PatternBindingSyntax, _ converter: SourceLocationConverter) throws {
     try self.init(
-      accessors: .init(syntax.accessor, file),
-      pattern: syntax.pattern.toPattern(file),
+      accessors: .init(syntax.accessor, converter),
+      pattern: syntax.pattern.toPattern(converter),
       typeAnnotation: syntax.typeAnnotation.map {
-        try TypeAnnotation($0, file)
+        try TypeAnnotation($0, converter)
       },
-      range: syntax.sourceRange(in: file)
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

@@ -18,13 +18,15 @@ struct BindingDecl: Statement {
 }
 
 extension BindingDecl {
-  init(_ syntax: VariableDeclSyntax, _ file: URL) throws {
+  init(_ syntax: VariableDeclSyntax, _ converter: SourceLocationConverter) throws {
     try self.init(
-      attributes: syntax.attributes?.map { Attribute($0, file) } ?? [],
-      bindings: syntax.bindings.map { try PatternBinding($0, file) },
+      attributes: syntax.attributes?.compactMap { $0 as? AttributeSyntax }.map {
+        Attribute($0, converter)
+      } ?? [],
+      bindings: syntax.bindings.map { try PatternBinding($0, converter) },
       isConstant: syntax.letOrVarKeyword.text == "let",
-      modifiers: syntax.modifiers?.map { Modifier($0, file) } ?? [],
-      range: syntax.sourceRange(in: file)
+      modifiers: syntax.modifiers?.map { Modifier($0, converter) } ?? [],
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

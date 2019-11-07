@@ -21,37 +21,37 @@ struct AccessorDecl: Location {
 }
 
 extension AccessorDecl {
-  init(_ syntax: AccessorDeclSyntax, _ file: URL) throws {
+  init(_ syntax: AccessorDeclSyntax, _ converter: SourceLocationConverter) throws {
     guard let kind = Kind(rawValue: syntax.accessorKind.text) else {
-      throw ASTError(syntax.accessorKind, .unknownSyntax, file)
+      throw ASTError(syntax.accessorKind, .unknownSyntax, converter)
     }
 
     let statements = syntax.body?.statements
 
     try self.init(
-      body: statements.map { try [Statement]($0, file) } ?? [],
+      body: statements.map { try [Statement]($0, converter) } ?? [],
       kind: kind,
-      range: syntax.sourceRange(in: file)
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }
 
 extension Array where Element == AccessorDecl {
-  init(_ maybeSyntax: Syntax?, _ file: URL) throws {
+  init(_ maybeSyntax: Syntax?, _ converter: SourceLocationConverter) throws {
     switch maybeSyntax {
     case let block as CodeBlockSyntax:
 
       self = try [AccessorDecl(
-        body: [Statement](block.statements, file),
+        body: [Statement](block.statements, converter),
         kind: .get,
-        range: block.sourceRange(in: file)
+        range: block.sourceRange(converter: converter)
       )]
     case let block as AccessorBlockSyntax:
-      self = try block.accessors.map { try AccessorDecl($0, file) }
+      self = try block.accessors.map { try AccessorDecl($0, converter) }
     case nil:
       self = []
     case let syntax?:
-      throw ASTError(syntax, .unknownSyntax, file)
+      throw ASTError(syntax, .unknownSyntax, converter)
     }
   }
 }

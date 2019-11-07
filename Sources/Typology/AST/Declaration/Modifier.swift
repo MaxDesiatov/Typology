@@ -20,11 +20,11 @@ struct Modifier: Location {
 }
 
 extension Modifier {
-  init(_ syntax: DeclModifierSyntax, _ file: URL) {
+  init(_ syntax: DeclModifierSyntax, _ converter: SourceLocationConverter) {
     self.init(
       name: syntax.name.text,
       detail: syntax.detail?.text,
-      range: syntax.sourceRange(in: file)
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

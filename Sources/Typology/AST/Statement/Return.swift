@@ -15,10 +15,10 @@ struct ReturnStmt: Statement {
 }
 
 extension ReturnStmt {
-  init(_ syntax: ReturnStmtSyntax, _ file: URL) throws {
+  init(_ syntax: ReturnStmtSyntax, _ converter: SourceLocationConverter) throws {
     try self.init(
-      expr: syntax.expression.map { try Expr($0, file) },
-      range: syntax.sourceRange(in: file)
+      expr: syntax.expression.map { try Expr($0, converter) },
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }

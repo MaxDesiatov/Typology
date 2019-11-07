@@ -25,7 +25,7 @@ struct FunctionDecl: Statement {
 }
 
 extension FunctionDecl {
-  init(_ syntax: FunctionDeclSyntax, _ file: URL) throws {
+  init(_ syntax: FunctionDeclSyntax, _ converter: SourceLocationConverter) throws {
     let returns = syntax.signature.output?.returnType
     let body = syntax.body?.statements
 
@@ -40,14 +40,14 @@ extension FunctionDecl {
           return try (
             parameter.firstName?.text,
             parameter.secondName?.text,
-            TypeAnnotation(type, file)
+            TypeAnnotation(type, converter)
           )
         },
-      statements: body.flatMap { try [Statement]($0, file) } ?? [],
+      statements: body.flatMap { try [Statement]($0, converter) } ?? [],
       returns: returns.map {
-        try TypeAnnotation($0, file)
+        try TypeAnnotation($0, converter)
       },
-      range: syntax.sourceRange(in: file)
+      range: syntax.sourceRange(converter: converter)
     )
   }
 }
