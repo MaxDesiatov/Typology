@@ -5,7 +5,7 @@
 //  Created by Max Desiatov on 01/06/2019.
 //
 
-@testable import Typology
+@testable import TypologyCore
 import XCTest
 
 let root = URL(fileURLWithPath: #file)

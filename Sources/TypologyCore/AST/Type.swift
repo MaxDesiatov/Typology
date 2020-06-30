@@ -159,19 +159,15 @@ extension Type: Equatable {
 }
 
 extension Type {
-  init(_ type: TypeSyntax, _ converter: SourceLocationConverter) throws {
-    switch type {
-    case let tuple as TupleTypeSyntax:
+  init(_ type: TypeSyntaxProtocol, _ converter: SourceLocationConverter) throws {
+    if let tuple = TupleTypeSyntax(type._syntaxNode) {
       self = try .tuple(tuple.elements.map { try Type($0.type, converter) })
-
-    case let identifier as SimpleTypeIdentifierSyntax:
+    } else if let identifier = SimpleTypeIdentifierSyntax(type._syntaxNode) {
       self = .constructor(TypeIdentifier(value: identifier.name.text), [])
-
-    case let array as ArrayTypeSyntax:
+    } else if let array = ArrayTypeSyntax(type._syntaxNode) {
       self = try .constructor("Array", [Type(array.elementType, converter)])
-
-    default:
-      throw ASTError(type, .unknownSyntax, converter)
+    } else {
+      throw ASTError(type._syntaxNode, .unknownSyntax, converter)
     }
   }
 }

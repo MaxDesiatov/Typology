@@ -6,7 +6,7 @@
 //  Copyright © 2019 Typology. All rights reserved.
 //
 
-@testable import Typology
+@testable import TypologyCore
 import XCTest
 
 final class InferenceTests: XCTestCase {

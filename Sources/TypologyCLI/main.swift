@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftCLI
-import Typology
+import TypologyCore
 
 let diagnose = CLI(singleCommand: Diagnose())
 diagnose.goAndExit()

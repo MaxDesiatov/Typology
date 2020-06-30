@@ -7,7 +7,7 @@
 
 import SwiftCLI
 import SwiftSyntax
-@testable import Typology
+@testable import TypologyCore
 import XCTest
 
 final class DiagnosticTests: XCTestCase {

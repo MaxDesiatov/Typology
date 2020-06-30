@@ -62,43 +62,42 @@ extension Expr: ExpressibleByStringLiteral {
 }
 
 extension Expr {
-  init(_ expr: ExprSyntax, _ converter: SourceLocationConverter) throws {
-    switch expr {
-    case let identifier as IdentifierExprSyntax:
+  init(_ expr: ExprSyntaxProtocol, _ converter: SourceLocationConverter) throws {
+    if let identifier = IdentifierExprSyntax(expr._syntaxNode) {
       self = .identifier(identifier.identifier.text)
 
-    case let ternary as TernaryExprSyntax:
+    } else if let ternary = TernaryExprSyntax(expr._syntaxNode) {
       self = try .ternary(
         Expr(ternary.conditionExpression, converter),
         Expr(ternary.firstChoice, converter),
         Expr(ternary.secondChoice, converter)
       )
 
-    case let literal as IntegerLiteralExprSyntax:
+    } else if let literal = IntegerLiteralExprSyntax(expr._syntaxNode) {
       guard let int = Int(literal.digits.text) else {
-        throw ASTError(expr, .unknownSyntax, converter)
+        throw ASTError(expr._syntaxNode, .unknownSyntax, converter)
       }
       self = .literal(.integer(int))
 
-    case let literal as FloatLiteralExprSyntax:
+    } else if let literal = FloatLiteralExprSyntax(expr._syntaxNode) {
       guard let double = Double(literal.floatingDigits.text) else {
-        throw ASTError(expr, .unknownSyntax, converter)
+        throw ASTError(expr._syntaxNode, .unknownSyntax, converter)
       }
       self = .literal(.floating(double))
 
-    case let literal as BooleanLiteralExprSyntax:
+    } else if let literal = BooleanLiteralExprSyntax(expr._syntaxNode) {
       guard let bool = Bool(literal.booleanLiteral.text) else {
-        throw ASTError(expr, .unknownSyntax, converter)
+        throw ASTError(expr._syntaxNode, .unknownSyntax, converter)
       }
       self = .literal(.bool(bool))
 
-    case let literal as StringLiteralExprSyntax:
+    } else if let literal = StringLiteralExprSyntax(expr._syntaxNode) {
       self = .literal(.string(literal.segments.compactMap {
         ($0 as? StringSegmentSyntax)?.content.text
       }.joined()))
 
-    default:
-      throw ASTError(expr, .unknownSyntax, converter)
+    } else {
+      throw ASTError(expr._syntaxNode, .unknownSyntax, converter)
     }
   }
 }

@@ -10,21 +10,20 @@ import SwiftSyntax
 
 protocol Pattern: Location {}
 
-extension PatternSyntax {
+extension PatternSyntaxProtocol {
   func toPattern(_ converter: SourceLocationConverter) throws -> Pattern {
-    switch self {
-    case let syntax as TuplePatternSyntax:
+    if let syntax = TuplePatternSyntax(_syntaxNode) {
       return try TuplePattern(
         elements: syntax.elements.map { try TuplePatternElement($0, converter) },
         range: syntax.sourceRange(converter: converter)
       )
-    case let syntax as IdentifierPatternSyntax:
+    } else if let syntax = IdentifierPatternSyntax(_syntaxNode) {
       return IdentifierPattern(
         identifier: syntax.identifier.text,
         range: syntax.sourceRange(converter: converter)
       )
-    default:
-      throw ASTError(self, .unknownSyntax, converter)
+    } else {
+      throw ASTError(_syntaxNode, .unknownSyntax, converter)
     }
   }
 }

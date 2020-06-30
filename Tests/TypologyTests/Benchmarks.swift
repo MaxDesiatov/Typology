@@ -5,7 +5,7 @@
 //  Created by Max Desiatov on 25/05/2019.
 //
 
-@testable import Typology
+@testable import TypologyCore
 import XCTest
 
 class Benchmarks: XCTestCase {

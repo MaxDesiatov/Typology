@@ -6,10 +6,7 @@ disabled_rules:
 - nesting
 - cyclomatic_complexity
 
-line_length:
-  warning: 80
-  error: 100
-  ignores_comments: true
+line_length: 100
 
 
 function_body_length:

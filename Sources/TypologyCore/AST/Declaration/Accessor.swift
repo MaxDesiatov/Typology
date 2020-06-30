@@ -23,7 +23,7 @@ struct AccessorDecl: Location {
 extension AccessorDecl {
   init(_ syntax: AccessorDeclSyntax, _ converter: SourceLocationConverter) throws {
     guard let kind = Kind(rawValue: syntax.accessorKind.text) else {
-      throw ASTError(syntax.accessorKind, .unknownSyntax, converter)
+      throw ASTError(syntax.accessorKind._syntaxNode, .unknownSyntax, converter)
     }
 
     let statements = syntax.body?.statements
@@ -37,21 +37,19 @@ extension AccessorDecl {
 }
 
 extension Array where Element == AccessorDecl {
-  init(_ maybeSyntax: Syntax?, _ converter: SourceLocationConverter) throws {
-    switch maybeSyntax {
-    case let block as CodeBlockSyntax:
-
+  init(_ syntax: SyntaxProtocol?, _ converter: SourceLocationConverter) throws {
+    if let block = syntax.flatMap({ CodeBlockSyntax($0._syntaxNode) }) {
       self = try [AccessorDecl(
         body: [Statement](block.statements, converter),
         kind: .get,
         range: block.sourceRange(converter: converter)
       )]
-    case let block as AccessorBlockSyntax:
+    } else if let block = syntax.flatMap({ AccessorBlockSyntax($0._syntaxNode) }) {
       self = try block.accessors.map { try AccessorDecl($0, converter) }
-    case nil:
+    } else if let syntax = syntax {
+      throw ASTError(syntax._syntaxNode, .unknownSyntax, converter)
+    } else {
       self = []
-    case let syntax?:
-      throw ASTError(syntax, .unknownSyntax, converter)
     }
   }
 }
