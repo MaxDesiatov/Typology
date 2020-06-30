@@ -3,7 +3,7 @@
 set -e 
 set -o pipefail
 
-swift test --enable-code-coverage
+swift test --enable-code-coverage --parallel
 xcrun llvm-cov show \
   .build/debug/TypologyPackageTests.xctest/Contents/MacOS/TypologyPackageTests \
   -instr-profile=.build/debug/codecov/default.profdata > coverage.txt

@@ -1,0 +1,24 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  xcode-11_5:
+    runs-on: macOS-10.15
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build with Xcode 11.5
+        run: ./ci.sh
+        env:
+          CODECOV_TOKEN: ${{ secrets.codecovToken }}
