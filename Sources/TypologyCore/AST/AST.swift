@@ -42,17 +42,17 @@ struct Target {
 
 extension Syntax {
   func toStatement(_ converter: SourceLocationConverter) throws -> [Statement] {
-    if let syntax = self.as(VariableDeclSyntax.self) {
+    if let syntax = VariableDeclSyntax(self) {
       return try [BindingDecl(syntax, converter)]
-    } else if let syntax = self.as(SequenceExprSyntax.self) {
+    } else if let syntax = SequenceExprSyntax(self) {
       return try syntax.elements.map { try ExprNode($0, converter) }
-    } else if let syntax = self.as(FunctionDeclSyntax.self) {
+    } else if let syntax = FunctionDeclSyntax(self) {
       return try [FunctionDecl(syntax, converter)]
-    } else if let syntax = self.as(ReturnStmtSyntax.self) {
+    } else if let syntax = ReturnStmtSyntax(self) {
       return try [ReturnStmt(syntax, converter)]
-    } else if let syntax = self.as(CodeBlockItemSyntax.self) {
+    } else if let syntax = CodeBlockItemSyntax(self) {
       return try syntax.item.toStatement(converter)
-    } else if let syntax = self.as(FunctionCallExprSyntax.self) {
+    } else if let syntax = FunctionCallExprSyntax(self) {
       return try [ExprNode(
         expr: Expr.application(
           Expr(syntax.calledExpression, converter),
