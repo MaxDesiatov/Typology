@@ -19,7 +19,6 @@ DerivedData
 *.hmap
 *.ipa
 coverage.txt
-.swiftpm
 
 # Bundler
 .bundle
@@ -40,6 +39,7 @@ Pods/
 
 # SwiftPM
 .build
+.swiftpm
 
 # Jazzy
 docs
