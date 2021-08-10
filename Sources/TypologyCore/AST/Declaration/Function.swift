@@ -10,7 +10,7 @@ import SwiftSyntax
 
 struct FunctionDecl: Statement {
   let genericParameters: [TypeVariable]
-  let parameters: [(String?, String?, TypeAnnotation)]
+  let parameters: [(externalName: String?, internalName: String?, TypeAnnotation)]
   let statements: [Statement]
   let returns: TypeAnnotation?
 
@@ -18,7 +18,7 @@ struct FunctionDecl: Statement {
 
   var scheme: Scheme {
     return Scheme(
-      parameters.map { $0.2.type } --> (returns?.type ?? .tuple([])),
+      parameters.map { $0.internalName.type } --> (returns?.type ?? .tuple([])),
       variables: genericParameters
     )
   }
