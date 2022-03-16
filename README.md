@@ -1,3 +1,5 @@
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine/)
+
 # Typology
 
 ![CI status](https://github.com/MaxDesiatov/Typology/workflows/CI/badge.svg?branch=main)
